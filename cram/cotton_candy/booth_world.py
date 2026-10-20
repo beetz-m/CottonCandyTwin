@@ -473,10 +473,12 @@ class BoothWorldBuilder:
             flap,
             self.root,
             (0.0, -depth / 2 - 0.02, L.FLAP_Z[1]),
-            Vector3.X(),
+            Vector3(-1, 0, 0),          # positive angles swing the lower edge out, over the customers (-y)
             0.0,
             math.radians(g("booth_flap_open_angle")),
         )
+        # the booth is open for business: opening the flap is staff work before the shift
+        flap_connection.position = math.radians(g("booth_flap_open_angle"))
         # the flap body's origin is the hinge; shift its geometry to hang below it
         for shape in flap.visual.shapes + flap.collision.shapes:
             shape.origin = HomogeneousTransformationMatrix.from_xyz_rpy(z=-g("booth_flap_height") / 2)
