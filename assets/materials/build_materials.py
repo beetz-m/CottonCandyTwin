@@ -99,6 +99,9 @@ PBR = {  # OmniPBR: (diffuse, roughness, metallic, extra)
     "SignPink": ((1.0, 0.45, 0.70), 0.40, 0.0, {"emissive": ((1.0, 0.40, 0.70), 3000.0)}),
     "CanisterBlue": ((0.15, 0.35, 0.75), 0.45, 0.0, {}),
     "TubLid": ((0.90, 0.90, 0.88), 0.45, 0.0, {}),
+    "CartonWhite": ((0.93, 0.92, 0.89), 0.65, 0.0, {}),            # coated paperboard gable-top carton
+    "SpongeYellow": ((0.92, 0.78, 0.25), 0.90, 0.0, {}),
+    "ScourGreen": ((0.15, 0.45, 0.20), 0.85, 0.0, {}),
     "PoleDark": ((0.10, 0.11, 0.12), 0.45, 0.4, {}),
     "TarpRed": ((0.70, 0.08, 0.08), 0.75, 0.0, {}),
     "TarpStripeWhite": ((0.92, 0.92, 0.90), 0.75, 0.0, {}),

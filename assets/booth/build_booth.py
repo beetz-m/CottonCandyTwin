@@ -1,9 +1,11 @@
-"""Booth asset: the 2 x 2 m wooden Zuckerwatte booth with fit-out, built from the twin layout (site/layout.py).
+"""Booth asset: the wooden Zuckerwatte market hut (booth_width x booth_depth) with fit-out, built from the twin layout
+(site/layout.py).
 
 Frame: the booth frame B of site/layout.py (origin on the paving at the booth centre, +y sales front -> back wall,
 z up, m), so the asset is referenced at the origin. Parts under /Booth: Shell (walls, floor, pillars), Roof, Flap,
 Counters, MachineTable, SideShelf, Equipment (hand-wash, extinguisher, power), Consumables (tubs, quiver + sticks,
-GN tray + scoop, bags), Signs, Display (finished portions).
+Flossugar carton, damp sponge, bags), Signs, Display (finished portions). Every layout item must be handled by a builder
+function (HANDLED); an unknown item fails the build instead of being skipped silently.
 Statuses: dimensions from the register / layout (see there); colours, sign and decoration ILLUSTRATIVE.
 
 Run: $E assets/booth/build_booth.py
@@ -29,6 +31,23 @@ TEX = os.path.join(ROOT, "assets", "booth", "usd", "textures")
 ITEMS = {it["name"]: it for it in L.items()}
 W, D, T = g("booth_width"), g("booth_depth"), g("booth_wall_panel_t")
 FZ = L.FLOOR_Z
+
+# layout items and the builder function that renders each (the machine and pan are the machine asset; the roof
+# underside is the roof slab; the door is cut into the back wall)
+HANDLED = {
+    "WallLeft": "shell", "WallRight": "shell", "WallBack": "shell", "WallFrontBelowCounter": "shell",
+    "WallFrontHeader": "shell", "RoofUnderside": "roof", "DoorBack": "shell",
+    "MachineTable": "counters", "CounterSteel": "counters", "SalesCounter": "counters",
+    "SideShelf": "shelf_and_consumables", "SugarTubs": "shelf_and_consumables",
+    "StickHolder": "shelf_and_consumables", "SugarCarton": "shelf_and_consumables", "Sponge": "shelf_and_consumables",
+    "BagRail": "shelf_and_consumables",
+    "HandwashStation": "equipment", "FireExtinguisher": "equipment", "PowerDistributor": "equipment",
+    "CashBox": "equipment", "InfoBoard": "signs",
+    "Machine": "machine asset", "MachinePan": "machine asset",
+}
+_unknown = sorted(set(ITEMS) - set(HANDLED))
+if _unknown:
+    raise SystemExit(f"build_booth.py does not know the layout items {_unknown} - add them to a builder function")
 
 
 def centre_size(name):
@@ -109,11 +128,11 @@ def flap(k):
             mat = "SprucePaintedWhite" if i % 2 else "SprucePaintedPink"
             k.extrude(mat, [(-0.07, 0.0), (0.0, -0.10), (0.07, 0.0)], (x, -0.026, -g("booth_flap_height")),
                       (x, -0.020, -g("booth_flap_height")), up=(0, 0, 1))
-        for x in (-0.25, 0.25):                                                                       # spot lights
+        for x in (-g("booth_flap_width") / 4, g("booth_flap_width") / 4):                            # spot lights
             k.cyl("PoleDark", (x, 0.0, -0.45), (x, 0.05, -0.45), 0.03)
             k.disk("LedWarm", (x, 0.051, -0.45), 0.024, normal=(0, 1, 0))
     tip = hinge + R @ np.array([0, 0, -0.6])
-    for x in (-0.72, 0.72):
+    for x in (-g("booth_flap_width") / 2 + 0.40, g("booth_flap_width") / 2 - 0.40):
         base = np.array([x, -D / 2 - 0.01, L.FLAP_Z[1] - 0.45])
         k.cyl("StainlessSatin", tuple(base), tuple(np.array([x, tip[1], tip[2]])), 0.009)
     edge = hinge + R @ np.array([0, 0, -g("booth_flap_height")])
@@ -127,7 +146,9 @@ def counters(k):
     c, s = centre_size("SalesCounter")
     k.box("SprucePaintedWhite", (c[0], c[1] + 0.02, (FZ + L.COUNTER_Z) / 2 - 0.0135), (s[0], s[1] - 0.04, L.COUNTER_Z - FZ - 0.027))
     k.box("SpruceOiled", (c[0], c[1] - 0.01, L.COUNTER_Z - 0.0135), (s[0], s[1] + 0.04, g("booth_counter_top_t")))
-    k.collide((0.5, -0.69, (FZ + L.COUNTER_Z) / 2), (1.0, 0.62, L.COUNTER_Z - FZ), name="Counter")
+    for name in ("CounterSteel", "SalesCounter"):
+        c, s = centre_size(name)
+        k.collide(tuple(c), tuple(s), name=name)
     # lowered stainless machine table: top, legs, undershelf
     it = ITEMS["MachineTable"]
     lo, hi = np.array(it["lo"]), np.array(it["hi"])
@@ -173,17 +194,27 @@ def shelf_and_consumables(k):
         sx_, sy_ = qlo[0] + 0.02 + 0.06 * rng.random(), qlo[1] + 0.02 + 0.08 * rng.random()
         k.box("PineStick", (sx_, sy_, qlo[2] + 0.04 + g("stick_length") / 2),
               (g("stick_section"), g("stick_section"), g("stick_length")))
-    # GN 1/6 working tray with pink sugar and scoop
-    t = ITEMS["SugarWorkTray"]
-    tlo, thi = np.array(t["lo"]), np.array(t["hi"])
-    c = (tlo + thi) / 2
-    s = thi - tlo
-    k.box("StainlessBrushed", (c[0], c[1], tlo[2] + 0.001), (s[0], s[1], 0.002))
-    for dx, dy, wx, wy in ((-s[0] / 2, 0, 0.002, s[1]), (s[0] / 2, 0, 0.002, s[1]), (0, -s[1] / 2, s[0], 0.002), (0, s[1] / 2, s[0], 0.002)):
-        k.box("StainlessBrushed", (c[0] + dx, c[1] + dy, c[2]), (wx, wy, s[2]))
-    k.box("SugarPink", (c[0], c[1], tlo[2] + 0.06), (s[0] - 0.006, s[1] - 0.006, 0.004))
-    k.cyl("StainlessSatin", (c[0] + 0.02, c[1], tlo[2] + 0.062), (c[0] + 0.02, c[1], tlo[2] + 0.092), 0.025)
-    k.cyl("StainlessSatin", (c[0] + 0.045, c[1], tlo[2] + 0.085), (c[0] + 0.14, c[1], tlo[2] + 0.11), 0.007)
+    # half-gallon Flossugar carton with E-Z pour spout (GM_MAN_EXP p. 9): white gable-top carton, generic label
+    c, sz = centre_size("SugarCarton")
+    body_h = sz[2] * 0.82
+    k.rbox("CartonWhite", (c[0], c[1], c[2] - sz[2] / 2 + body_h / 2), (sz[0], sz[1], body_h), r=0.004)
+    gable = [(-sz[1] / 2, 0.0), (sz[1] / 2, 0.0), (0.0, sz[2] - body_h)]
+    z_top = c[2] - sz[2] / 2 + body_h
+    k.extrude("CartonWhite", [(y_, z_ + z_top) for y_, z_ in gable], (c[0] - sz[0] / 2, 0, 0),
+              (c[0] + sz[0] / 2, 0, 0), up=(0, 0, 1))
+    k.cyl("PlasticBlue", (c[0], c[1] - sz[1] * 0.18, z_top + (sz[2] - body_h) * 0.55),
+          (c[0], c[1] - sz[1] * 0.18, z_top + (sz[2] - body_h) * 0.55 + 0.02), 0.011)             # pour spout
+    png = text_png(os.path.join(TEX, "carton_label.png"), [("FLOSS", 1.2, (225, 25, 115, 255)),
+                                                           ("SUGAR", 1.2, (225, 25, 115, 255)),
+                                                           ("Himbeer E129", 0.6, (60, 60, 60, 255))],
+                   size=(256, 384), bg=(255, 255, 255, 255))
+    k.decal(png, (c[0], c[1] + sz[1] / 2 + 0.0015, c[2] - sz[2] / 2 + body_h / 2), (0, 1, 0), (0, 0, 1),
+            sz[0] * 0.9, body_h * 0.8)
+    k.collide(tuple(c), tuple(sz), name="SugarCarton")
+    # damp cleaning sponge on the machine table
+    c, sz = centre_size("Sponge")
+    k.rbox("SpongeYellow", (c[0], c[1], c[2] - sz[2] / 6), (sz[0], sz[1], sz[2] * 2 / 3), r=0.006)
+    k.rbox("ScourGreen", (c[0], c[1], c[2] + sz[2] / 3), (sz[0], sz[1], sz[2] / 3), r=0.003)
     # bag rail with filled bags (display)
     b = ITEMS["BagRail"]
     blo, bhi = np.array(b["lo"]), np.array(b["hi"])
@@ -244,10 +275,11 @@ def signs(k):
     y = -D / 2 - 0.035
     png = text_png(os.path.join(TEX, "sign_zuckerwatte.png"), [("Zuckerwatte", 1.0, (225, 25, 115, 255))],
                    size=(1600, 320), bg=(255, 250, 252, 255))
-    k.rbox("SprucePaintedWhite", (0, y + 0.015, z), (1.90, 0.03, 0.40), r=0.01)
-    k.decal(png, (0, y - 0.001, z), (0, -1, 0), (0, 0, 1), 1.70, 0.34, emissive=25.0)
-    k.box("SignPink", (0, y - 0.002, z - 0.19), (1.90, 0.01, 0.012))
-    k.box("SignPink", (0, y - 0.002, z + 0.19), (1.90, 0.01, 0.012))
+    sw = 0.63 * W                                                                     # sign width scales with the hut
+    k.rbox("SprucePaintedWhite", (0, y + 0.015, z), (sw, 0.03, 0.40), r=0.01)
+    k.decal(png, (0, y - 0.001, z), (0, -1, 0), (0, 0, 1), sw - 0.20, (sw - 0.20) / 5, emissive=25.0)
+    k.box("SignPink", (0, y - 0.002, z - 0.19), (sw, 0.01, 0.012))
+    k.box("SignPink", (0, y - 0.002, z + 0.19), (sw, 0.01, 0.012))
     it = ITEMS["InfoBoard"]
     lo, hi = np.array(it["lo"]), np.array(it["hi"])
     c = (lo + hi) / 2
@@ -265,7 +297,7 @@ def signs(k):
 
 def display(k):
     for i, (mat, dx) in enumerate((("FlossPink", 0.0), ("FlossBlue", 0.11))):
-        x, y = 0.62 + dx * 1.5, -0.80 + 0.03 * i
+        x, y = L.X1 - 0.80 + dx * 1.5, L.Y0 + 0.40 + 0.03 * i                          # on the sales counter
         k.cyl("SpruceOiled", (x, y, L.COUNTER_Z), (x, y, L.COUNTER_Z + 0.06), 0.04)
         floss_portion(k, x, y, L.COUNTER_Z + 0.02, mat, seed=10 + i)
 
@@ -279,7 +311,8 @@ def build():
         k = Kit()
         fn(k)
         k.write(st, f"{root}/{name}")
-    sdt(st.GetPrimAtPath(root), assetId="CottonCandyBooth", canonicalName="2 x 2 m Zuckerwatte market booth",
+    sdt(st.GetPrimAtPath(root), assetId="CottonCandyBooth",
+        canonicalName=f"{W:g} x {D:g} m Zuckerwatte market hut",
         status="SOURCED footprint/panels/counter depth; ANALOGUE heights/flap; ILLUSTRATIVE colours and decoration",
         frame="booth frame B of site/layout.py")
     for part, cls in (("Flap", "SalesFlap"), ("Equipment", "HandwashStation;FireExtinguisher;PowerDistributor"),

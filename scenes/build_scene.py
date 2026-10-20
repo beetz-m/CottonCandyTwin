@@ -43,11 +43,13 @@ def context(st):
     """Paving, two light poles with a string of bulbs, two neighbour stalls (ILLUSTRATIVE)."""
     k = Kit()
     k.quad("Paving", (0, -1.0, 0.0), (0, 0, 1), (0, 1, 0), 60.0, 60.0, uv=(0, 0, 60.0 / 2.0 * 2.0, 60.0 / 2.0 * 2.0))  # meshkit divides UVs by TILE_M (2 m)
-    poles = [(-2.6, -2.6), (2.6, -2.6)]
+    poles = [(-2.6, -2.6 - (g("booth_depth") - 2.0) / 2), (2.6, -2.6 - (g("booth_depth") - 2.0) / 2)]
     for x, y in poles:
         k.cyl("PoleDark", (x, y, 0.0), (x, y, 3.4), 0.05)
         k.cyl("PoleDark", (x, y, 0.0), (x, y, 0.05), 0.25)
-    anchors = [(-2.6, -2.6, 3.3), (-1.0, -1.25, 2.25), (1.0, -1.25, 2.25), (2.6, -2.6, 3.3)]
+    yf, zf = -g("booth_depth") / 2 - 0.05, L.EAVE_Z + 0.05                # string lights fixed to the front eave
+    py = poles[0][1]
+    anchors = [(-2.6, py, 3.3), (-1.2, yf, zf), (1.2, yf, zf), (2.6, py, 3.3)]
     bulbs = []
     for (x0, y0, z0), (x1, y1, z1) in zip(anchors[:-1], anchors[1:]):
         n = 7
@@ -62,7 +64,7 @@ def context(st):
             k.sphere("BulbWarm", (p[0], p[1], p[2] - 0.05), 0.03, seg=12)
             bulbs.append((p[0], p[1], p[2] - 0.05))
     # neighbour stalls: striped tarp roof on four poles, a counter (ILLUSTRATIVE, background)
-    for cx in (-4.2, 4.2):
+    for cx in (-(g("booth_width") / 2 + 2.7), g("booth_width") / 2 + 2.7):
         for dx in (-1.4, 1.4):
             for dy in (-1.1, 1.1):
                 k.cyl("StainlessSatin", (cx + dx, 0.6 + dy, 0), (cx + dx, 0.6 + dy, 2.3), 0.025)
@@ -89,11 +91,11 @@ def lights(st, bulbs):
     x.AddRotateZOp().Set(220.0)
     x.AddRotateXOp().Set(82.0)                      # ~8 deg above the horizon, from the south-west
     inside = UsdLux.RectLight.Define(st, "/World/Lights/BoothLED")
-    inside.CreateWidthAttr(1.8)
+    inside.CreateWidthAttr(g("booth_width") - 0.2)
     inside.CreateHeightAttr(0.06)
     inside.CreateIntensityAttr(9000.0)
     inside.CreateColorAttr(Gf.Vec3f(1.0, 0.88, 0.72))
-    UsdGeom.Xformable(inside).AddTranslateOp().Set(Gf.Vec3d(0, -0.85, L.EAVE_Z - 0.05))
+    UsdGeom.Xformable(inside).AddTranslateOp().Set(Gf.Vec3d(0, L.Y0 + 0.45, L.EAVE_Z - 0.05))
     spot = UsdLux.SphereLight.Define(st, "/World/Lights/MachineSpot")
     spot.CreateRadiusAttr(0.04)
     spot.CreateIntensityAttr(25000.0)
