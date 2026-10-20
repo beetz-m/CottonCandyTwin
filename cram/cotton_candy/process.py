@@ -15,6 +15,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 
 from krrood.exceptions import DataclassException
+from typing_extensions import List
 
 from cotton_candy.semantic_annotations import CottonCandyMachine
 
@@ -118,6 +119,84 @@ class PhaseNotReached(DataclassException):
 
     def suggest_correction(self) -> str:
         return "Check the switches, the heat setting and the sugar in the head."
+
+
+# %% belief about the cotton candy
+
+
+class CandyStage(Enum):
+    """
+    How far a portion of cotton candy has come.
+    """
+
+    NONE = "none"
+    """
+    No floss on a stick yet.
+    """
+
+    GATHERED = "gathered"
+    """
+    The web of floss has been gathered from the pan onto the stick.
+    """
+
+    WRAPPED = "wrapped"
+    """
+    The floss has been wrapped into a portion (figure eights).
+    """
+
+    DELIVERED = "delivered"
+    """
+    The customer holds the portion.
+    """
+
+
+@dataclass(eq=False)
+class CottonCandyBelief:
+    """
+    The robot's belief about one portion of cotton candy: what was ordered (flavour, ingredients, for whom), how far
+    it has come, the stick it is on, how much floss it holds and who received it. Updated by the plan's process
+    steps when the plan reaches them.
+    """
+
+    order: int = 0
+    """
+    The order number.
+    """
+
+    flavour: str = "raspberry (pink)"
+    """
+    The ordered flavour (:class:`~cotton_candy.recipes.Flavour` value).
+    """
+
+    ingredients: List[str] = field(default_factory=list)
+    """
+    The ingredients the portion is made of (ontology material names).
+    """
+
+    ordered_by: str | None = None
+    """
+    The name of the customer's body the portion is made for.
+    """
+
+    stage: CandyStage = CandyStage.NONE
+    """
+    How far the portion has come.
+    """
+
+    stick: str | None = None
+    """
+    The name of the stick carrying it.
+    """
+
+    floss_kg: float = 0.0
+    """
+    The floss on the stick.
+    """
+
+    customer: str | None = None
+    """
+    Who received it.
+    """
 
 
 # %% the model
@@ -233,6 +312,22 @@ class FlossMachineProcess:
     Portions taken from the pan so far.
     """
 
+    candies: List[CottonCandyBelief] = field(default_factory=list)
+    """
+    The belief store: every portion ordered so far, delivered or not.
+    """
+
+    @property
+    def candy(self) -> CottonCandyBelief:
+        """
+        :return: The portion currently being made (the latest order not yet delivered); a default order is opened
+            if there is none.
+        """
+        open_orders = [c for c in self.candies if c.stage is not CandyStage.DELIVERED]
+        if open_orders:
+            return open_orders[-1]
+        return self.new_order()
+
     # %% phase
 
     @property
@@ -338,9 +433,9 @@ class FlossMachineProcess:
             raise SugarPouredIntoSpinningHead(self.phase)
         self.sugar_in_head_kg = min(self.timings.head_capacity_kg, self.sugar_in_head_kg + kg)
 
-    def take_portion(self) -> None:
+    def take_portion(self, stick: str | None = None) -> None:
         """
-        Wind one portion of floss from the pan onto a stick.
+        Wind one portion of floss from the pan onto a stick (the candy is then GATHERED).
 
         :raises NotEnoughFloss: When less than a portion has collected.
         """
@@ -348,3 +443,34 @@ class FlossMachineProcess:
             raise NotEnoughFloss(self.floss_in_pan_kg, self.timings.portion_sugar_kg)
         self.floss_in_pan_kg -= self.timings.portion_sugar_kg
         self.portions_served += 1
+        candy = self.candy
+        candy.stage, candy.stick, candy.floss_kg = CandyStage.GATHERED, stick, self.timings.portion_sugar_kg
+
+    def candy_wrapped(self) -> None:
+        """
+        The gathered floss has been wrapped into a portion.
+        """
+        candy = self.candy
+        candy.stage = CandyStage.WRAPPED
+
+    def candy_delivered(self, customer: str) -> None:
+        """
+        The customer has taken the portion; the next portion starts from nothing.
+        """
+        candy = self.candy
+        candy.stage, candy.customer = CandyStage.DELIVERED, customer
+
+    def new_order(self, flavour: str = "raspberry (pink)", ingredients: List[str] | None = None,
+                  ordered_by: str | None = None) -> CottonCandyBelief:
+        """
+        Open the belief about a newly ordered portion.
+
+        :return: The new portion's belief.
+        """
+        from cotton_candy.recipes import Flavour
+
+        candy = CottonCandyBelief(order=len(self.candies) + 1, flavour=flavour,
+                                  ingredients=list(ingredients or Flavour(flavour).ingredients),
+                                  ordered_by=ordered_by)
+        self.candies.append(candy)
+        return candy

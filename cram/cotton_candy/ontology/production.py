@@ -29,6 +29,7 @@ from cotton_candy import actions as A
 from cotton_candy.booth_world import RobotStation, TwinModule
 from cotton_candy.manipulation_categories import ManipulationActionCategory, category_profile
 from cotton_candy.process import FlossMachineProcess
+from cotton_candy.recipes import Ingredient
 from cotton_candy.semantic_annotations import (
     CandyStick,
     ControlKnob,
@@ -671,17 +672,17 @@ class OntologyBuilder:
 
     def _materials(self) -> None:
         self.ontology.materials += [
-            Material("sucrose (floss sugar)", MaterialKind.INGREDIENT,
+            Material(Ingredient.SUCROSE.value, MaterialKind.INGREDIENT,
                      register_keys=["sucrose_density", "sucrose_melt", "portion_sugar"]),
-            Material("Allura Red (pink colour)", MaterialKind.COLOUR, e_number="E129", requires_warning=True,
+            Material(Ingredient.ALLURA_RED.value, MaterialKind.COLOUR, e_number="E129", requires_warning=True,
                      register_keys=["colour_sugar_pink", "reg_azo_warning"]),
-            Material("Brilliant Blue (blue colour)", MaterialKind.COLOUR, e_number="E133",
+            Material(Ingredient.BRILLIANT_BLUE.value, MaterialKind.COLOUR, e_number="E133",
                      register_keys=["colour_sugar_pink"]),
-            Material("silica (anti-caking agent)", MaterialKind.ADDITIVE, e_number="E551",
+            Material(Ingredient.SILICA.value, MaterialKind.ADDITIVE, e_number="E551",
                      register_keys=["colour_sugar_pink"]),
-            Material("lactose (carrier of the colour sugar)", MaterialKind.INGREDIENT, allergen="milk",
+            Material(Ingredient.LACTOSE.value, MaterialKind.INGREDIENT, allergen="milk",
                      register_keys=["colour_sugar_pink", "reg_allergen_lactose"]),
-            Material("flavouring", MaterialKind.INGREDIENT, register_keys=["colour_sugar_pink"]),
+            Material(Ingredient.FLAVOURING.value, MaterialKind.INGREDIENT, register_keys=["colour_sugar_pink"]),
             Material("pine wood (stick)", MaterialKind.PACKAGING, register_keys=["stick_length", "stick_section"]),
             Material("cardboard (sugar carton)", MaterialKind.PACKAGING, register_keys=["sugar_carton"]),
         ]
@@ -720,6 +721,11 @@ class OntologyBuilder:
                                                            station(RobotStation.SERVING),
                                                            station(RobotStation.MACHINE)),
              "J handover / F serve", "-", "robot"),
+            ("Make cotton candy and hand it to a customer",
+             A.MakeAndServeCottonCandyAction(machine, process, one(CandyStick), one(SugarCarton), one(HandoverZone),
+                                             one(Human), arm, station(RobotStation.SERVING),
+                                             station(RobotStation.MACHINE), station(RobotStation.MACHINE_CLOSE)),
+             "activity: serve (B + D + J)", "GM_MAN_EXP pp. 9-11", "robot"),
             ("Stop the machine", A.StopFlossMachineAction(machine, process, arm), "B machine tending: operate",
              "GM_MAN_EXP p. 10, step 8", "robot"),
             ("Shut the machine down", A.ShutDownFlossMachineAction(machine, process, arm),

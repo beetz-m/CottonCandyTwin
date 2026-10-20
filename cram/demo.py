@@ -12,7 +12,9 @@ the live questions read the world and the machine's process while the shift runs
 
 Run (viewer: ``cramera`` at http://localhost:8711, then choose Live):
 
-    cram/run.sh cramera-live cram/demo.py
+    cram/run.sh cramera-live cram/demo.py                             # the whole shift
+    COTTON_CANDY_PLAN=serve cram/run.sh cramera-live cram/demo.py     # make one portion, hand it to the customer
+    COTTON_CANDY_PLAN=generalized cram/run.sh cramera-live cram/demo.py   # the generalized plan, two orders
 
 Collision avoidance is off for this kinematic run: the PR2's collision buffers (0.05-0.20 m) exceed the clearances
 of the human-scale machine (controls under the pan overhang, reaching over the 0.66 m pan); coraplex's per-motion
@@ -35,17 +37,20 @@ from coraplex.demonstrations import RobotDemonstration
 from coraplex.plans.factories import sequential
 from coraplex.plans.plan_node import PlanNode
 from semantic_digital_twin.robots.pr2 import PR2
+from semantic_digital_twin.semantic_annotations.semantic_annotations import Human
 from semantic_digital_twin.world import World
 
 from cotton_candy.actions import (
     CleanFlossMachineAction,
     FillSpinnerHeadAction,
+    MakeAndServeCottonCandyAction,
     SellCottonCandyAction,
     ShutDownFlossMachineAction,
     StartFlossMachineAction,
     project_refills,
 )
 from cotton_candy.booth_world import BoothWorldBuilder, RobotStation, TwinModule
+from cotton_candy.recipes import Flavour
 from cotton_candy.competency_questions import CottonCandyKnowledgeSource
 from cotton_candy.ontology.production import CottonCandyProductionOntology, OntologyBuilder
 from cotton_candy.process import FlossMachineProcess, FlossMachineTimings
@@ -132,8 +137,41 @@ class CottonCandyBoothDemonstration(RobotDemonstration):
             return
         CottonCandyKnowledgeSource(self.ontology, self.process, world).register_on(bridge)
 
+    plan_kind: str = field(default_factory=lambda: os.environ.get("COTTON_CANDY_PLAN", "shift"))
+    """
+    ``shift`` (the whole shift), ``serve`` (make cotton candy and hand it to the customer, from a cold machine) or
+    ``generalized`` (the generalized plan: the candy ordered is made and handed over from whatever state it is in;
+    two orders, the second reusing the running machine).
+    """
+
+    def run(self) -> World:
+        if self.plan_kind != "generalized":
+            return super().run()
+        from coraplex.execution_environment import ExecutionEnvironment
+
+        from cotton_candy.universal_plan import make_and_hand_over
+
+        try:
+            world = self.acquire_world()
+            context = self.build_context(world)
+            plan = make_and_hand_over(context, self.process, self.ontology.materials)
+            if self.visualization is not None:
+                plan.on_plan = self.visualization.attach_plan
+            with ExecutionEnvironment(execution_type=self.execution_type,
+                                      collision_avoidance=self.collision_avoidance):
+                for order in range(self.portions):
+                    self.process.new_order(Flavour.RASPBERRY.value, ordered_by="Customer")
+                    plan.perform()
+                    print(f"order {order + 1}: {' -> '.join(plan.trace)}", flush=True)
+                    plan.trace.clear()
+        finally:
+            self.tear_down()
+        return world
+
     def build_plan(self, context: Context) -> PlanNode:
         world = context.world
+        if self.plan_kind == "serve":
+            return self._serve_plan(context)
         one = lambda annotation: world.get_semantic_annotations_by_type(annotation)[0]
         machine, arm = one(CottonCandyMachine), context.robot.right_arm
         sticks = world.get_semantic_annotations_by_type(CandyStick)
@@ -155,6 +193,23 @@ class CottonCandyBoothDemonstration(RobotDemonstration):
             CleanFlossMachineAction(machine, self.process, one(Sponge), arm),
         ]
         return sequential(shift, context=context).plan
+
+    def _serve_plan(self, context: Context) -> PlanNode:
+        """
+        :return: The plan that makes one portion and hands it to the customer.
+        """
+        world = context.world
+        one = lambda annotation: world.get_semantic_annotations_by_type(annotation)[0]
+        return sequential(
+            [
+                MakeAndServeCottonCandyAction(
+                    one(CottonCandyMachine), self.process, one(CandyStick), one(SugarCarton), one(HandoverZone),
+                    one(Human), context.robot.right_arm, RobotStation.SERVING.pose(world.root),
+                    RobotStation.MACHINE.pose(world.root), RobotStation.MACHINE_CLOSE.pose(world.root),
+                )
+            ],
+            context=context,
+        ).plan
 
 
 class HoldOption(StrEnum):

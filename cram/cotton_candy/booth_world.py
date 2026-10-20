@@ -41,6 +41,7 @@ from semantic_digital_twin.world_description.geometry import Box, Color, Cylinde
 from semantic_digital_twin.world_description.shape_collection import ShapeCollection
 from semantic_digital_twin.world_description.world_entity import Body
 
+from cotton_candy.recipes import Flavour
 from cotton_candy.semantic_annotations import (
     CandyStick,
     ControlKnob,
@@ -647,7 +648,7 @@ class BoothWorldBuilder:
             tuple((l + h) / 2 for l, h in zip(lo, hi)),
         )
         annotations = dict(
-            carton=SugarCarton(root=carton),
+            carton=SugarCarton(root=carton, contents=Flavour.RASPBERRY.ingredients),   # 'Himbeer E129' carton
             quiver=StickQuiver(root=quiver),
             sticks=sticks,
             sponge=Sponge(root=sponge),

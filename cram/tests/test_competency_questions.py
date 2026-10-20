@@ -69,7 +69,8 @@ def flat(rows) -> list:
 @pytest.mark.parametrize("question", QUESTIONS, ids=lambda q: q.text[:40])
 def test_every_question_builds_and_answers(runner, question):
     result = list(runner.build(question.code).evaluate())
-    assert result, question.text
+    # belief questions are about orders, which may not exist yet; all others must answer
+    assert result or question.competence == "Belief", question.text
 
 
 # %% gold answers
@@ -88,7 +89,9 @@ def test_sugar_only_into_a_stopped_head(runner):
 
 def test_pressing_buttons_happens_when_starting_stopping_and_shutting_down(runner):
     rows = set(flat(answer(runner, "Kategorien", "Welche Schritte enthalten")))
-    assert rows == {"Start the machine", "Stop the machine", "Shut the machine down"}
+    # the make-and-serve plan starts a cold machine, so it presses the switches as well
+    assert rows == {"Start the machine", "Make cotton candy and hand it to a customer", "Stop the machine",
+                    "Shut the machine down"}
 
 
 def test_start_is_press_watch_press_turn_watch_turn(runner):
@@ -146,3 +149,10 @@ def test_live_no_combustible_is_inside_the_regulated_clearance(runner):
 def test_live_machine_starts_off(runner):
     rows = flat(answer(runner, "Live", "In welcher Phase"))
     assert "off" in [str(getattr(r, "value", r)) for r in rows]
+
+
+def test_belief_question_finds_the_open_order(source, runner):
+    source.process.candies.clear()
+    source.process.new_order("raspberry (pink)", ordered_by="Customer")
+    rows = flat(answer(runner, "Belief", "Wie weit"))
+    assert "raspberry (pink)" in rows and "Customer" in rows

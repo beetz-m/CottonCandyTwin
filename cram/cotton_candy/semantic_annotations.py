@@ -191,6 +191,11 @@ class SugarCarton(Tool, Container):
     reaches over the spinner head from the near side of the pan.
     """
 
+    contents: List[str] = field(default_factory=list, hash=False, kw_only=True)
+    """
+    The ingredients of the floss sugar in the carton (ontology material names).
+    """
+
     def tool_alignment(self, target: Union[Body, Pose]) -> List[AlignmentPair]:
         return [
             AlignmentPair(

@@ -28,7 +28,7 @@ from cotton_candy.ontology.production import (
     Regulation,
     SafetyMeasure,
 )
-from cotton_candy.process import FlossMachineProcess
+from cotton_candy.process import CandyStage, CottonCandyBelief, FlossMachineProcess
 
 
 # %% the questions
@@ -97,6 +97,11 @@ QUESTIONS: List[CompetencyQuestion] = [
     CompetencyQuestion("Live", "Welche brennbaren Objekte liegen gerade naeher als 0,6 m am Heizband?",
                        "set_of(artefact.name, artefact.distance_to_heating_band)"
                        ".where(artefact.combustible == True, artefact.distance_to_heating_band < 0.6)"),
+    CompetencyQuestion("Belief", "Wie weit ist die Zuckerwatte, die ich gerade mache, und wofuer ist sie?",
+                       "set_of(candy.order, candy.flavour, candy.stage, candy.stick, candy.ordered_by)"
+                       ".where(candy.stage != CandyStage.DELIVERED)"),
+    CompetencyQuestion("Belief", "Welche Zuckerwatten wurden schon an wen uebergeben?",
+                       "set_of(candy.order, candy.flavour, candy.customer).where(candy.stage == CandyStage.DELIVERED)"),
     CompetencyQuestion("Live", "In welcher Phase ist die Maschine, wie viel Zucker ist im Kopf, wie viele Portionen?",
                        "set_of(process.phase, process.sugar_in_head_kg, process.floss_in_pan_kg, "
                        "process.portions_served)"),
@@ -143,6 +148,7 @@ class CottonCandyKnowledgeSource:
             QueryDomain("category", ManipulationCategoryNode, o.categories),
             QueryDomain("quality", ProductQuality, o.qualities),
             QueryDomain("process", FlossMachineProcess, [self.process]),
+            QueryDomain("candy", CottonCandyBelief, self.process.candies),
         ]
 
     def knowledge(self) -> List[QueryableKnowledge]:
@@ -150,7 +156,7 @@ class CottonCandyKnowledgeSource:
             QueryableKnowledge(
                 scope=QueryScope.CURRENT_STATE,
                 domains=self.domains(),
-                extra_names={"world": self.world},
+                extra_names={"world": self.world, "CandyStage": CandyStage},
             )
         ]
 

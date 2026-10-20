@@ -43,6 +43,7 @@ from krrood.ormatic.utils import classproperty
 from coraplex.datastructures.dataclasses import Context
 from coraplex.datastructures.enums import WipingTechnique
 from coraplex.plans.factories import sequential
+from coraplex.plans.attachment_nodes import ReAttachNode
 from coraplex.plans.plan_node import PlanNode
 from coraplex.querying.predicates import GripperIsFree, GripperIsNotFree
 from coraplex.robot_plans.actions.base import ActionDescription
@@ -50,6 +51,7 @@ from coraplex.robot_plans.actions.core.navigation import NavigateAction
 from coraplex.robot_plans.actions.core.robot_body import MoveTorsoAction, ParkArmsAction
 from semantic_digital_twin.datastructures.definitions import TorsoState
 from semantic_digital_twin.robots.robot_parts import Arm
+from semantic_digital_twin.semantic_annotations.semantic_annotations import Human
 from semantic_digital_twin.spatial_types.spatial_types import Pose
 
 from cotton_candy.manipulation_categories import (
@@ -472,11 +474,108 @@ class RefillSpinnerHeadAction(ActionDescription):
 
 
 @dataclass
+class FinishPortionAction(ActionDescription):
+    """
+    Wrap the gathered floss on the held stick into a portion with figure eights above the pan ("This leaves giant
+    pockets and makes the final product appear larger", GM_MAN_EXP p. 11); the candy belief becomes WRAPPED.
+
+    Categories: Wrapping.
+    """
+
+    machine: CottonCandyMachine
+    """
+    The machine the portion is wrapped above.
+    """
+
+    process: FlossMachineProcess
+    """
+    The machine's process (holds the candy belief).
+    """
+
+    stick: CandyStick
+    """
+    The held stick with the gathered floss.
+    """
+
+    arm: Arm
+    """
+    The arm holding the stick.
+    """
+
+    @property
+    def _action_plan(self) -> PlanNode:
+        return sequential(
+            [
+                WrappingAction(arm=self.arm, tool=self.stick, above=self.machine.floss_pan.root),
+                process_step(self.process.candy_wrapped),
+            ]
+        )
+
+    @staticmethod
+    def pre_condition(variables: Dict[str, Variable], context: Context, kwargs: Dict[str, Any]) -> ConditionType:
+        """
+        The arm holds the stick.
+        """
+        return GripperIsNotFree(variables["arm"].end_effector)
+
+
+@dataclass
+class FormPortionAction(ActionDescription):
+    """
+    Form a portion on the held stick: wait until a portion of floss has collected, gather the web of floss from the
+    pan onto the stick and lift it out ("DO NOT roll floss while the cone is inside the pan", GM_MAN_EXP p. 11), then
+    wrap it. The candy belief goes GATHERED, then WRAPPED.
+
+    Categories: Monitoring - Gathering - Wrapping.
+    """
+
+    machine: CottonCandyMachine
+    """
+    The producing machine.
+    """
+
+    process: FlossMachineProcess
+    """
+    The machine's process (holds the candy belief).
+    """
+
+    stick: CandyStick
+    """
+    The held, still empty stick.
+    """
+
+    arm: Arm
+    """
+    The arm holding the stick.
+    """
+
+    @property
+    def _action_plan(self) -> PlanNode:
+        pan, stick_name = self.machine.floss_pan.root, self.stick.root.name.name
+        return sequential(
+            [
+                MonitoringProcessAction(self.process, until_portion=True, timeout_s=120.0),
+                GatheringAction(arm=self.arm, tool=self.stick, container=pan),
+                process_step(lambda: self.process.take_portion(stick_name)),
+                FinishPortionAction(self.machine, self.process, self.stick, self.arm),
+            ]
+        )
+
+    @staticmethod
+    def pre_condition(variables: Dict[str, Variable], context: Context, kwargs: Dict[str, Any]) -> ConditionType:
+        """
+        The machine produces floss and the arm holds the stick.
+        """
+        return and_(
+            variable_from(kwargs["process"]).phase == FlossMachinePhase.PRODUCING,
+            GripperIsNotFree(variables["arm"].end_effector),
+        )
+
+
+@dataclass
 class MakeCottonCandyAction(ActionDescription):
     """
-    Make one portion (GM_MAN_EXP p. 11): take a stick, wait until a portion of floss has collected, gather the web
-    of floss from the pan onto the stick, lift it out and wrap it with a figure eight ("DO NOT roll floss while the
-    cone is inside the pan").
+    Make one portion (GM_MAN_EXP p. 11): take a stick from the quiver and form the portion on it.
 
     Categories: Transporting (stick, held) - Monitoring - Gathering - Wrapping.
     """
@@ -503,15 +602,11 @@ class MakeCottonCandyAction(ActionDescription):
 
     @property
     def _action_plan(self) -> PlanNode:
-        pan = self.machine.floss_pan.root
         return sequential(
             [
                 MoveTorsoAction(TorsoState.LOW),
                 TransportingAction(self.stick, self.arm, ApproachDirection.TOWARDS_LEFT_WALL),
-                MonitoringProcessAction(self.process, until_portion=True, timeout_s=120.0),
-                GatheringAction(arm=self.arm, tool=self.stick, container=pan),
-                process_step(self.process.take_portion),
-                WrappingAction(arm=self.arm, tool=self.stick, above=pan),
+                FormPortionAction(self.machine, self.process, self.stick, self.arm),
             ]
         )
 
@@ -567,6 +662,16 @@ class ServeCottonCandyAction(ActionDescription):
     Where the robot's base returns to afterwards.
     """
 
+    customer: Optional[Human] = None
+    """
+    The customer who takes the portion; once released, the stick is attached to them (it moves with the customer).
+    """
+
+    process: Optional[FlossMachineProcess] = None
+    """
+    The machine's process, whose candy belief becomes DELIVERED (if given).
+    """
+
     def _handover_pose(self) -> Pose:
         """
         :return: The stick's pose in the handover zone: upright, the floss end up (the stick's x axis points to the
@@ -582,6 +687,11 @@ class ServeCottonCandyAction(ActionDescription):
             [
                 NavigateAction(self.serving_station),
                 HandingOverAction(self.stick, self.arm, self._handover_pose()),
+            ]
+            + ([ReAttachNode(body=self.stick.root, new_parent=self.customer.root)] if self.customer else [])
+            + ([process_step(lambda: self.process.candy_delivered(self.customer.root.name.name))]
+               if self.customer and self.process else [])
+            + [
                 ParkArmsAction(self.robot.all_arms),
                 NavigateAction(self.machine_station),
             ]
@@ -597,9 +707,14 @@ class ServeCottonCandyAction(ActionDescription):
     @staticmethod
     def post_condition(variables: Dict[str, Variable], context: Context, kwargs: Dict[str, Any]) -> ConditionType:
         """
-        The arm is free again: the customer has the portion.
+        The arm is free again, and the customer (if given) holds the stick.
         """
-        return GripperIsFree(variables["arm"].end_effector)
+        if kwargs.get("customer") is None:
+            return GripperIsFree(variables["arm"].end_effector)
+        return and_(
+            GripperIsFree(variables["arm"].end_effector),
+            variable_from(kwargs["stick"].root).parent_kinematic_structure_entity == kwargs["customer"].root,
+        )
 
 
 @dataclass
@@ -669,6 +784,119 @@ class SellCottonCandyAction(ActionDescription):
             ServeCottonCandyAction(self.stick, self.handover, self.arm, self.serving_station, self.machine_station),
         ]
         return sequential(steps)
+
+
+@dataclass
+class MakeAndServeCottonCandyAction(ActionDescription):
+    """
+    Make a portion of cotton candy and hand it to a customer, from whatever state the machine is in.
+
+    Machine state is projected when the plan is built (the plan is expanded before it runs): a machine that is off
+    is filled (if its head holds less than a portion) and started; a running machine whose head runs short is
+    refilled; a producing machine with enough sugar goes straight to making the portion. The portion is then made,
+    carried to the serving station, presented in the handover zone and released to the customer, who then holds it.
+
+    Categories: (Transporting - Pouring - Transporting) - (PressingButton - Monitoring - PressingButton - Turning -
+    Monitoring - Turning) - Transporting - Monitoring - Gathering - Wrapping - HandingOver.
+    """
+
+    machine: CottonCandyMachine
+    """
+    The floss machine.
+    """
+
+    process: FlossMachineProcess
+    """
+    The machine's process.
+    """
+
+    stick: CandyStick
+    """
+    The stick for this portion.
+    """
+
+    carton: SugarCarton
+    """
+    The sugar carton, in case the head must be filled.
+    """
+
+    handover: HandoverZone
+    """
+    Where the portion is presented.
+    """
+
+    customer: Human
+    """
+    The customer who receives the portion.
+    """
+
+    arm: Arm
+    """
+    The arm that does the work.
+    """
+
+    serving_station: Pose
+    """
+    Where the base stands to serve.
+    """
+
+    machine_station: Pose
+    """
+    Where the base stands at the machine.
+    """
+
+    close_station: Pose
+    """
+    Where the base stands for pouring.
+    """
+
+    def _preparation(self) -> List[Any]:
+        """
+        :return: The steps that bring the machine to producing with enough sugar for one portion, projected from the
+            process state now (when the plan is built).
+        """
+        timings = self.process.timings
+        enough = self.process.sugar_in_head_kg + self.process.floss_in_pan_kg + 1e-9 >= timings.portion_sugar_kg
+        fill = FillSpinnerHeadAction(self.machine, self.process, self.carton, self.arm, self.machine_station,
+                                     self.close_station)
+        start = StartFlossMachineAction(self.machine, self.process, self.arm)
+        if self.process.phase is FlossMachinePhase.OFF:
+            return ([] if enough else [fill]) + [start]
+        if not enough:
+            return [RefillSpinnerHeadAction(self.machine, self.process, self.carton, self.arm, self.machine_station,
+                                            self.close_station)]
+        return []
+
+    @property
+    def _action_plan(self) -> PlanNode:
+        return sequential(
+            self._preparation()
+            + [
+                MakeCottonCandyAction(self.machine, self.process, self.stick, self.arm),
+                ServeCottonCandyAction(self.stick, self.handover, self.arm, self.serving_station,
+                                       self.machine_station, customer=self.customer, process=self.process),
+            ]
+        )
+
+    @staticmethod
+    def pre_condition(variables: Dict[str, Variable], context: Context, kwargs: Dict[str, Any]) -> ConditionType:
+        """
+        The arm is free, and the stick is still unused (not with a customer).
+        """
+        return and_(
+            GripperIsFree(variables["arm"].end_effector),
+            variable_from(kwargs["stick"].root).parent_kinematic_structure_entity != kwargs["customer"].root,
+        )
+
+    @staticmethod
+    def post_condition(variables: Dict[str, Variable], context: Context, kwargs: Dict[str, Any]) -> ConditionType:
+        """
+        The customer holds the stick with the portion, and the robot's arm is free again.
+        """
+        return and_(
+            GripperIsFree(variables["arm"].end_effector),
+            variable_from(kwargs["stick"].root).parent_kinematic_structure_entity == kwargs["customer"].root,
+        )
 
 
 # %% top level: end of the day
