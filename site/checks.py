@@ -159,13 +159,38 @@ def main():
     check("C12 stick holder within 0.80 m of the operator", r <= 0.80, reach_m=round(r, 3))
 
     # C13 working sugar within reach of the operator (refill every ~30 s)
-    st = items["SugarWorkTray"]
+    st = items["SugarCarton"]
     r = math.hypot((st["lo"][0] + st["hi"][0]) / 2 - ox, (st["lo"][1] + st["hi"][1]) / 2 - oy)
-    check("C13 working sugar within 0.80 m of the operator", r <= 0.80, reach_m=round(r, 3))
+    check("C13 sugar carton within 0.80 m of the operator", r <= 0.80, reach_m=round(r, 3))
+
+    # C14 robot fit: the parked robot's MEASURED envelopes (lower: base; upper: torso, arms, head) plus the collision
+    # margin are free of every fixed item at every station
+    envelope = L.robot_envelope()
+    for station, (sx, sy, yaw) in L.ROBOT_STATIONS.items():
+        parked = not station.endswith("_close")
+        c, s_ = math.cos(yaw), math.sin(yaw)
+        hits = []
+        links = envelope.get("links") or [dict(name=k, **envelope[k]) for k in ("lower", "upper")]
+        for part in (links if parked else [l for l in links if "base" in l["name"]]):
+            lo, hi, part = part["lo"], part["hi"], part["name"]
+            xs, ys = [], []
+            for bx in (lo[0], hi[0]):
+                for by in (lo[1], hi[1]):
+                    xs.append(sx + c * bx - s_ * by)
+                    ys.append(sy + s_ * bx + c * by)
+            margin = L.robot_buffer(part)
+            part_box = dict(lo=(min(xs) - margin, min(ys) - margin, L.FLOOR_Z + lo[2]),
+                            hi=(max(xs) + margin, max(ys) + margin, L.FLOOR_Z + hi[2]))
+            hits += [f"{part}:{n}" for n, it in items.items()
+                     if it["role"] not in ("door", "roof") and overlap(part_box, it)]
+        check(f"C14 parked robot fits at the {station} station" if parked else
+              f"C15 robot base fits at the {station} station (arms raised there, never parked)", not hits, collisions=hits,
+              envelope="MEASURED" if os.path.exists(os.path.join(ROOT, "data", "robot_envelope.json")) else "register")
 
     failed = [r_["test"] for r_ in results if not r_["passed"]]
     out = provenance.write("checks", dict(machine_envelope=source, results=results, failed=failed),
-                           [os.path.join(HERE, f) for f in ("params.py", "layout.py", "checks.py")])
+                           [os.path.join(HERE, f) for f in ("params.py", "layout.py", "checks.py")]
+                           + [p for p in (env_path, os.path.join(ROOT, "data", "robot_envelope.json")) if os.path.exists(p)])
     print(f"\n{len(results) - len(failed)}/{len(results)} passed -> {os.path.relpath(out, ROOT)}")
     sys.exit(1 if failed else 0)
 

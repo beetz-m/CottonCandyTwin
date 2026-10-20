@@ -183,6 +183,24 @@ class SugarScoop(Tool, Container):
 
 
 @dataclass(eq=False)
+class SugarCarton(Tool, Container):
+    """
+    A half-gallon Flossugar carton with an "E-Z pour spout for filling your machine" (GM_MAN_EXP p. 9).
+
+    Its tool frame (``<root>_end_effector``) is the spout on top; held near its bottom and tilted forward, the spout
+    reaches over the spinner head from the near side of the pan.
+    """
+
+    def tool_alignment(self, target: Union[Body, Pose]) -> List[AlignmentPair]:
+        return [
+            AlignmentPair(
+                tip_normal=Vector3(0, 0, 1, reference_frame=self.root),
+                goal_normal=Vector3(0, 0, 1, reference_frame=target),
+            )
+        ]
+
+
+@dataclass(eq=False)
 class CandyStick(Tool):
     """
     A wooden stick (40 cm, 4 x 4 mm pine) the floss is wound onto.
@@ -228,10 +246,11 @@ class Sponge(Tool):
     """
 
     def tool_alignment(self, target: Union[Body, Pose]) -> List[AlignmentPair]:
+        frame = target if isinstance(target, Body) else target.reference_frame
         return [
             AlignmentPair(
                 tip_normal=Vector3(0, 0, -1, reference_frame=self.root),
-                goal_normal=Vector3(0, 0, -1, reference_frame=target),
+                goal_normal=Vector3(0, 0, -1, reference_frame=frame),
             )
         ]
 

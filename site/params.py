@@ -126,6 +126,14 @@ SOURCES = {
                "daten/tr/asr_a1_2/5.htm (search summary): Bewegungsflaeche >= 1,50 m2, Breite und Tiefe >= 1,00 m",
     "ASR_A18": "ASR A1.8 'Verkehrswege' 4.2 via https://www.komnet.nrw.de/_sitetools/dialog/22760 (search summary): "
                "lichte Hoehe ueber Verkehrswegen >= 2,00 m",
+    "ZV_HANNOVER": "https://www.zeltverleih-hannover.de/mietzelte/verkaufsbuden/holzh%C3%BCtte-mit-verkaufsklappe-"
+                   "leihen.html - snippet: hut 3.03 x 2.03 m, side wall 1.9 m, ridge 2.5 m",
+    "PR2_URDF": "iai_pr2_description (~/ros_ws/src/iai_pr2) base_link collision box; PR2 base 668 mm square",
+    "PR2_CRAM_CFG": "~/WORK/cognitive_robot_abstract_machine/semantic_digital_twin/src/semantic_digital_twin/robots/"
+                    "pr2.py (collision rules: AvoidExternalCollisions buffer_zone_distance 0.1 default, 0.05 arms, "
+                    "0.2 base_link with violated_distance 0.05) - read 2026-10-20",
+    "WD_HUT": "https://wichtige-dinge.de/eventmodul/weihnachtsmarkthuette-buchen/ - hut 3.0 x 2.6 x 3.0 m, "
+              "'Strom: 230V/16A', 'Inkl. Beleuchtung'",
     "DIN_EN631": "DIN EN 631-1 Gastronorm container sizes (GN 1/1 530 x 325 mm; GN 1/6 176 x 162 mm) - from "
                  "general knowledge of the standard, not re-read - VERIFY",
     "DIN33402": "DIN 33402-2:2020 body dimensions (adult elbow height standing ca. 1.0-1.15 m, 5th-95th pct.); "
@@ -134,20 +142,26 @@ SOURCES = {
 
 P = {
     # ---------------------------------------------------------------- booth (wooden Markthuette, 2 x 2 m)
-    "booth_width": (2.0, "m", S, "MH_PROFI", "'2 x 2 m Markthuette Basic'; rentals 2 x 2 x 3 m (CRYPTON)"),
-    "booth_depth": (2.0, "m", S, "MH_PROFI", "square footprint"),
+    "booth_width": (3.0, "m", S, "WD_HUT", "3.0 x 2.6 m market hut (ZV_HANNOVER rental 3.03 x 2.03 m); enlarged from the 2 x 2 m hut "
+                    "(MH_PROFI, CRYPTON) on 2026-10-20 (user decision) because a PR2 does not fit 2 x 2 m with "
+                    "collision-avoidance margins; Rolls-Toys Zuckerwatte stand 2.40 x 2.00 m (ROLLS_STAND)"),
+    "booth_depth": (2.6, "m", S, "WD_HUT", "3.0 x 2.6 x 3.0 m market hut with 230 V/16 A; 2.0 m was too shallow for "
+                    "a PR2 with its collision buffers (base 0.67 m + 2 x 0.20 m between machine table and back wall; "
+                    "check C14, 2026-10-20)"),
     "booth_wall_panel_t": (0.013, "m", S, "MH_PROFI", "13 mm 3-ply Nordic spruce panels with frame"),
     "booth_roof_deck_t": (0.009, "m", S, "MH_PROFI", "9 mm screen-printed multiplex"),
-    "booth_eave_height": (2.05, "m", I, "recon", "rental huts: standing height ca. 1.90, side wall 1.90 (HUT_RENT); "
-                          "2.05 chosen so a 1.90 m operator clears the eave"),
-    "booth_ridge_height": (2.50, "m", A, "HUT_RENT", "range 2.30 (STEINHAUER Nikolaus) - 2.60 (rental listing); gable "
-                           "roof, ridge across the sales front"),
+    "booth_eave_height": (2.30, "m", I, "recon", "eave of the 3.0 m-high hut (not published); a 1.90 m operator "
+                          "clears it, the sales-flap hinge sits below it"),
+    "booth_ridge_height": (3.00, "m", S, "WD_HUT", "3.0 x 2.6 x 3.0 m market hut (the footprint used here); smaller "
+                           "2 x 2 huts 2.30-2.60 (STEINHAUER, HUT_RENT) - with 2.5 m the PR2 torso could not rise "
+                           "(mast in the roof buffer), so its shoulder stayed below the pan rim (2026-10-20)"),
     "booth_roof_overhang": (0.25, "m", I, "recon", "front and side overhang of the gable roof"),
     "booth_counter_depth": (0.60, "m", S, "MH_PROFI", "'Theke innen mit 60cm Tiefe'"),
     "booth_counter_height": (0.90, "m", PX, "COUNTER", "retail advice 90 cm (95-110 for checkout/gastro); low "
                              "enough that children see the machine"),
     "booth_counter_top_t": (0.027, "m", I, "recon", "solid wood worktop"),
-    "booth_flap_width": (1.60, "m", A, "CRAFTMAX", "sales flap 1600 x 1000 mm on a food trailer; used for the hut"),
+    "booth_flap_width": (2.40, "m", I, "recon", "wide sales opening over machine and counter of the 3 m hut; trailer "
+                         "flaps are 1600 x 1000 mm (CRAFTMAX)"),
     "booth_flap_height": (1.00, "m", A, "CRAFTMAX", "flap hinged at the top, opens up as a rain/sun awning"),
     "booth_flap_open_angle": (100.0, "deg", I, "recon", "rotation from the closed (hanging) position, held by gas "
                               "struts; edge rises above the hinge"),
@@ -160,6 +174,15 @@ P = {
                              "1.34 m"),
     "handwash_unit": ((0.45, 0.45, 0.85), "m", A, "MS_MB25", "mobile hand-wash station with fresh/waste water "
                       "canisters, typical market-trader unit; dimensions illustrative"),
+    "robot_base_footprint": (0.668, "m", PX, "PR2_URDF", "PR2 base square edge; MEASURED from the parked robot in "
+                             "the CRAM world -> data/robot_envelope.json when available"),
+    "robot_buffer_base": (0.20, "m", S, "PR2_CRAM_CFG", "giskard buffer zone of base_link (violated below 0.05 m)"),
+    "robot_buffer_arm": (0.05, "m", S, "PR2_CRAM_CFG", "buffer zone of the arm links (end effectors excluded)"),
+    "robot_buffer_base_booth": (0.08, "m", I, "recon", "base_link buffer used in the booth (CRAM default 0.20 m keeps "
+                                "the spinner head ~0.88 m from the shoulder, beyond reliable PR2 reach) - tight-"
+                                "workplace tuning, applied as an extra collision rule in the CRAM world"),
+    "robot_violated_base_booth": (0.03, "m", I, "recon", "base_link violated distance in the booth (CRAM default 0.05)"),
+    "robot_buffer_default": (0.10, "m", S, "PR2_CRAM_CFG", "buffer zone of all other robot links"),
     "gn16_size": ((0.176, 0.162), "m", SV, "DIN_EN631", "Gastronorm 1/6 container 176 x 162 mm"),
     "side_shelf_depth": (0.30, "m", I, "recon", "3-level shelf on the right wall (sugar tubs, sticks, bag stock)"),
     # ---------------------------------------------------------------- booth regulation / equipment
@@ -221,7 +244,8 @@ P = {
     "bubble_base_diameter": (26.5 * IN, "m", PX, "GM3943_CFE", "'fits 26\" O.D. floss bowls'"),
     "bubble_height": (0.50, "m", PX, "GM3943_SMARTUK", "listing says 660 mm (probably box size); 0.50 m chosen so "
                       "the operator can reach in through the front opening"),
-    "bubble_opening_angle": (110.0, "deg", I, "recon", "front cut-out of the dome for the operator"),
+    "bubble_opening_angle": (150.0, "deg", I, "recon", "front cut-out of the dome for the operator; 110 deg blocked "
+                             "a PR2 forearm coming in diagonally from beside the machine (kinematic test 2026-10-20)"),
     # ---------------------------------------------------------------- machine: spinner head
     "head_band_diameter": (5.5 * IN, "m", S, "GM_MAN_EXP", "'5 1/2 FLOSS BAND 43165' = head outer diameter"),
     "head_band_height": (0.034, "m", A, "GM_MAN_EXP", "photo p22 scaled by band diameter"),
@@ -282,6 +306,13 @@ P = {
     "colour_sugar_energy": (400.0, "kcal/100g", S, "PCO", "1698 kJ"),
     "colour_sugar_price": (8.99, "EUR/kg", S, "HOPSER", "7.99-9.99 EUR/kg retail"),
     "colour_sugar_shelf_life": (12.0, "months", S, "PCO", "store dry, room temperature"),
+    "sugar_carton": ("half-gallon Flossugar carton with E-Z pour spout", "-", S, "GM_MAN_EXP",
+                     "'packed in handy half-gallon sealed cartons, with an E-Z pour spout for filling your machine' "
+                     "(p. 9); the robot fills the head from the carton (reach over the 0.66 m pan)"),
+    "sugar_carton_size": ((0.095, 0.095, 0.195), "m", A, "recon", "US half-gallon gable-top carton ~3.75 x 3.75 x "
+                          "7.7 in (milk carton analogue); spout on top"),
+    "sugar_carton_grip_height": (0.03, "m", I, "recon", "grip just above the carton bottom so the tilted spout reaches "
+                                 "~0.17 m ahead of the gripper"),
     "sugar_tub_volume": (0.010, "m3", I, "recon", "10 L lidded food-grade tub per colour (white, pink, blue)"),
     "scoop_volume": (25e-6, "m3", D, "recon", "portion_sugar / sugar_bulk_density = 25 mL scoop"),
     "stick_length": (0.40, "m", S, "HOPSER_ST", "pine wood, food grade"),

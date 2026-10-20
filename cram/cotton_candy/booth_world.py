@@ -22,6 +22,7 @@ from enum import Enum
 from typing_extensions import Dict, List, Tuple, Type
 
 from semantic_digital_twin.adapters.urdf import URDFParser
+from semantic_digital_twin.collision_checking.collision_rules import AvoidExternalCollisions
 from semantic_digital_twin.datastructures.definitions import StaticJointState
 from semantic_digital_twin.datastructures.prefixed_name import PrefixedName
 from semantic_digital_twin.robots.robot_parts import AbstractRobot
@@ -56,8 +57,7 @@ from cotton_candy.semantic_annotations import (
     SpinnerHead,
     Sponge,
     StickQuiver,
-    SugarScoop,
-    SugarTray,
+    SugarCarton,
 )
 
 
@@ -141,22 +141,19 @@ class Finish(Enum):
 
 class RobotStation(Enum):
     """
-    Where the robot's base stands to work (x, y, yaw in the booth frame), facing the sales front (-y).
-
-    Chosen for a PR2 (0.67 m square base): MACHINE keeps the parked arms clear of the machine table and the
-    counter (the full-body controller moves the base closer when an arm needs it); SERVING puts the base front against the counter so the left arm reaches
-    the handover zone (~0.62 m). Both footprints are clear of the table, counter, shelf and hand-wash station.
+    Where the robot's base stands to work, from the twin layout's ``ROBOT_STATIONS`` (x, y, yaw in the booth frame).
     """
 
-    MACHINE = (-0.20, 0.34, -math.pi / 2)
-    SERVING = (0.32, -0.04, -math.pi / 2)
+    MACHINE = "machine"
+    MACHINE_CLOSE = "machine_close"
+    SERVING = "serving"
 
     def pose(self, reference_frame: Body) -> Pose:
         """
         :param reference_frame: The booth frame body.
         :return: The base pose of this station.
         """
-        x, y, yaw = self.value
+        x, y, yaw = TwinModule.LAYOUT.load().ROBOT_STATIONS[self.value]
         return Pose.from_xyz_rpy(x=x, y=y, yaw=yaw, reference_frame=reference_frame)
 
 
@@ -186,7 +183,10 @@ def cylinder_body(name: str, diameter: float, height: float, finish: Finish) -> 
     return Body(name=PrefixedName(name, "booth"), visual=ShapeCollection([shape]), collision=ShapeCollection([shape]))
 
 
-def ring_body(name: str, diameter: float, height: float, wall: float, finish: Finish, segments: int = 24) -> Body:
+def ring_body(
+    name: str, diameter: float, height: float, wall: float, finish: Finish, segments: int = 24,
+    opening_deg: float = 0.0, bottom: bool = True,
+) -> Body:
     """
     An open ring (pan wall) approximated by boxes, so the inside stays free for the spinner head and the stick.
 
@@ -209,15 +209,41 @@ def ring_body(name: str, diameter: float, height: float, wall: float, finish: Fi
             color=finish.color,
         )
         for angle in (2 * math.pi * i / segments for i in range(segments))
+        if abs(math.degrees(math.atan2(math.sin(angle - math.pi / 2), math.cos(angle - math.pi / 2)))) > opening_deg / 2
     ]
-    shapes.append(
+    if bottom:
+        shapes.append(
         Cylinder(
             origin=HomogeneousTransformationMatrix.from_xyz_rpy(z=-height / 2 + wall / 2),
             width=diameter,
             height=wall,
             color=finish.color,
         )
-    )
+        )
+    return Body(name=PrefixedName(name, "booth"), visual=ShapeCollection(shapes), collision=ShapeCollection(shapes))
+
+
+def open_box_body(name: str, size: Tuple[float, float, float], wall: float, finish: Finish) -> Body:
+    """
+    An open-topped container (tray, tub) as four walls and a bottom, so tools can dip into it.
+
+    :param name: Name of the body (prefix "booth").
+    :param size: Outer edge lengths along x, y, z in metres; centred on the body origin.
+    :param wall: Wall and bottom thickness in metres.
+    :param finish: Surface colour.
+    """
+    sx, sy, sz = size
+    parts = [
+        ((0.0, 0.0, -sz / 2 + wall / 2), (sx, sy, wall)),
+        ((-sx / 2 + wall / 2, 0.0, 0.0), (wall, sy, sz)),
+        ((sx / 2 - wall / 2, 0.0, 0.0), (wall, sy, sz)),
+        ((0.0, -sy / 2 + wall / 2, 0.0), (sx, wall, sz)),
+        ((0.0, sy / 2 - wall / 2, 0.0), (sx, wall, sz)),
+    ]
+    shapes = [
+        Box(origin=HomogeneousTransformationMatrix.from_xyz_rpy(*xyz), scale=Scale(*dims), color=finish.color)
+        for xyz, dims in parts
+    ]
     return Body(name=PrefixedName(name, "booth"), visual=ShapeCollection(shapes), collision=ShapeCollection(shapes))
 
 
@@ -232,9 +258,9 @@ class BoothWorldBuilder:
     The robot that operates the booth.
     """
 
-    robot_xy_yaw: Tuple[float, float, float] = RobotStation.MACHINE.value
+    station: RobotStation = RobotStation.MACHINE
     """
-    Where the robot's base stands when the world is built (x, y, yaw).
+    The station the robot's base stands at when the world is built.
     """
 
     machine_set_up: bool = True
@@ -293,7 +319,7 @@ class BoothWorldBuilder:
 
     def _robot_world(self) -> World:
         """
-        :return: A world rooted at the booth frame with the robot standing at :attr:`robot_xy_yaw`.
+        :return: A world rooted at the booth frame with the robot parked at :attr:`station`.
         """
         world = URDFParser.from_file(
             file_path=self.robot_type.get_ros_file_path(),
@@ -316,11 +342,21 @@ class BoothWorldBuilder:
             z=self.layout.FLOOR_Z, reference_frame=self.root
         )
         robot = world.get_semantic_annotations_by_type(self.robot_type)[0]
+        # tight-workplace tuning of the base's collision buffer (twin register robot_buffer_base_booth)
+        with world.modify_world():
+            world.collision_manager.add_default_rule(
+                AvoidExternalCollisions(
+                    buffer_zone_distance=self.params.get("robot_buffer_base_booth"),
+                    violated_distance=self.params.get("robot_violated_base_booth"),
+                    robot=robot,
+                    body_subset={world.get_body_in_branch_by_name(robot.root, "base_link")},
+                )
+            )
         for arm in robot.all_arms:
             park = arm.get_joint_state_by_type(StaticJointState.PARK)
             for connection, value in zip(park.connections, park.target_values):
                 connection.position = value
-        x, y, yaw = self.robot_xy_yaw
+        x, y, yaw = self.layout.ROBOT_STATIONS[self.station.value]
         drive.origin = HomogeneousTransformationMatrix.from_xyz_rpy(x=x, y=y, yaw=yaw, reference_frame=self.root)
         return world
 
@@ -426,7 +462,7 @@ class BoothWorldBuilder:
                         x=0.0,
                         y=sign * slab / 2 * math.cos(pitch),
                         z=L.EAVE_Z + rise - slab / 2 * math.sin(pitch),
-                        roll=sign * pitch,
+                        roll=-sign * pitch,  # rises towards the ridge
                         reference_frame=self.root,
                     ),
                 )
@@ -534,7 +570,8 @@ class BoothWorldBuilder:
             -1.0e6,
             1.0e6,
         )
-        bubble = ring_body("FlossBubble", g("bubble_base_diameter"), g("bubble_height"), 0.003, Finish.BUBBLE, 16)
+        bubble = ring_body("FlossBubble", g("bubble_base_diameter"), g("bubble_height"), 0.003, Finish.BUBBLE, 16,
+                           opening_deg=g("bubble_opening_angle"), bottom=False)
         self._add(bubble, (mx, my, L.M_TOP_Z + g("bubble_height") / 2 + 0.002))
         machine = CottonCandyMachine(
             root=cabinet,
@@ -556,13 +593,23 @@ class BoothWorldBuilder:
     def _tools(self) -> Dict[str, object]:
         g, L = self.params.get, self.layout
         items = {item["name"]: item for item in L.items()}
-        tray_item = items["SugarWorkTray"]
-        tray = self._layout_box(tray_item, Finish.STAINLESS)
-        scoop = cylinder_body("SugarScoop", 0.05, 0.035, Finish.STAINLESS)
-        tray_top = tray_item["hi"][2]
-        cx = (tray_item["lo"][0] + tray_item["hi"][0]) / 2
-        cy = (tray_item["lo"][1] + tray_item["hi"][1]) / 2
-        self._free(scoop, (cx, cy, tray_top + 0.0175))
+        carton_item = items["SugarCarton"]
+        lo, hi = carton_item["lo"], carton_item["hi"]
+        carton_size = tuple(h - l for l, h in zip(lo, hi))
+        carton = self._free(
+            box_body("SugarCarton", carton_size, Finish.WHITE_PAINT), tuple((l + h) / 2 for l, h in zip(lo, hi))
+        )
+        spout = Body(name=PrefixedName("SugarCarton_end_effector", "booth"))
+        self.world.add_kinematic_structure_entity(spout)
+        self.world.add_connection(
+            FixedConnection(
+                parent=carton,
+                child=spout,
+                parent_T_connection_expression=HomogeneousTransformationMatrix.from_xyz_rpy(
+                    z=carton_size[2] / 2, reference_frame=carton
+                ),
+            )
+        )
         quiver_item = items["StickHolder"]
         quiver = self._layout_box(quiver_item, Finish.SPRUCE)
         sticks = []
@@ -591,17 +638,19 @@ class BoothWorldBuilder:
                 )
             )
             sticks.append(CandyStick(root=stick))
-        sponge = box_body("Sponge", (0.10, 0.07, 0.03), Finish.SUGAR_PINK)
-        shelf = items["SideShelf"]
-        self._free(sponge, ((shelf["lo"][0] + shelf["hi"][0]) / 2, shelf["lo"][1] + 0.1, shelf["lo"][2] + 1.02))
+        sponge_item = items["Sponge"]
+        lo, hi = sponge_item["lo"], sponge_item["hi"]
+        sponge = self._free(
+            box_body("Sponge", tuple(h - l for l, h in zip(lo, hi)), Finish.SUGAR_PINK),
+            tuple((l + h) / 2 for l, h in zip(lo, hi)),
+        )
         annotations = dict(
-            tray=SugarTray(root=tray),
-            scoop=SugarScoop(root=scoop),
+            carton=SugarCarton(root=carton),
             quiver=StickQuiver(root=quiver),
             sticks=sticks,
             sponge=Sponge(root=sponge),
         )
-        for annotation in [annotations["tray"], annotations["scoop"], annotations["quiver"], annotations["sponge"],
+        for annotation in [annotations["carton"], annotations["quiver"], annotations["sponge"],
                            *sticks]:
             self.world.add_semantic_annotation_recursively(annotation)
         return annotations
@@ -615,7 +664,8 @@ class BoothWorldBuilder:
         floor = self.bodies["BoothFloor"]
         booth = CottonCandyBooth(root=floor, machine=machine, sales_flap=flap)
         handover = box_body("HandoverZone", (0.25, 0.20, 0.25), Finish.BUBBLE)
-        self._add(handover, (0.45, -0.62, L.COUNTER_Z + 0.25))
+        handover.collision = ShapeCollection([])     # a region, not an obstacle
+        self._add(handover, L.HANDOVER_XYZ)
         for annotation in (
             booth,
             HandoverZone(root=handover),
@@ -631,5 +681,5 @@ class BoothWorldBuilder:
         A customer standing in front of the flap, as a simple body (ILLUSTRATIVE: child height 1.25 m).
         """
         customer = cylinder_body("Customer", 0.35, 1.25, Finish.PANEL_BLUE)
-        self._add(customer, (0.45, -1.45, 0.625))
+        self._add(customer, (self.layout.HANDOVER_XYZ[0], -self.params.get("booth_depth") / 2 - 0.45, 0.625))
         self.world.add_semantic_annotation_recursively(Human(root=customer))

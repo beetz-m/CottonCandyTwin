@@ -1,11 +1,13 @@
 {
  "_provenance": {
-  "git": "375c2a4",
-  "generated": "2026-10-20T12:20:44",
+  "git": "d93b946",
+  "generated": "2026-10-20T13:14:42",
   "inputs": {
-   "site/params.py": "44bb00adbc0bcb56",
-   "site/layout.py": "7f6b8dbe7730b78c",
-   "site/checks.py": "ca96a6fdf25b9659"
+   "site/params.py": "8155a33587b06966",
+   "site/layout.py": "f22934e424124b2f",
+   "site/checks.py": "afd134629a854501",
+   "data/asset_envelopes.json": "c1ce5779c31784a1",
+   "data/robot_envelope.json": "83e81f780763b8da"
   }
  },
  "machine_envelope": "MEASURED (asset_envelopes.json)",
@@ -23,19 +25,19 @@
   {
    "test": "C3a machine cabinet footprint on the table (margin >= 0.03 m)",
    "passed": true,
-   "margin_m": 0.192,
+   "margin_m": 0.199,
    "on_top": true
   },
   {
    "test": "C3b pan rim clears the walls",
    "passed": true,
-   "gap_m": 0.241
+   "gap_m": 0.235
   },
   {
    "test": "C4 heating band >= 0.50 m from combustibles",
    "passed": true,
    "nearest": "WallLeft",
-   "clearance_m": 0.507,
+   "clearance_m": 0.502,
    "required_m": 0.5
   },
   {
@@ -48,21 +50,21 @@
   {
    "test": "C6 operator movement area >= 1.5 m2 containing a 1.0 x 1.0 m square",
    "passed": true,
-   "area_m2": 1.939,
+   "area_m2": 5.012,
    "square_fits": true,
    "operator_in_free_region": true
   },
   {
    "test": "C7a interior headroom >= 2.00 m",
    "passed": true,
-   "headroom_m": 2.05
+   "headroom_m": 2.3
   },
   {
    "test": "C7b open flap edge >= 2.00 m above the customers",
    "passed": true,
    "edge_z_m": 2.154,
-   "edge_y_m": -1.985,
-   "header_m": 0.15
+   "edge_y_m": -2.285,
+   "header_m": 0.4
   },
   {
    "test": "C8 electrical load <= 80 % of 230 V / 16 A",
@@ -86,7 +88,7 @@
    "test": "C10 head visible through the flap and >= 0.5 m behind the customer line",
    "passed": true,
    "visible": true,
-   "behind_front_m": 0.59
+   "behind_front_m": 0.585
   },
   {
    "test": "C11 head capacity sustains >= 1 portion per fill",
@@ -97,12 +99,30 @@
   {
    "test": "C12 stick holder within 0.80 m of the operator",
    "passed": true,
-   "reach_m": 0.527
+   "reach_m": 0.606
   },
   {
-   "test": "C13 working sugar within 0.80 m of the operator",
+   "test": "C13 sugar carton within 0.80 m of the operator",
    "passed": true,
-   "reach_m": 0.495
+   "reach_m": 0.62
+  },
+  {
+   "test": "C15 robot base fits at the machine_close station (arms raised there, never parked)",
+   "passed": true,
+   "collisions": [],
+   "envelope": "MEASURED"
+  },
+  {
+   "test": "C14 parked robot fits at the machine station",
+   "passed": true,
+   "collisions": [],
+   "envelope": "MEASURED"
+  },
+  {
+   "test": "C14 parked robot fits at the serving station",
+   "passed": true,
+   "collisions": [],
+   "envelope": "MEASURED"
   }
  ],
  "failed": []

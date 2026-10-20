@@ -35,8 +35,7 @@ from cotton_candy.semantic_annotations import (
     CottonCandyMachine,
     HandoverZone,
     Sponge,
-    SugarScoop,
-    SugarTray,
+    SugarCarton,
 )
 
 
@@ -125,7 +124,7 @@ def test_pressing_a_button_closes_the_gripper_pushes_and_lets_go(booth):
     action = PressingButtonAction(machine.motor_switch, robot.right_arm, 1.0)
     sequential([action], context)
     names = [type(node.designator).__name__ for node in action._action_plan.children]
-    assert names == ["ParkArmsAction", "MoveGripperMotion", "GraspingAction", "OpeningMotion", "MoveGripperMotion",
+    assert names == ["ParkArmsAction", "MoveGripperMotion", "GraspingAction", "TurnToMotion", "MoveGripperMotion",
                      "MoveToolCenterPointMotion"]
 
 
@@ -138,8 +137,9 @@ def test_top_level_designators_map_onto_manipulation_categories(booth):
     one = lambda t: world.get_semantic_annotations_by_type(t)[0]
     expected = [
         (PrepareFlossMachineAction(machine, arm), [C.TURNING, C.TURNING]),
-        (FillSpinnerHeadAction(machine, process, one(SugarScoop), one(SugarTray), arm),
-         [C.TRANSPORTING, C.SCOOPING, C.POURING, C.TRANSPORTING]),
+        (FillSpinnerHeadAction(machine, process, one(SugarCarton), arm, RobotStation.MACHINE.pose(world.root),
+                               RobotStation.MACHINE_CLOSE.pose(world.root)),
+         [C.TRANSPORTING, C.POURING, C.TRANSPORTING]),
         (StartFlossMachineAction(machine, process, arm),
          [C.PRESSING_BUTTON, C.MONITORING, C.PRESSING_BUTTON, C.TURNING, C.MONITORING, C.TURNING]),
         (MakeCottonCandyAction(machine, process, one(CandyStick), arm),
@@ -156,9 +156,9 @@ def test_top_level_designators_map_onto_manipulation_categories(booth):
 def test_fill_needs_a_stopped_head(booth):
     world, robot, context, machine, _ = booth
     process = FlossMachineProcess(machine)
-    scoop = world.get_semantic_annotations_by_type(SugarScoop)[0]
-    tray = world.get_semantic_annotations_by_type(SugarTray)[0]
-    action = FillSpinnerHeadAction(machine, process, scoop, tray, robot.right_arm)
+    carton = world.get_semantic_annotations_by_type(SugarCarton)[0]
+    action = FillSpinnerHeadAction(machine, process, carton, robot.right_arm, RobotStation.MACHINE.pose(world.root),
+                                   RobotStation.MACHINE_CLOSE.pose(world.root))
     sequential([action], context)
     assert condition_holds(action, action.pre_condition)
     set_fraction(machine.motor_switch, 1.0)
@@ -201,12 +201,12 @@ def test_selling_refills_only_when_the_head_runs_short(booth, refill_needed):
     stick = world.get_semantic_annotations_by_type(CandyStick)[0]
     action = SellCottonCandyAction(
         machine, process, stick,
-        world.get_semantic_annotations_by_type(SugarScoop)[0],
-        world.get_semantic_annotations_by_type(SugarTray)[0],
+        world.get_semantic_annotations_by_type(SugarCarton)[0],
         world.get_semantic_annotations_by_type(HandoverZone)[0],
         robot.right_arm,
         RobotStation.SERVING.pose(world.root),
         RobotStation.MACHINE.pose(world.root),
+        RobotStation.MACHINE_CLOSE.pose(world.root),
     )
     sequential([action], context)
     names = [type(node.designator).__name__ for node in action._action_plan.children]
