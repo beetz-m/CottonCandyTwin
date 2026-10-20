@@ -149,9 +149,9 @@ class FlossMachineTimings:
     Sugar per portion (portion_sugar, SOURCED: 1 kg ~ 50 portions).
     """
 
-    head_capacity_kg: float = 0.025
+    head_capacity_kg: float = 0.060
     """
-    Sugar the head holds when full (head_sugar_capacity, ILLUSTRATIVE).
+    Sugar the head holds when full (head_sugar_capacity, CALIBRATED to the rated output).
     """
 
     fill_fraction: float = 0.90

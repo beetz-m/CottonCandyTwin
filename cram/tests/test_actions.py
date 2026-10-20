@@ -13,6 +13,7 @@ from semantic_digital_twin.robots.pr2 import PR2
 from semantic_digital_twin.world_description.world_entity import Body
 
 from cotton_candy.actions import (
+    project_refills,
     CleanFlossMachineAction,
     FillSpinnerHeadAction,
     MakeCottonCandyAction,
@@ -196,8 +197,6 @@ def test_prepare_post_condition_reads_the_handles(booth):
 def test_selling_refills_only_when_the_head_runs_short(booth, refill_needed):
     world, robot, context, machine, _ = booth
     process = FlossMachineProcess(machine)
-    if not refill_needed:
-        process.sugar_in_head_kg = 0.05
     stick = world.get_semantic_annotations_by_type(CandyStick)[0]
     action = SellCottonCandyAction(
         machine, process, stick,
@@ -207,6 +206,7 @@ def test_selling_refills_only_when_the_head_runs_short(booth, refill_needed):
         RobotStation.SERVING.pose(world.root),
         RobotStation.MACHINE.pose(world.root),
         RobotStation.MACHINE_CLOSE.pose(world.root),
+        refill_first=refill_needed,
     )
     sequential([action], context)
     names = [type(node.designator).__name__ for node in action._action_plan.children]
@@ -229,3 +229,10 @@ def test_every_top_level_designator_builds_a_plan(booth):
     for action in actions:
         sequential([action], context)
         assert action._action_plan.children
+
+
+def test_refill_projection_follows_the_sugar_budget(booth):
+    process = FlossMachineProcess(booth[3])
+    # the register: 60 g head x 0.9 = 54 g per fill, 20 g per portion
+    assert project_refills(process, 5) == [False, False, True, False, True]   # 54 g per fill = 2 portions
+    assert project_refills(process, 2, head_filled=False) == [True, False]

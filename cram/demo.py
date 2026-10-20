@@ -43,6 +43,7 @@ from cotton_candy.actions import (
     SellCottonCandyAction,
     ShutDownFlossMachineAction,
     StartFlossMachineAction,
+    project_refills,
 )
 from cotton_candy.booth_world import BoothWorldBuilder, RobotStation, TwinModule
 from cotton_candy.competency_questions import CottonCandyKnowledgeSource
@@ -142,11 +143,12 @@ class CottonCandyBoothDemonstration(RobotDemonstration):
                                   stations[RobotStation.MACHINE_CLOSE]),
             StartFlossMachineAction(machine, self.process, arm),
         ]
+        portions = min(self.portions, len(sticks))
         shift += [
             SellCottonCandyAction(machine, self.process, sticks[i], one(SugarCarton), one(HandoverZone), arm,
                                   stations[RobotStation.SERVING], stations[RobotStation.MACHINE],
-                                  stations[RobotStation.MACHINE_CLOSE])
-            for i in range(min(self.portions, len(sticks)))
+                                  stations[RobotStation.MACHINE_CLOSE], refill_first=refill)
+            for i, refill in enumerate(project_refills(self.process, portions))
         ]
         shift += [
             ShutDownFlossMachineAction(machine, self.process, arm),

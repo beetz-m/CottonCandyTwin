@@ -34,7 +34,7 @@ import math
 
 import numpy as np
 
-from typing_extensions import Any, Dict, Optional
+from typing_extensions import Any, Dict, List, Optional
 
 from krrood.entity_query_language.core.variable import Variable
 from krrood.entity_query_language.factories import ConditionType, and_, variable_from
@@ -605,8 +605,7 @@ class ServeCottonCandyAction(ActionDescription):
 @dataclass
 class SellCottonCandyAction(ActionDescription):
     """
-    Sell one portion: refill the head first if it and the pan hold less than one portion, make the portion and
-    serve it.
+    Sell one portion: refill the head first if the projection says so, make the portion and serve it.
     """
 
     machine: CottonCandyMachine
@@ -654,10 +653,16 @@ class SellCottonCandyAction(ActionDescription):
     Where the base stands for pouring, in case the head must be refilled.
     """
 
+    refill_first: bool = False
+    """
+    Whether to refill the head before making the portion. The plan is expanded before it runs, so this is decided by
+    the caller's projection of the sugar budget (:func:`project_refills`), not by reading the process now.
+    """
+
     @property
     def _action_plan(self) -> PlanNode:
         steps = []
-        if self.process.sugar_in_head_kg + self.process.floss_in_pan_kg < self.process.timings.portion_sugar_kg:
+        if self.refill_first:
             steps.append(RefillSpinnerHeadAction(self.machine, self.process, self.carton, self.arm, self.machine_station, self.close_station))
         steps += [
             MakeCottonCandyAction(self.machine, self.process, self.stick, self.arm),
@@ -794,3 +799,25 @@ class CleanFlossMachineAction(ActionDescription):
         The machine is off ("Allow to cool before cleaning").
         """
         return variable_from(kwargs["process"]).phase == FlossMachinePhase.OFF
+
+
+def project_refills(process: FlossMachineProcess, portions: int, head_filled: bool = True) -> List[bool]:
+    """
+    Project the sugar budget of a run of sales: which sale has to refill the head first.
+
+    :param process: The machine's process (its timings give the head's fill and the sugar per portion).
+    :param portions: How many portions are sold.
+    :param head_filled: Whether the head is full when the first sale starts.
+    :return: One flag per sale: refill before making that portion.
+    """
+    timings = process.timings
+    fill = timings.head_capacity_kg * timings.fill_fraction
+    budget = fill if head_filled else 0.0
+    flags = []
+    for _ in range(portions):
+        refill = budget + 1e-9 < timings.portion_sugar_kg
+        if refill:
+            budget = fill
+        budget -= timings.portion_sugar_kg
+        flags.append(refill)
+    return flags
