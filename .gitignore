@@ -1,0 +1,23 @@
+__pycache__/
+*.pyc
+# generated (rebuild with tools/build_all.sh)
+renders/
+assets/*/usd/
+assets/*/build/
+assets/materials/textures/
+assets/materials/*.usda
+scenes/*.usda
+*.hdr
+# external / not ours to redistribute
+reference/
+third_party/
+data/osm/
+geo/raw/
+# LaTeX artefacts
+report/*.aux
+report/*.log
+report/*.fls
+report/*.fdb_latexmk
+report/*.out
+report/*.toc
+report/*.pdf
