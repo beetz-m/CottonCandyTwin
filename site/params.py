@@ -141,7 +141,7 @@ SOURCES = {
 }
 
 P = {
-    # ---------------------------------------------------------------- booth (wooden Markthuette, 2 x 2 m)
+    # ---------------------------------------------------------------- booth (wooden Markthuette, 3.0 x 2.6 m)
     "booth_width": (3.0, "m", S, "WD_HUT", "3.0 x 2.6 m market hut (ZV_HANNOVER rental 3.03 x 2.03 m); enlarged from the 2 x 2 m hut "
                     "(MH_PROFI, CRYPTON) on 2026-10-20 (user decision) because a PR2 does not fit 2 x 2 m with "
                     "collision-avoidance margins; Rolls-Toys Zuckerwatte stand 2.40 x 2.00 m (ROLLS_STAND)"),

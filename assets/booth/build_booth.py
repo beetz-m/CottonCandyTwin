@@ -101,7 +101,7 @@ def roof(k):
     pitch = math.degrees(math.atan2(rise, half))
     for sign, o in ((-1, ov_front), (1, ov)):
         run = math.hypot(half + o, rise * (half + o) / half)
-        R = rot_x(sign * pitch)
+        R = rot_x(-sign * pitch)                      # panel rises from its eave to the ridge
         with k.at((0, sign * (half + o) / 2, L.RIDGE_Z - rise * (half + o) / half / 2 + 0.03), R=R):
             k.box("SprucePaintedPink", (0, 0, 0), (W + 2 * ov, run, 0.03))
             for i in range(9):                                                         # white stripes (tarp look)
@@ -200,8 +200,8 @@ def shelf_and_consumables(k):
     k.rbox("CartonWhite", (c[0], c[1], c[2] - sz[2] / 2 + body_h / 2), (sz[0], sz[1], body_h), r=0.004)
     gable = [(-sz[1] / 2, 0.0), (sz[1] / 2, 0.0), (0.0, sz[2] - body_h)]
     z_top = c[2] - sz[2] / 2 + body_h
-    k.extrude("CartonWhite", [(y_, z_ + z_top) for y_, z_ in gable], (c[0] - sz[0] / 2, 0, 0),
-              (c[0] + sz[0] / 2, 0, 0), up=(0, 0, 1))
+    k.extrude("CartonWhite", [(y_, z_ + z_top) for y_, z_ in gable], (c[0] - sz[0] / 2, c[1], 0),
+              (c[0] + sz[0] / 2, c[1], 0), up=(0, 0, 1))                                      # gable on the body
     k.cyl("PlasticBlue", (c[0], c[1] - sz[1] * 0.18, z_top + (sz[2] - body_h) * 0.55),
           (c[0], c[1] - sz[1] * 0.18, z_top + (sz[2] - body_h) * 0.55 + 0.02), 0.011)             # pour spout
     png = text_png(os.path.join(TEX, "carton_label.png"), [("FLOSS", 1.2, (225, 25, 115, 255)),

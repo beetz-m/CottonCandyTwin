@@ -1,0 +1,1070 @@
+{
+ "_provenance": {
+  "git": "ba9ad33",
+  "generated": "2026-10-20T19:57:23",
+  "inputs": {
+   "cram/cotton_candy/__init__.py": "e3b0c44298fc1c14",
+   "cram/cotton_candy/actions.py": "37fe6dd8530098ed",
+   "cram/cotton_candy/booth_world.py": "751fa1e95eb75b93",
+   "cram/cotton_candy/competency_questions.py": "f0803aa407df3e8b",
+   "cram/cotton_candy/control.py": "1e32b8a42abc2027",
+   "cram/cotton_candy/designators.py": "67fb5c8ef844a169",
+   "cram/cotton_candy/manipulation_categories.py": "56ef474b1f8cf8b3",
+   "cram/cotton_candy/ontology/__init__.py": "e3b0c44298fc1c14",
+   "cram/cotton_candy/ontology/owl.py": "3caca49c83d7be41",
+   "cram/cotton_candy/ontology/production.py": "885d0b4403107149",
+   "cram/cotton_candy/process.py": "c97fd8d801395f35",
+   "cram/cotton_candy/process_nodes.py": "b31637e79df59d19",
+   "cram/cotton_candy/recipes.py": "89470b9b988e47e8",
+   "cram/cotton_candy/robot_envelope.py": "4889f9c5e1a28ac1",
+   "cram/cotton_candy/semantic_annotations.py": "df2605b029c87f2c",
+   "cram/cotton_candy/teach_postures.py": "444552dfeb302a99",
+   "cram/cotton_candy/universal_plan.py": "a1e3b177aa93c4e8",
+   "site/params.py": "850d7237e38a5ee3",
+   "site/layout.py": "f22934e424124b2f",
+   "cram/export_results.py": "1b1d4f5b53c52af9"
+  }
+ },
+ "generated_by": "cram/export_results.py",
+ "shift": [
+  {
+   "step": "Fill the spinner head",
+   "designator": "FillSpinnerHeadAction",
+   "wall_s": 3.3,
+   "time_s": 0.0,
+   "phase": "off",
+   "sugar_in_head_g": 54.0,
+   "floss_in_pan_g": 0.0,
+   "portions_served": 0
+  },
+  {
+   "step": "Start the machine",
+   "designator": "StartFlossMachineAction",
+   "wall_s": 2.7,
+   "time_s": 35.0,
+   "phase": "producing",
+   "sugar_in_head_g": 53.6,
+   "floss_in_pan_g": 0.4,
+   "portions_served": 0
+  },
+  {
+   "step": "Sell portion 1",
+   "designator": "SellCottonCandyAction",
+   "wall_s": 2.4,
+   "time_s": 58.5,
+   "phase": "producing",
+   "sugar_in_head_g": 34.0,
+   "floss_in_pan_g": 0.0,
+   "portions_served": 1
+  },
+  {
+   "step": "Sell portion 2",
+   "designator": "SellCottonCandyAction",
+   "wall_s": 2.7,
+   "time_s": 82.5,
+   "phase": "producing",
+   "sugar_in_head_g": 14.0,
+   "floss_in_pan_g": 0.0,
+   "portions_served": 2
+  },
+  {
+   "step": "Shut down (burn-out)",
+   "designator": "ShutDownFlossMachineAction",
+   "wall_s": 2.1,
+   "time_s": 399.5,
+   "phase": "off",
+   "sugar_in_head_g": 0.0,
+   "floss_in_pan_g": 14.0,
+   "portions_served": 2
+  },
+  {
+   "step": "Clean the machine",
+   "designator": "CleanFlossMachineAction",
+   "wall_s": 1.8,
+   "time_s": 399.5,
+   "phase": "off",
+   "sugar_in_head_g": 0.0,
+   "floss_in_pan_g": 14.0,
+   "portions_served": 2
+  }
+ ],
+ "scenarios": [
+  {
+   "scenario": "cold machine, first order",
+   "projection": [
+    "MACHINE-READY",
+    "STICK-IN-HAND",
+    "CANDY-FORMED",
+    "CANDY-WRAPPED",
+    "HANDED-OVER"
+   ],
+   "outcome": "delivered",
+   "trace": [
+    "MACHINE-READY",
+    "STICK-IN-HAND",
+    "CANDY-FORMED",
+    "HANDED-OVER"
+   ],
+   "failures": [],
+   "wall_s": 9.2,
+   "process_time_s": 58.5
+  },
+  {
+   "scenario": "stick already taken, machine running",
+   "projection": [
+    "CANDY-FORMED",
+    "CANDY-WRAPPED",
+    "HANDED-OVER"
+   ],
+   "outcome": "delivered",
+   "trace": [
+    "CANDY-FORMED",
+    "HANDED-OVER"
+   ],
+   "failures": [],
+   "wall_s": 2.5,
+   "process_time_s": 58.5
+  },
+  {
+   "scenario": "wrapped candy already in hand",
+   "projection": [
+    "HANDED-OVER"
+   ],
+   "outcome": "delivered",
+   "trace": [
+    "HANDED-OVER"
+   ],
+   "failures": [],
+   "wall_s": 1.8,
+   "process_time_s": 58.5
+  },
+  {
+   "scenario": "believed candy whose stick is not in hand",
+   "projection": [
+    "MACHINE-READY",
+    "STICK-IN-HAND",
+    "CANDY-FORMED",
+    "CANDY-WRAPPED",
+    "HANDED-OVER"
+   ],
+   "outcome": "delivered",
+   "trace": [
+    "MACHINE-READY",
+    "STICK-IN-HAND",
+    "CANDY-FORMED",
+    "HANDED-OVER"
+   ],
+   "failures": [],
+   "wall_s": 8.9,
+   "process_time_s": 58.5
+  },
+  {
+   "scenario": "second order, machine still running",
+   "projection": [
+    "STICK-IN-HAND",
+    "CANDY-FORMED",
+    "CANDY-WRAPPED",
+    "HANDED-OVER"
+   ],
+   "outcome": "delivered",
+   "trace": [
+    "STICK-IN-HAND",
+    "CANDY-FORMED",
+    "HANDED-OVER"
+   ],
+   "failures": [],
+   "wall_s": 2.9,
+   "process_time_s": 82.5
+  },
+  {
+   "scenario": "blueberry ordered, only raspberry sugar",
+   "outcome": "GoalUnachievable",
+   "trace": [],
+   "message": "no sub-goal applies for candy 1 (blueberry (blue)): sugar for it NOT available, stick for it available, customer there",
+   "wall_s": 0.0,
+   "process_time_s": 0.0
+  },
+  {
+   "scenario": "two open orders",
+   "outcome": "MultipleSolutionFound",
+   "trace": [],
+   "message": "More than 1 solutions found for the expression (CottonCandyBelief).",
+   "wall_s": 0.0,
+   "process_time_s": 0.0
+  }
+ ],
+ "questions": [
+  {
+   "competence": "Ablauf",
+   "question": "Welche Schritte hat eine Schicht, in welcher Reihenfolge, wer fuehrt sie aus?",
+   "code": "set_of(step.order, step.name, step.designator_name, step.performed_by)",
+   "rows": 9,
+   "answer": [
+    [
+     "1",
+     "Prepare the machine (unlock the transport handles)",
+     "PrepareFlossMachineAction",
+     "staff"
+    ],
+    [
+     "2",
+     "Fill the spinner head",
+     "FillSpinnerHeadAction",
+     "robot"
+    ],
+    [
+     "3",
+     "Start the machine",
+     "StartFlossMachineAction",
+     "robot"
+    ],
+    [
+     "4",
+     "Make a portion",
+     "MakeCottonCandyAction",
+     "robot"
+    ],
+    [
+     "5",
+     "Serve the portion",
+     "ServeCottonCandyAction",
+     "robot"
+    ],
+    [
+     "6",
+     "Make cotton candy and hand it to a customer",
+     "MakeAndServeCottonCandyAction",
+     "robot"
+    ],
+    [
+     "7",
+     "Stop the machine",
+     "StopFlossMachineAction",
+     "robot"
+    ],
+    [
+     "8",
+     "Shut the machine down",
+     "ShutDownFlossMachineAction",
+     "robot"
+    ],
+    [
+     "9",
+     "Clean the machine",
+     "CleanFlossMachineAction",
+     "robot"
+    ]
+   ]
+  },
+  {
+   "competence": "Ablauf",
+   "question": "Was muss gelten, bevor Zucker in den Spinnkopf gefuellt werden darf?",
+   "code": "an(entity(step.precondition).where(step.designator_name == 'FillSpinnerHeadAction'))",
+   "rows": 1,
+   "answer": [
+    "The head stands still (\"NEVER add sugar when motor is running\") and the arm is free."
+   ]
+  },
+  {
+   "competence": "Kategorien",
+   "question": "Welche Schritte enthalten 'Pressing Button'?",
+   "code": "an(entity(step.name).where(contains(step.category_names, 'PressingButton')))",
+   "rows": 3,
+   "answer": [
+    "Start the machine",
+    "Stop the machine",
+    "Shut the machine down"
+   ]
+  },
+  {
+   "competence": "Kategorien",
+   "question": "Aus welchen Manipulationskategorien besteht das Starten der Maschine?",
+   "code": "an(entity(step.category_names).where(step.designator_name == 'StartFlossMachineAction'))",
+   "rows": 1,
+   "answer": [
+    "['PressingButton', 'MonitoringProcess', 'PressingButton', 'Turning', 'MonitoringProcess', 'Turning']"
+   ]
+  },
+  {
+   "competence": "Kategorien",
+   "question": "Welche Kategorien stammen aus dem CRAM-L2-Modul, welche sind neu vorgeschlagen?",
+   "code": "set_of(category.name, category.parent, category.defined_in)",
+   "rows": 10,
+   "answer": [
+    [
+     "Transporting",
+     "ObjectDisplacement",
+     "action-category-dl.md"
+    ],
+    [
+     "PressingButton",
+     "ConfigurationChange",
+     "proposed"
+    ],
+    [
+     "Turning",
+     "ConfigurationChange",
+     "proposed"
+    ],
+    [
+     "Scooping",
+     "Transferring",
+     "proposed"
+    ],
+    [
+     "Pouring",
+     "Transferring",
+     "action-category-dl.md"
+    ],
+    [
+     "Gathering",
+     "Transferring",
+     "proposed"
+    ],
+    [
+     "Wrapping",
+     "SubstanceManipulation",
+     "proposed"
+    ],
+    [
+     "HandingOver",
+     "InteractionAction",
+     "proposed"
+    ],
+    [
+     "Wiping",
+     "SurfaceTreatment",
+     "action-category-dl.md"
+    ],
+    [
+     "MonitoringProcess",
+     "PerceptionAction",
+     "proposed"
+    ]
+   ]
+  },
+  {
+   "competence": "Verankerung",
+   "question": "Auf welche Teile wirkt das Starten der Maschine?",
+   "code": "an(entity(step.acts_on_names).where(step.designator_name == 'StartFlossMachineAction'))",
+   "rows": 1,
+   "answer": [
+    "['FlossMachineCabinet', 'MotorMasterSwitch', 'HeatSwitch', 'HeatControlKnob', 'SpinnerHead', 'FlossPan']"
+   ]
+  },
+  {
+   "competence": "Verankerung",
+   "question": "Welche semantische Annotation steht fuer welches Ontologie-Individuum?",
+   "code": "set_of(artefact.name, artefact.annotation_type, artefact.kind)",
+   "rows": 21,
+   "answer": [
+    [
+     "MotorMasterSwitch",
+     "RockerSwitch",
+     "OperatingElement"
+    ],
+    [
+     "HeatSwitch",
+     "RockerSwitch",
+     "OperatingElement"
+    ],
+    [
+     "HeatControlKnob",
+     "ControlKnob",
+     "OperatingElement"
+    ],
+    [
+     "SpinnerHead",
+     "SpinnerHead",
+     "MachinePart"
+    ],
+    [
+     "FlossPan",
+     "FlossPan",
+     "MachinePart"
+    ],
+    [
+     "LockNGoHandleLeft",
+     "LockHandle",
+     "OperatingElement"
+    ],
+    [
+     "LockNGoHandleRight",
+     "LockHandle",
+     "OperatingElement"
+    ],
+    [
+     "FlossMachineCabinet",
+     "CottonCandyMachine",
+     "Machine"
+    ],
+    [
+     "SugarCarton",
+     "SugarCarton",
+     "Consumable"
+    ],
+    [
+     "StickHolder",
+     "StickQuiver",
+     "BoothElement"
+    ],
+    [
+     "Sponge",
+     "Sponge",
+     "Tool"
+    ],
+    [
+     "CandyStick0",
+     "CandyStick",
+     "Consumable"
+    ]
+   ]
+  },
+  {
+   "competence": "Verankerung",
+   "question": "Welche Teile gehoeren zur Zuckerwattemaschine?",
+   "code": "an(entity(artefact.name).where(artefact.part_of_name == 'FlossMachineCabinet'))",
+   "rows": 7,
+   "answer": [
+    "MotorMasterSwitch",
+    "HeatSwitch",
+    "HeatControlKnob",
+    "SpinnerHead",
+    "FlossPan",
+    "LockNGoHandleLeft",
+    "LockNGoHandleRight"
+   ]
+  },
+  {
+   "competence": "Zutaten",
+   "question": "Welche Zutaten verlangen einen Warnhinweis, und welche E-Nummer haben sie?",
+   "code": "set_of(material.name, material.e_number).where(material.requires_warning == True)",
+   "rows": 1,
+   "answer": [
+    [
+     "Allura Red (pink colour)",
+     "E129"
+    ]
+   ]
+  },
+  {
+   "competence": "Zutaten",
+   "question": "Welche Allergene enthaelt die pinke Zuckerwatte?",
+   "code": "set_of(material.name, material.allergen).where(material.allergen != '')",
+   "rows": 1,
+   "answer": [
+    [
+     "lactose (carrier of the colour sugar)",
+     "milk"
+    ]
+   ]
+  },
+  {
+   "competence": "Gefahren",
+   "question": "Welche Gefahren gibt es, woher kommen sie, was mindert sie?",
+   "code": "set_of(hazard.name, hazard.caused_by_name, hazard.mitigation_names)",
+   "rows": 4,
+   "answer": [
+    [
+     "rotating spinner head (3450 rpm)",
+     "SpinnerHead",
+     "['floss bubble (spectator protection)', 'sugar only into a stopped head']"
+    ],
+    [
+     "hot heating band (molten sugar ~170 C)",
+     "SpinnerHead",
+     "['0.5 m clearance of the heating band', 'clean only after cool-down', 'fire extinguisher']"
+    ],
+    [
+     "food hygiene (unpackaged food)",
+     "FlossMachineCabinet",
+     "['hand washing']"
+    ],
+    [
+     "azo colour and milk allergen for customers",
+     "InfoBoard",
+     "['colour, azo and allergen labelling']"
+    ]
+   ]
+  },
+  {
+   "competence": "Vorschriften",
+   "question": "Welche Vorschrift wird durch welches Objekt im Stand erfuellt?",
+   "code": "set_of(regulation.name, regulation.reference, regulation.satisfied_by_names)",
+   "rows": 7,
+   "answer": [
+    [
+     "hand washing facility",
+     "Reg. (EC) 852/2004 Annex II Ch. III 2(a); Muenster MB 25",
+     "['HandwashStation']"
+    ],
+    [
+     "colour declaration",
+     "LMZDV par. 5(1) Nr. 1",
+     "['InfoBoard']"
+    ],
+    [
+     "azo-dye warning",
+     "Reg. (EC) 1333/2008 Annex V",
+     "['InfoBoard']"
+    ],
+    [
+     "allergen information",
+     "Reg. (EU) 1169/2011 Art. 9(1)c / 44",
+     "['InfoBoard']"
+    ],
+    [
+     "fire extinguisher per stand",
+     "market regulations (GEJA 2026, Heilbronn 2022)",
+     "['FireExtinguisher']"
+    ],
+    [
+     "clearance of heating devices",
+     "fire service leaflet Heilbronn 2022",
+     "['FlossMachineCabinet']"
+    ],
+    [
+     "no remote operation",
+     "EN 60335 / GM_MAN_EXP",
+     "['MotorMasterSwitch', 'HeatSwitch']"
+    ]
+   ]
+  },
+  {
+   "competence": "Datenqualitaet",
+   "question": "Welche Werte sind nur ILLUSTRATIVE (Annahmen dieser Rekonstruktion)?",
+   "code": "set_of(entry.key, entry.value, entry.note).where(entry.status == 'ILLUSTRATIVE')",
+   "rows": 28,
+   "answer": [
+    [
+     "booth_eave_height",
+     "2.3",
+     "eave of the 3.0 m-high hut (not published); a 1.90 m operator clears it, the sales-flap hinge sits below it"
+    ],
+    [
+     "booth_roof_overhang",
+     "0.25",
+     "front and side overhang of the gable roof"
+    ],
+    [
+     "booth_counter_top_t",
+     "0.027",
+     "solid wood worktop"
+    ],
+    [
+     "booth_flap_width",
+     "2.4",
+     "wide sales opening over machine and counter of the 3 m hut; trailer flaps are 1600 x 1000 mm (CRAFTMAX)"
+    ],
+    [
+     "booth_flap_open_angle",
+     "100.0",
+     "rotation from the closed (hanging) position, held by gas struts; edge rises above the hinge"
+    ],
+    [
+     "booth_floor_height",
+     "0.08",
+     "wooden floor on skids above the paving"
+    ],
+    [
+     "booth_colour_scheme",
+     "pink/white",
+     "red-white nostalgic stands exist (ROLLS_STAND); no source for pink Zuckerwatte livery -> GAP-driven design choice"
+    ],
+    [
+     "booth_side_door_width",
+     "0.7",
+     "rear-side entrance for the operator"
+    ],
+    [
+     "machine_table_height",
+     "0.62",
+     "lowered stainless machine table so the pan rim sits at elbow height (checked in site/checks.py); a machine on the 0.90 m counter puts the rim at 1.34 m"
+    ],
+    [
+     "robot_buffer_base_booth",
+     "0.08",
+     "base_link buffer used in the booth (CRAM default 0.20 m keeps the spinner head ~0.88 m from the shoulder, beyond reliable PR2 reach) - tight-workplace tuning, applied as an extra collision rule in the CRAM world"
+    ],
+    [
+     "robot_violated_base_booth",
+     "0.03",
+     "base_link violated distance in the booth (CRAM default 0.05)"
+    ],
+    [
+     "side_shelf_depth",
+     "0.3",
+     "3-level shelf on the right wall (sugar tubs, sticks, bag stock)"
+    ]
+   ]
+  },
+  {
+   "competence": "Prozessphysik",
+   "question": "Bei welcher Luftfeuchte faellt Zuckerwatte zusammen, wie sicher ist das?",
+   "code": "set_of(quality.name, quality.value, quality.unit, quality.status).where(contains(quality.name, 'humidity'))",
+   "rows": 2,
+   "answer": [
+    [
+     "relative humidity at which floss collapses (3 days)",
+     "33.0",
+     "%RH",
+     "SOURCED"
+    ],
+    [
+     "relative humidity at which floss stays stable",
+     "11.0",
+     "%RH",
+     "SOURCED"
+    ]
+   ]
+  },
+  {
+   "competence": "Live",
+   "question": "Welche brennbaren Objekte liegen gerade naeher als 0,6 m am Heizband?",
+   "code": "set_of(artefact.name, artefact.distance_to_heating_band).where(artefact.combustible == True, artefact.distance_to_heating_band < 0.6)",
+   "rows": 1,
+   "answer": [
+    [
+     "SugarCarton",
+     "0.5140694621025755"
+    ]
+   ]
+  },
+  {
+   "competence": "Belief",
+   "question": "Wie weit ist die Zuckerwatte, die ich gerade mache, und wofuer ist sie?",
+   "code": "set_of(candy.order, candy.flavour, candy.stage, candy.stick, candy.ordered_by).where(candy.stage != CandyStage.DELIVERED)",
+   "rows": 1,
+   "answer": [
+    [
+     "2",
+     "raspberry (pink)",
+     "none",
+     "None",
+     "Customer"
+    ]
+   ]
+  },
+  {
+   "competence": "Belief",
+   "question": "Welche Zuckerwatten wurden schon an wen uebergeben?",
+   "code": "set_of(candy.order, candy.flavour, candy.customer).where(candy.stage == CandyStage.DELIVERED)",
+   "rows": 1,
+   "answer": [
+    [
+     "1",
+     "raspberry (pink)",
+     "Customer"
+    ]
+   ]
+  },
+  {
+   "competence": "Live",
+   "question": "In welcher Phase ist die Maschine, wie viel Zucker ist im Kopf, wie viele Portionen?",
+   "code": "set_of(process.phase, process.sugar_in_head_kg, process.floss_in_pan_kg, process.portions_served)",
+   "rows": 1,
+   "answer": [
+    [
+     "producing",
+     "0.03399999999999987",
+     "-2.0816681711721685e-17",
+     "1"
+    ]
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "order": 1,
+   "name": "Prepare the machine (unlock the transport handles)",
+   "designator": "PrepareFlossMachineAction",
+   "performed_by": "staff",
+   "categories": [
+    "Turning",
+    "Turning"
+   ],
+   "acts_on": [
+    "FlossMachineCabinet",
+    "MotorMasterSwitch",
+    "HeatSwitch",
+    "HeatControlKnob",
+    "SpinnerHead",
+    "FlossPan"
+   ],
+   "precondition": "The motor is off: the handles are only moved on a stopped machine.",
+   "effect": "Every handle stands UNLOCKED.",
+   "family": "B machine tending: access"
+  },
+  {
+   "order": 2,
+   "name": "Fill the spinner head",
+   "designator": "FillSpinnerHeadAction",
+   "performed_by": "robot",
+   "categories": [
+    "Transporting",
+    "Pouring",
+    "Transporting"
+   ],
+   "acts_on": [
+    "FlossMachineCabinet",
+    "MotorMasterSwitch",
+    "HeatSwitch",
+    "HeatControlKnob",
+    "SpinnerHead",
+    "FlossPan",
+    "SugarCarton"
+   ],
+   "precondition": "The head stands still (\"NEVER add sugar when motor is running\") and the arm is free.",
+   "effect": "The head is filled to at least 85 % of its capacity.",
+   "family": "B machine tending: load"
+  },
+  {
+   "order": 3,
+   "name": "Start the machine",
+   "designator": "StartFlossMachineAction",
+   "performed_by": "robot",
+   "categories": [
+    "PressingButton",
+    "MonitoringProcess",
+    "PressingButton",
+    "Turning",
+    "MonitoringProcess",
+    "Turning"
+   ],
+   "acts_on": [
+    "FlossMachineCabinet",
+    "MotorMasterSwitch",
+    "HeatSwitch",
+    "HeatControlKnob",
+    "SpinnerHead",
+    "FlossPan"
+   ],
+   "precondition": "The machine is off, unlocked, and its head holds sugar.",
+   "effect": "The machine produces floss.",
+   "family": "B machine tending: operate"
+  },
+  {
+   "order": 4,
+   "name": "Make a portion",
+   "designator": "MakeCottonCandyAction",
+   "performed_by": "robot",
+   "categories": [
+    "Transporting",
+    "MonitoringProcess",
+    "Gathering",
+    "Wrapping"
+   ],
+   "acts_on": [
+    "FlossMachineCabinet",
+    "MotorMasterSwitch",
+    "HeatSwitch",
+    "HeatControlKnob",
+    "SpinnerHead",
+    "FlossPan",
+    "CandyStick0"
+   ],
+   "precondition": "The machine produces floss and the arm is free to take a stick.",
+   "effect": "The arm holds the stick with the portion.",
+   "family": "D portion"
+  },
+  {
+   "order": 5,
+   "name": "Serve the portion",
+   "designator": "ServeCottonCandyAction",
+   "performed_by": "robot",
+   "categories": [
+    "HandingOver"
+   ],
+   "acts_on": [
+    "CandyStick0",
+    "HandoverZone"
+   ],
+   "precondition": "The arm holds the stick.",
+   "effect": "The arm is free again, and the customer (if given) holds the stick.",
+   "family": "J handover / F serve"
+  },
+  {
+   "order": 6,
+   "name": "Make cotton candy and hand it to a customer",
+   "designator": "MakeAndServeCottonCandyAction",
+   "performed_by": "robot",
+   "categories": [
+    "Transporting",
+    "MonitoringProcess",
+    "Gathering",
+    "Wrapping",
+    "HandingOver"
+   ],
+   "acts_on": [
+    "FlossMachineCabinet",
+    "MotorMasterSwitch",
+    "HeatSwitch",
+    "HeatControlKnob",
+    "SpinnerHead",
+    "FlossPan",
+    "CandyStick0",
+    "SugarCarton",
+    "HandoverZone",
+    "Customer"
+   ],
+   "precondition": "The arm is free, and the stick is still unused (not with a customer).",
+   "effect": "The customer holds the stick with the portion, and the robot's arm is free again.",
+   "family": "activity: serve (B + D + J)"
+  },
+  {
+   "order": 7,
+   "name": "Stop the machine",
+   "designator": "StopFlossMachineAction",
+   "performed_by": "robot",
+   "categories": [
+    "PressingButton",
+    "MonitoringProcess",
+    "PressingButton",
+    "MonitoringProcess"
+   ],
+   "acts_on": [
+    "FlossMachineCabinet",
+    "MotorMasterSwitch",
+    "HeatSwitch",
+    "HeatControlKnob",
+    "SpinnerHead",
+    "FlossPan"
+   ],
+   "precondition": "-",
+   "effect": "The machine is off.",
+   "family": "B machine tending: operate"
+  },
+  {
+   "order": 8,
+   "name": "Shut the machine down",
+   "designator": "ShutDownFlossMachineAction",
+   "performed_by": "robot",
+   "categories": [
+    "MonitoringProcess",
+    "Turning",
+    "MonitoringProcess",
+    "PressingButton",
+    "MonitoringProcess",
+    "PressingButton",
+    "MonitoringProcess"
+   ],
+   "acts_on": [
+    "FlossMachineCabinet",
+    "MotorMasterSwitch",
+    "HeatSwitch",
+    "HeatControlKnob",
+    "SpinnerHead",
+    "FlossPan"
+   ],
+   "precondition": "The arm is free (no stick or carton held while working the controls).",
+   "effect": "The machine is off and the head has been burnt out for the full time.",
+   "family": "B machine tending / maintenance"
+  },
+  {
+   "order": 9,
+   "name": "Clean the machine",
+   "designator": "CleanFlossMachineAction",
+   "performed_by": "robot",
+   "categories": [
+    "Transporting",
+    "Wiping",
+    "Transporting"
+   ],
+   "acts_on": [
+    "FlossMachineCabinet",
+    "MotorMasterSwitch",
+    "HeatSwitch",
+    "HeatControlKnob",
+    "SpinnerHead",
+    "FlossPan",
+    "Sponge"
+   ],
+   "precondition": "The machine is off (\"Allow to cool before cleaning\").",
+   "effect": "-",
+   "family": "G wipe"
+  }
+ ],
+ "categories": [
+  {
+   "name": "Transporting",
+   "parent": "ObjectDisplacement",
+   "defined_in": "action-category-dl.md"
+  },
+  {
+   "name": "PressingButton",
+   "parent": "ConfigurationChange",
+   "defined_in": "proposed"
+  },
+  {
+   "name": "Turning",
+   "parent": "ConfigurationChange",
+   "defined_in": "proposed"
+  },
+  {
+   "name": "Scooping",
+   "parent": "Transferring",
+   "defined_in": "proposed"
+  },
+  {
+   "name": "Pouring",
+   "parent": "Transferring",
+   "defined_in": "action-category-dl.md"
+  },
+  {
+   "name": "Gathering",
+   "parent": "Transferring",
+   "defined_in": "proposed"
+  },
+  {
+   "name": "Wrapping",
+   "parent": "SubstanceManipulation",
+   "defined_in": "proposed"
+  },
+  {
+   "name": "HandingOver",
+   "parent": "InteractionAction",
+   "defined_in": "proposed"
+  },
+  {
+   "name": "Wiping",
+   "parent": "SurfaceTreatment",
+   "defined_in": "action-category-dl.md"
+  },
+  {
+   "name": "MonitoringProcess",
+   "parent": "PerceptionAction",
+   "defined_in": "proposed"
+  }
+ ],
+ "counts": {
+  "steps": 9,
+  "artefacts": 21,
+  "materials": 8,
+  "hazards": 4,
+  "measures": 7,
+  "regulations": 7,
+  "register": 133,
+  "categories": 10,
+  "qualities": 10
+ },
+ "plan_rows": [
+  {
+   "index": 0,
+   "tag": "FREE-GRIPPER",
+   "kernel": "true",
+   "protects": false
+  },
+  {
+   "index": 1,
+   "tag": "MACHINE-READY",
+   "kernel": "gripper free AND there is sugar for the candy",
+   "protects": false
+  },
+  {
+   "index": 2,
+   "tag": "STICK-IN-HAND",
+   "kernel": "gripper free AND producing AND sugar >= portion AND a stick for the candy",
+   "protects": true
+  },
+  {
+   "index": 3,
+   "tag": "CANDY-FORMED",
+   "kernel": "stick in hand AND candy not started AND producing AND sugar >= portion",
+   "protects": false
+  },
+  {
+   "index": 4,
+   "tag": "CANDY-WRAPPED",
+   "kernel": "stick in hand AND floss gathered",
+   "protects": false
+  },
+  {
+   "index": 5,
+   "tag": "HANDED-OVER",
+   "kernel": "stick in hand AND candy wrapped AND the customer it is for is there",
+   "protects": false
+  }
+ ],
+ "materials": [
+  {
+   "name": "sucrose (floss sugar)",
+   "kind": "Ingredient",
+   "e_number": "",
+   "requires_warning": false,
+   "allergen": ""
+  },
+  {
+   "name": "Allura Red (pink colour)",
+   "kind": "FoodColour",
+   "e_number": "E129",
+   "requires_warning": true,
+   "allergen": ""
+  },
+  {
+   "name": "Brilliant Blue (blue colour)",
+   "kind": "FoodColour",
+   "e_number": "E133",
+   "requires_warning": false,
+   "allergen": ""
+  },
+  {
+   "name": "silica (anti-caking agent)",
+   "kind": "FoodAdditive",
+   "e_number": "E551",
+   "requires_warning": false,
+   "allergen": ""
+  },
+  {
+   "name": "lactose (carrier of the colour sugar)",
+   "kind": "Ingredient",
+   "e_number": "",
+   "requires_warning": false,
+   "allergen": "milk"
+  },
+  {
+   "name": "flavouring",
+   "kind": "Ingredient",
+   "e_number": "",
+   "requires_warning": false,
+   "allergen": ""
+  },
+  {
+   "name": "pine wood (stick)",
+   "kind": "Packaging",
+   "e_number": "",
+   "requires_warning": false,
+   "allergen": ""
+  },
+  {
+   "name": "cardboard (sugar carton)",
+   "kind": "Packaging",
+   "e_number": "",
+   "requires_warning": false,
+   "allergen": ""
+  }
+ ],
+ "flavours": [
+  {
+   "name": "RASPBERRY",
+   "label": "raspberry (pink)",
+   "ingredients": [
+    "sucrose (floss sugar)",
+    "Allura Red (pink colour)",
+    "silica (anti-caking agent)",
+    "lactose (carrier of the colour sugar)",
+    "flavouring"
+   ]
+  },
+  {
+   "name": "BLUEBERRY",
+   "label": "blueberry (blue)",
+   "ingredients": [
+    "sucrose (floss sugar)",
+    "Brilliant Blue (blue colour)",
+    "silica (anti-caking agent)",
+    "lactose (carrier of the colour sugar)",
+    "flavouring"
+   ]
+  }
+ ]
+}

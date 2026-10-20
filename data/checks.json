@@ -1,12 +1,12 @@
 {
  "_provenance": {
-  "git": "5ed6f66",
-  "generated": "2026-10-20T13:20:03",
+  "git": "ba9ad33",
+  "generated": "2026-10-20T20:14:12",
   "inputs": {
-   "site/params.py": "8155a33587b06966",
+   "site/params.py": "850d7237e38a5ee3",
    "site/layout.py": "f22934e424124b2f",
    "site/checks.py": "afd134629a854501",
-   "data/asset_envelopes.json": "0420dd861caf801e",
+   "data/asset_envelopes.json": "7f3f4dbc2a873fd8",
    "data/robot_envelope.json": "83e81f780763b8da"
   }
  },

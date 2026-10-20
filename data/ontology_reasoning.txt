@@ -1,0 +1,3 @@
+loaded 41 classes, 11 object / 18 data properties, 217 individuals; unparsed axioms: 0
+HermiT: consistent; unsatisfiable classes: none
+example: step 'Start the machine' categories: ['category_PressingButton', 'category_MonitoringProcess', 'category_Turning'] | inferred types: ['ProductionStep', 'Thing']
