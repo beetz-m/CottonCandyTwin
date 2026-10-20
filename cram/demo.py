@@ -15,6 +15,8 @@ Run (viewer: ``cramera`` at http://localhost:8711, then choose Live):
     cram/run.sh cramera-live cram/demo.py                             # the whole shift
     COTTON_CANDY_PLAN=serve cram/run.sh cramera-live cram/demo.py     # make one portion, hand it to the customer
     COTTON_CANDY_PLAN=generalized cram/run.sh cramera-live cram/demo.py   # the generalized plan, two orders
+    COTTON_CANDY_PLAN=control cram/run.sh cramera-live cram/demo.py       # drive the generalized plan from a page
+                                                                          # at http://127.0.0.1:8770 (cotton_candy.control)
 
 Collision avoidance is off for this kinematic run: the PR2's collision buffers (0.05-0.20 m) exceed the clearances
 of the human-scale machine (controls under the pan overhang, reaching over the 0.66 m pan); coraplex's per-motion
@@ -141,11 +143,12 @@ class CottonCandyBoothDemonstration(RobotDemonstration):
     """
     ``shift`` (the whole shift), ``serve`` (make cotton candy and hand it to the customer, from a cold machine) or
     ``generalized`` (the generalized plan: the candy ordered is made and handed over from whatever state it is in;
-    two orders, the second reusing the running machine).
+    two orders, the second reusing the running machine) or ``control`` (the generalized plan, driven from the control
+    page of :mod:`cotton_candy.control`: orders, changes to the booth, projection and execution on request).
     """
 
     def run(self) -> World:
-        if self.plan_kind != "generalized":
+        if self.plan_kind not in ("generalized", "control"):
             return super().run()
         from coraplex.execution_environment import ExecutionEnvironment
 
@@ -159,6 +162,10 @@ class CottonCandyBoothDemonstration(RobotDemonstration):
                 plan.on_plan = self.visualization.attach_plan
             with ExecutionEnvironment(execution_type=self.execution_type,
                                       collision_avoidance=self.collision_avoidance):
+                if self.plan_kind == "control":
+                    from cotton_candy.control import PlanControl
+
+                    PlanControl(plan, attach_plan=plan.on_plan).serve_forever()
                 for order in range(self.portions):
                     self.process.new_order(Flavour.RASPBERRY.value, ordered_by="Customer")
                     plan.perform()

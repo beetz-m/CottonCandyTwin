@@ -1,0 +1,196 @@
+<!doctype html>
+<!-- Served by cotton_candy/control.py (PlanControl) at http://127.0.0.1:8770/. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Candy Plan Control</title>
+<style>
+:root {
+  --bg: #fbf8fa; --surface: #ffffff; --ink: #231a21; --muted: #6b5d68; --line: #e8dde4;
+  --accent: #b5175a; --accent-soft: #fbe3ee; --sugar: #24678f; --sugar-soft: #e1eef6;
+  --ok: #2d7a4a; --ok-soft: #e2f2e7; --bad: #b42318; --bad-soft: #fde7e4;
+  --mono: ui-monospace, "JetBrains Mono", "SFMono-Regular", Menlo, monospace;
+  --sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root {
+  --bg: #17121a; --surface: #201a23; --ink: #f1e9ef; --muted: #a998a5; --line: #3a2f3a;
+  --accent: #f0609a; --accent-soft: #3d1f2e; --sugar: #6fb3dc; --sugar-soft: #1b2e3b;
+  --ok: #8fd3a5; --ok-soft: #1c3325; --bad: #ff8a7a; --bad-soft: #3d1d1a; color-scheme: dark } }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 var(--sans); padding: 20px max(16px, 3vw) 40px; }
+header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+h1 { font-size: 1.45rem; margin: 0; }
+h2 { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 10px; font-family: var(--mono); }
+a { color: var(--sugar); }
+.grid { display: grid; grid-template-columns: minmax(260px, 340px) 1fr; gap: 18px; align-items: start; }
+@media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+.col { display: grid; gap: 18px; min-width: 0; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; min-width: 0; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+label { font-size: 0.8rem; color: var(--muted); display: grid; gap: 3px; }
+select, button { font: inherit; font-size: 0.88rem; border-radius: 7px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); padding: 7px 10px; }
+button { cursor: pointer; text-align: left; }
+button:hover:not(:disabled) { border-color: var(--accent); }
+button:focus-visible, select:focus-visible { outline: 2px solid var(--sugar); outline-offset: 2px; }
+button:disabled { opacity: 0.5; cursor: wait; }
+.stack { display: grid; gap: 8px; }
+.stack button small { display: block; color: var(--muted); font-size: 0.76rem; }
+.primary { background: var(--accent); border-color: var(--accent); color: var(--bg); font-weight: 600; font-size: 1rem; padding: 11px 14px; }
+.primary small { color: inherit !important; opacity: 0.85; }
+.busy { font-family: var(--mono); font-size: 0.8rem; color: var(--accent); min-height: 1.2em; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); font-size: 0.85rem; vertical-align: top; }
+th { font: 600 0.7rem var(--mono); color: var(--muted); text-transform: lowercase; }
+.mono { font-family: var(--mono); font-size: 0.82rem; }
+.chip { display: inline-block; font: 600 0.72rem var(--mono); padding: 2px 8px; border-radius: 999px; margin: 0 4px 4px 0; }
+.yes { background: var(--ok-soft); color: var(--ok); } .no { background: var(--bad-soft); color: var(--bad); }
+.tt tr.sel { background: var(--accent-soft); }
+.tt tr.now td:first-child::before { content: "▶ "; color: var(--accent); }
+.tt td.kern { color: var(--muted); font-size: 0.78rem; }
+.mark { font: 600 0.75rem var(--mono); }
+.proj { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font: 600 0.78rem var(--mono); }
+.proj span { background: var(--sugar-soft); color: var(--sugar); padding: 3px 8px; border-radius: 6px; }
+.proj i { color: var(--muted); font-style: normal; }
+.warn { background: var(--bad-soft); color: var(--bad); border-radius: 8px; padding: 8px 12px; font-size: 0.88rem; }
+.kv { display: grid; grid-template-columns: max-content 1fr; gap: 3px 14px; font-size: 0.88rem; }
+.kv dt { color: var(--muted); font-family: var(--mono); font-size: 0.78rem; }
+.kv dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.log { display: grid; gap: 6px; max-height: 320px; overflow-y: auto; }
+.log div { font-size: 0.84rem; border-left: 3px solid var(--ok); padding-left: 8px; }
+.log div.bad { border-color: var(--bad); }
+.log time { font-family: var(--mono); color: var(--muted); font-size: 0.75rem; margin-right: 6px; }
+.scroll { overflow-x: auto; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Cotton candy plan control</h1>
+  <div class="row mono"><span id="conn">connecting…</span> · watch the robot in <a href="http://localhost:8711" target="_blank" rel="noopener">cramera (Live)</a></div>
+</header>
+
+<div class="grid">
+  <div class="col">
+    <section class="card">
+      <h2>Orders</h2>
+      <div class="stack">
+        <div class="row">
+          <label for="flavour">Flavour<select id="flavour"></select></label>
+          <label for="customer">Customer<select id="customer"></select></label>
+        </div>
+        <button data-cmd="order">Place order<small>adds a candy to the belief store</small></button>
+        <button data-cmd="cancel_open_orders">Cancel open orders<small>removes undelivered candies</small></button>
+      </div>
+    </section>
+    <section class="card">
+      <h2>Change the booth</h2>
+      <div class="stack">
+        <button data-cmd="take_stick">Robot takes a stick<small>the plan then starts at CANDY-FORMED</small></button>
+        <button data-cmd="stop_machine">Robot stops the machine<small>the plan has to restart it</small></button>
+        <button data-cmd="empty_sugar_head">Spinner head runs dry<small>exogenous: the plan has to refill</small></button>
+        <button data-cmd="lose_candy">Belief says the candy is wrapped on a stick not in hand<small>the estimator resets it: the candy is lost</small></button>
+      </div>
+    </section>
+    <section class="card">
+      <h2>Plan</h2>
+      <div class="stack">
+        <button data-cmd="project">Project<small>which sub-goals would run now, without acting</small></button>
+        <button data-cmd="achieve" class="primary">Achieve: make and hand over the candy<small>runs the generalized plan from the current state</small></button>
+        <div class="busy" id="busy"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="col">
+    <section class="card">
+      <h2>The plan's view of the candy</h2>
+      <div id="belief"></div>
+    </section>
+    <section class="card">
+      <h2>Triangle table, evaluated on the current belief</h2>
+      <div class="scroll"><table class="tt"><thead><tr><th>sub-goal</th><th>kernel</th><th>kernel holds</th><th>goal holds</th></tr></thead><tbody id="tt"></tbody></table></div>
+      <div style="margin-top:10px" class="proj" id="proj"></div>
+    </section>
+    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));">
+      <section class="card"><h2>Machine</h2><dl class="kv" id="machine"></dl></section>
+      <section class="card"><h2>Candy belief store</h2><div class="scroll"><table><thead><tr><th>#</th><th>flavour</th><th>stage</th><th>stick</th><th>for</th></tr></thead><tbody id="candies"></tbody></table></div></section>
+    </div>
+    <section class="card"><h2>Log</h2><div class="log" id="log"></div></section>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+const chip = (ok, text) => `<span class="chip ${ok ? "yes" : "no"}">${esc(text)}</span>`;
+let optionsFilled = false;
+
+async function send(cmd) {
+  const body = cmd === "order" ? {flavour: $("flavour").value, customer: $("customer").value} : {};
+  try {
+    const r = await fetch("/" + cmd, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body)});
+    const j = await r.json();
+    if (!j.ok) $("busy").textContent = "refused: " + j.error;
+  } catch (e) { $("busy").textContent = "the demo is not reachable"; }
+  poll();
+}
+document.querySelectorAll("button[data-cmd]").forEach(b => b.addEventListener("click", () => send(b.dataset.cmd)));
+
+function render(s) {
+  if (!optionsFilled && s.flavours) {
+    $("flavour").innerHTML = s.flavours.map(f => `<option>${esc(f)}</option>`).join("");
+    $("customer").innerHTML = s.customers.map(c => `<option>${esc(c)}</option>`).join("") + '<option value="">any customer</option>';
+    optionsFilled = true;
+  }
+  const busy = s.running || s.queued;
+  document.querySelectorAll("button[data-cmd]").forEach(b => b.disabled = !!busy);
+  $("busy").textContent = s.running ? `running ${s.running}${s.current_row ? " · sub-goal " + s.current_row : ""}…` + (s.queued ? ` (${s.queued} queued)` : "") : "";
+
+  const b = s.belief;
+  if (s.snapshot_error) $("belief").innerHTML = `<div class="warn">${esc(s.snapshot_error)}</div>`;
+  else if (!b) $("belief").innerHTML = `<div class="warn">${esc(s.belief_error || "no belief")}</div>`;
+  else $("belief").innerHTML =
+    `<dl class="kv">
+      <dt>(the-candy)</dt><dd>order ${b.candy}, ${esc(b.flavour)}, stage <b>${esc(b.stage)}</b></dd>
+      <dt>(the-stick-of)</dt><dd>${esc(b.stick || "none")}</dd>
+      <dt>(the-sugar-for)</dt><dd>${b.sugar ? esc(b.sugar) : '<span class="chip no">no carton holds these ingredients</span>'}</dd>
+      <dt>(the-customer-of)</dt><dd>${esc(b.customer || "not found")}</dd>
+      <dt>(the-ingredients-of)</dt><dd>${b.ingredients.map(esc).join(", ")}</dd>
+      <dt>gripper</dt><dd>${esc(b.holding)}${b.held ? " · " + esc(b.held) : ""}</dd>
+    </dl>
+    <div style="margin-top:10px">${Object.entries(b.fluents).map(([k, v]) => chip(v, k)).join("")}</div>`;
+
+  $("tt").innerHTML = (s.rows || []).map((r, i) => {
+    const k = s.kernels ? s.kernels[i] : null, g = s.goals ? s.goals[i] : null;
+    const cls = [s.selected === r.tag ? "sel" : "", s.current_row === r.tag ? "now" : ""].join(" ");
+    const mark = v => v === null ? "" : `<span class="mark" style="color:var(${v ? "--ok" : "--muted"})">${v ? "yes" : "no"}</span>`;
+    return `<tr class="${cls}"><td class="mono">${r.index} ${esc(r.tag)}</td><td class="kern">${esc(r.kernel)}</td><td>${mark(k)}</td><td>${mark(g)}</td></tr>`;
+  }).join("");
+  if (s.unachievable) $("proj").innerHTML = `<div class="warn">goal unachievable: ${esc(s.unachievable)}</div>`;
+  else if (s.projection) $("proj").innerHTML = s.projection.length
+    ? "<i>would run:</i>" + s.projection.map(t => `<span>${esc(t)}</span>`).join("<i>→</i>")
+    : "<i>goal holds: the customer has the candy</i>";
+  else $("proj").innerHTML = "";
+
+  const m = s.machine || {};
+  $("machine").innerHTML = `<dt>phase</dt><dd>${esc(m.phase)}</dd><dt>sugar in head</dt><dd>${m.sugar_in_head_g} g</dd>
+    <dt>floss in pan</dt><dd>${m.floss_in_pan_g} g</dd><dt>portions served</dt><dd>${m.portions_served}</dd><dt>process time</dt><dd>${m.time_s} s</dd>`;
+  $("candies").innerHTML = (s.candies || []).slice().reverse().map(c =>
+    `<tr><td>${c.order}</td><td>${esc(c.flavour)}</td><td class="mono">${esc(c.stage)}</td><td class="mono">${esc(c.stick || "")}</td><td>${esc(c.customer || c.ordered_by || "any")}</td></tr>`).join("")
+    || '<tr><td colspan="5">no orders yet</td></tr>';
+  $("log").innerHTML = (s.log || []).slice().reverse().map(e =>
+    `<div class="${e.ok ? "" : "bad"}"><time>${e.time}</time><b>${esc(e.command)}</b> ${esc(e.message)} <span class="mono" style="color:var(--muted)">${e.seconds} s</span></div>`).join("")
+    || '<div>Place an order, then press Achieve.</div>';
+}
+
+async function poll() {
+  try {
+    const r = await fetch("/status", {cache: "no-store"});
+    render(await r.json());
+    $("conn").textContent = "connected to the demo";
+  } catch (e) { $("conn").textContent = "demo not reachable"; }
+}
+poll(); setInterval(poll, 800);
+</script>
+</body>
+</html>

@@ -314,6 +314,11 @@ class MakeAndHandOverCandyPlan:
     Where held objects are put back (by root body name).
     """
 
+    parents: Dict[str, Any] = field(default_factory=dict)
+    """
+    What held objects are put back into (by root body name): the body each was attached to when the plan was made.
+    """
+
     max_retries: int = 2
     """
     How often a sub-goal may fail before the plan gives up.
@@ -336,6 +341,7 @@ class MakeAndHandOverCandyPlan:
 
     def __post_init__(self):
         for obj in self.estimator.graspables:
+            self.parents.setdefault(obj.root.name.name, obj.root.parent_kinematic_structure_entity)
             m = obj.root.global_pose.to_np()
             qx, qy, qz, qw = Rotation.from_matrix(m[:3, :3]).as_quat()
             self.homes.setdefault(obj.root.name.name, Pose.from_xyz_quaternion(
@@ -398,7 +404,8 @@ class MakeAndHandOverCandyPlan:
         """
         if belief.held is None:
             return []
-        return [PuttingDownAction(belief.held, self.homes[belief.held.root.name.name])]
+        name = belief.held.root.name.name
+        return [PuttingDownAction(belief.held, self.homes[name], new_parent=self.parents.get(name))]
 
     def _make_ready(self, belief: ServiceBelief) -> List[ActionDescription]:
         """
@@ -436,6 +443,7 @@ class MakeAndHandOverCandyPlan:
             raise GoalUnachievable(
                 f"no sub-goal applies for candy {belief.candy.order} ({belief.candy.flavour}): "
                 f"sugar for it {'available' if belief.sugar_available else 'NOT available'}, "
+                f"stick for it {'available' if belief.stick is not None else 'NOT available'}, "
                 f"customer {'there' if belief.customer else 'not found'}"
             )
         return max(candidates, key=lambda s: s.index)

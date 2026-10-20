@@ -33,6 +33,7 @@ from krrood.ormatic.utils import classproperty
 
 from coraplex.datastructures.dataclasses import Context
 from coraplex.datastructures.enums import ToolPathSegmentKind
+from coraplex.plans.attachment_nodes import ReAttachNode
 from coraplex.plans.factories import code, sequential
 from coraplex.plans.plan_node import PlanNode
 from coraplex.querying.predicates import GripperIsFree, GripperIsNotFree
@@ -502,6 +503,12 @@ class PuttingDownAction(ActionDescription, HasManipulationCategory):
     current height, before it is carried over to the target.
     """
 
+    new_parent: Any = None
+    """
+    If given, the object is attached to this body after it is put down (e.g. a stick put back into the quiver is in
+    the quiver again, for designators such as "a stick in the quiver").
+    """
+
     @classproperty
     def manipulation_category(cls) -> ManipulationActionCategory:
         return ManipulationActionCategory.TRANSPORTING
@@ -539,6 +546,8 @@ class PuttingDownAction(ActionDescription, HasManipulationCategory):
                 )
             )
         steps.append(PlaceAction(self.graspable, self.target))
+        if self.new_parent is not None:
+            steps.append(ReAttachNode(body=self.graspable.root, new_parent=self.new_parent))
         return sequential(steps)
 
 
