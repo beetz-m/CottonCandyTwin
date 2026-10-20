@@ -21,7 +21,8 @@ LM.TEX = os.path.join(HERE, "textures")          # write the reused textures her
 OUT = os.path.join(HERE, "twin_materials.usda")
 
 TILE_M = dict(LM.TILE_M)
-TILE_M.update({"CladdingWhite": 2.0, "CladdingGrey": 2.0, "Asphalt": 6.0, "HallFloor": 8.0, "Grass": 8.0,
+TILE_M.update({"Paving": 2.0, "SpruceOiled": 1.2, "SprucePaintedPink": 1.2, "SprucePaintedWhite": 1.2,
+               "CladdingWhite": 2.0, "CladdingGrey": 2.0, "Asphalt": 6.0, "HallFloor": 8.0, "Grass": 8.0,
                "QuayConcrete": 6.0, "RoofMembrane": 6.0})
 
 PBR = {  # OmniPBR: (diffuse, roughness, metallic, extra)
@@ -74,6 +75,34 @@ PBR = {  # OmniPBR: (diffuse, roughness, metallic, extra)
     "TPYellow": ((0.80, 0.55, 0.02), 0.45, 0.0, {}),             # transition piece (RAL 1023-like)
     "BladeWhite": ((0.80, 0.80, 0.78), 0.25, 0.0, {}),
     "MonopileGrey": ((0.20, 0.21, 0.22), 0.55, 0.2, {}),
+    # ---- cotton candy booth (ILLUSTRATIVE colours from the Gold Medal manual photos and fair stands)
+    "PanelBlue": ((0.05, 0.16, 0.52), 0.35, 0.0, {}),             # machine front label
+    "DialPink": ((0.85, 0.12, 0.42), 0.40, 0.0, {}),
+    "KnobBlack": ((0.03, 0.03, 0.03), 0.35, 0.0, {}),
+    "RockerGreenLit": ((0.15, 0.70, 0.25), 0.30, 0.0, {"emissive": ((0.2, 1.0, 0.3), 80.0)}),
+    "LeverRed": ((0.78, 0.05, 0.04), 0.35, 0.0, {}),
+    "HeadCastGrey": ((0.18, 0.19, 0.20), 0.55, 0.3, {}),          # anodized / coated spinner head
+    "LeatherTan": ((0.62, 0.38, 0.22), 0.65, 0.0, {}),
+    "Brass": ((0.78, 0.60, 0.30), 0.30, 1.0, {}),
+    "AluSpun": ((0.80, 0.81, 0.83), 0.22, 1.0, {}),
+    "ScreenWhite": ((0.92, 0.92, 0.90), 0.60, 0.0, {}),
+    "FlossPink": ((0.98, 0.62, 0.80), 0.95, 0.0, {"emissive": ((1.0, 0.75, 0.88), 2.0)}),
+    "FlossBlue": ((0.55, 0.78, 0.98), 0.95, 0.0, {"emissive": ((0.7, 0.85, 1.0), 2.0)}),
+    "FlossWhite": ((0.96, 0.96, 0.95), 0.95, 0.0, {}),
+    "SugarPink": ((0.96, 0.55, 0.72), 0.80, 0.0, {}),
+    "SugarBlue": ((0.40, 0.62, 0.95), 0.80, 0.0, {}),
+    "SugarWhite": ((0.93, 0.93, 0.92), 0.80, 0.0, {}),
+    "PineStick": ((0.86, 0.74, 0.55), 0.70, 0.0, {}),
+    "GlossRed": ((0.72, 0.03, 0.03), 0.20, 0.0, {}),               # extinguisher body
+    "BulbWarm": ((1.0, 0.85, 0.55), 0.40, 0.0, {"emissive": ((1.0, 0.78, 0.45), 30000.0)}),
+    "LedWarm": ((1.0, 0.92, 0.80), 0.40, 0.0, {"emissive": ((1.0, 0.90, 0.75), 8000.0)}),
+    "SignPink": ((1.0, 0.45, 0.70), 0.40, 0.0, {"emissive": ((1.0, 0.40, 0.70), 3000.0)}),
+    "CanisterBlue": ((0.15, 0.35, 0.75), 0.45, 0.0, {}),
+    "TubLid": ((0.90, 0.90, 0.88), 0.45, 0.0, {}),
+    "PoleDark": ((0.10, 0.11, 0.12), 0.45, 0.4, {}),
+    "TarpRed": ((0.70, 0.08, 0.08), 0.75, 0.0, {}),
+    "TarpStripeWhite": ((0.92, 0.92, 0.90), 0.75, 0.0, {}),
+    "BagFilm": ((0.97, 0.82, 0.90), 0.15, 0.0, {}),
 }
 TEXTURED = {  # (albedo png, roughness, metallic)
     "CladdingWhite": ("cladding_white.png", 0.42, 0.2),
@@ -83,6 +112,10 @@ TEXTURED = {  # (albedo png, roughness, metallic)
     "Grass": ("grass.png", 0.95, 0.0),
     "QuayConcrete": ("quay_concrete.png", 0.85, 0.0),
     "RoofMembrane": ("roof.png", 0.75, 0.0),
+    "Paving": ("paving.png", 0.80, 0.0),
+    "SpruceOiled": ("spruce_oiled.png", 0.45, 0.0),
+    "SprucePaintedPink": ("spruce_pink.png", 0.55, 0.0),
+    "SprucePaintedWhite": ("spruce_white.png", 0.55, 0.0),
 }
 
 
@@ -111,6 +144,42 @@ def make_site_textures():
     r = 0.56 + 0.02 * LM._tileable_lowfreq(rng, n, 6) + 0.01 * rng.normal(size=(n, n))
     r[:, ::64] = 0.48
     LM._save("roof.png", np.stack([r, r, r * 1.01], -1) ** (1 / 2.2))
+    # concrete pavers 20 x 10 cm in running bond, 2 m tile (ILLUSTRATIVE)
+    p = 0.42 + 0.03 * LM._tileable_lowfreq(rng, n, 10) + 0.03 * rng.normal(size=(n, n))
+    cell_y = (yy / n * 20).astype(int)
+    shift = (cell_y % 2) * 0.5
+    xc = (xx / n * 10 + shift) % 1.0
+    yc = (yy / n * 20) % 1.0
+    tone = 0.9 + 0.2 * np.random.default_rng(3).random((20, 11))[cell_y, ((xx / n * 10 + shift).astype(int)) % 11]
+    p = p * tone
+    p[(xc < 0.03) | (yc < 0.06)] = 0.18
+    LM._save("paving.png", np.clip(np.stack([p * 1.0, p * 0.98, p * 0.95], -1), 0, 1) ** (1 / 2.2))
+    # spruce 3-ply panel: grain along u, boards 10 cm wide, 1.2 m tile
+    grain = 0.5 + 0.5 * np.sin(xx / n * 1.2 * 2 * np.pi * 9 + 3.0 * LM._tileable_lowfreq(rng, n, 6))
+    board = np.random.default_rng(5).random(12)[(yy / n * 12).astype(int)]
+    w = 0.80 + 0.06 * grain + 0.05 * board + 0.02 * rng.normal(size=(n, n))
+    LM._save("spruce_oiled.png", np.clip(np.stack([w * 0.86, w * 0.66, w * 0.42], -1), 0, 1))
+    for name, col in (("spruce_pink.png", (0.96, 0.62, 0.78)), ("spruce_white.png", (0.95, 0.94, 0.91))):
+        v = 0.975 + 0.012 * grain + 0.006 * board          # paint hides most of the grain
+        LM._save(name, np.clip(np.stack([v * col[0], v * col[1], v * col[2]], -1), 0, 1))
+
+
+def hashed(name):
+    """Copy textures/<name> to textures/<stem>_<sha1[:8]>.png and return that name.
+
+    Isaac Sim / RTX caches textures by path: a texture regenerated under the same file name keeps showing stale
+    (even foreign) content. A content-hashed name gives every new content a new path.
+    """
+    import hashlib
+    import shutil
+    src = os.path.join(LM.TEX, name)
+    with open(src, "rb") as f:
+        h = hashlib.sha1(f.read()).hexdigest()[:8]
+    stem, ext = os.path.splitext(name)
+    out = f"{stem}_{h}{ext}"
+    if not os.path.exists(os.path.join(LM.TEX, out)):
+        shutil.copy(src, os.path.join(LM.TEX, out))
+    return out
 
 
 def define_site(stage):
@@ -129,10 +198,17 @@ def define_site(stage):
         names.append(name)
     for name, (alb, rough, metal) in TEXTURED.items():
         mat, sh = LM._shader(stage, f"/Looks/{name}", "OmniPBR")
-        LM._set(sh, "diffuse_texture", LM.A, LM.tex(alb))
+        LM._set(sh, "diffuse_texture", LM.A, LM.tex(hashed(alb)))
         LM._set(sh, "reflection_roughness_constant", F, rough)
         LM._set(sh, "metallic_constant", F, metal)
         names.append(name)
+    # clear thin-walled polyethylene floss bubble (PolystyreneClear of the lab library is a solid, mirror-like glass)
+    mat, sh = LM._shader(stage, "/Looks/BubbleClearPE", "OmniGlass")
+    LM._set(sh, "glass_color", C3, Gf.Vec3f(0.97, 0.98, 1.0))
+    LM._set(sh, "glass_ior", F, 1.04)
+    LM._set(sh, "thin_walled", B, True)
+    LM._set(sh, "frosting_roughness", F, 0.0)
+    names.append("BubbleClearPE")
     return names
 
 

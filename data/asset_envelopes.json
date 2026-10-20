@@ -1,0 +1,57 @@
+{
+ "_provenance": {
+  "git": "940e977",
+  "generated": "2026-10-20T12:14:25",
+  "inputs": {
+   "assets/machine/build_machine.py": "2ea34c6a5038f383",
+   "site/params.py": "44bb00adbc0bcb56"
+  }
+ },
+ "machine": {
+  "lo": [
+   -0.1809,
+   -0.165,
+   0.0
+  ],
+  "hi": [
+   0.1809,
+   0.168,
+   0.4346
+  ],
+  "note": "cabinet footprint (feet + housing), height to the pan rim"
+ },
+ "pan": {
+  "lo": [
+   -0.3365,
+   -0.3365,
+   0.207
+  ],
+  "hi": [
+   0.3365,
+   0.3365,
+   0.4346
+  ]
+ },
+ "head": {
+  "centre": [
+   0.0,
+   0.0,
+   0.36
+  ],
+  "radius": 0.0698,
+  "swept_radius": 0.1041,
+  "note": "hot zone = floss band (radius as built); swept_radius incl. the unheated leather floaters"
+ },
+ "all_parts": {
+  "lo": [
+   -0.1809,
+   -0.165,
+   0.0
+  ],
+  "hi": [
+   0.1809,
+   0.199,
+   0.442
+  ]
+ }
+}

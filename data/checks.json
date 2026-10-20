@@ -1,14 +1,14 @@
 {
  "_provenance": {
-  "git": "19d33ed",
-  "generated": "2026-10-20T11:48:27",
+  "git": "940e977",
+  "generated": "2026-10-20T12:16:02",
   "inputs": {
-   "site/params.py": "18faf7ed548975d1",
+   "site/params.py": "44bb00adbc0bcb56",
    "site/layout.py": "4c31ec4c4cc3a671",
    "site/checks.py": "ca96a6fdf25b9659"
   }
  },
- "machine_envelope": "register",
+ "machine_envelope": "MEASURED (asset_envelopes.json)",
  "results": [
   {
    "test": "C1 everything inside the booth interior",
@@ -23,13 +23,13 @@
   {
    "test": "C3a machine cabinet footprint on the table (margin >= 0.03 m)",
    "passed": true,
-   "margin_m": 0.195,
+   "margin_m": 0.192,
    "on_top": true
   },
   {
    "test": "C3b pan rim clears the walls",
    "passed": true,
-   "gap_m": 0.24
+   "gap_m": 0.241
   },
   {
    "test": "C4 heating band >= 0.50 m from combustibles",
@@ -41,9 +41,9 @@
   {
    "test": "C5 pan rim at operator elbow height",
    "passed": true,
-   "rim_above_floor_m": 1.056,
+   "rim_above_floor_m": 1.055,
    "elbow_m": 1.05,
-   "rim_on_counter_would_be_m": 1.336
+   "rim_on_counter_would_be_m": 1.335
   },
   {
    "test": "C6 operator movement area >= 1.5 m2 containing a 1.0 x 1.0 m square",
@@ -92,7 +92,7 @@
    "test": "C11 head capacity sustains >= 1 portion per fill",
    "passed": true,
    "sugar_g_per_min": 50.0,
-   "refill_every_s": 27.0
+   "refill_every_s": 64.8
   },
   {
    "test": "C12 stick holder within 0.80 m of the operator",
