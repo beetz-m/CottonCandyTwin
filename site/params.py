@@ -122,6 +122,12 @@ SOURCES = {
              "einer Grundflaeche von 75 m2' need no Ausfuehrungsgenehmigung",
     "TSB_SAFETY": "https://cdn02.plentyone.com/zkz64ybyye6y/frontend/Artikel/Anleitungen/2026/teamsportbedarf-de_"
                   "Zelt-faltbar_Sicherheitshinweise_2026-03.pdf - 'mindestens 15 kg bis 25 kg pro Standbein'",
+    "ASR_A12": "ASR A1.2 'Raumabmessungen und Bewegungsflaechen' 5.1 via https://vorschriften.bgn-branchenwissen.de/"
+               "daten/tr/asr_a1_2/5.htm (search summary): Bewegungsflaeche >= 1,50 m2, Breite und Tiefe >= 1,00 m",
+    "ASR_A18": "ASR A1.8 'Verkehrswege' 4.2 via https://www.komnet.nrw.de/_sitetools/dialog/22760 (search summary): "
+               "lichte Hoehe ueber Verkehrswegen >= 2,00 m",
+    "DIN_EN631": "DIN EN 631-1 Gastronorm container sizes (GN 1/1 530 x 325 mm; GN 1/6 176 x 162 mm) - from "
+                 "general knowledge of the standard, not re-read - VERIFY",
     "DIN33402": "DIN 33402-2:2020 body dimensions (adult elbow height standing ca. 1.0-1.15 m, 5th-95th pct.); "
                 "values via secondary ergonomics tables - VERIFY",
 }
@@ -143,11 +149,19 @@ P = {
     "booth_counter_top_t": (0.027, "m", I, "recon", "solid wood worktop"),
     "booth_flap_width": (1.60, "m", A, "CRAFTMAX", "sales flap 1600 x 1000 mm on a food trailer; used for the hut"),
     "booth_flap_height": (1.00, "m", A, "CRAFTMAX", "flap hinged at the top, opens up as a rain/sun awning"),
-    "booth_flap_open_angle": (75.0, "deg", I, "recon", "open position, held by gas struts"),
+    "booth_flap_open_angle": (100.0, "deg", I, "recon", "rotation from the closed (hanging) position, held by gas "
+                              "struts; edge rises above the hinge"),
     "booth_floor_height": (0.08, "m", I, "recon", "wooden floor on skids above the paving"),
     "booth_colour_scheme": ("pink/white", "-", I, "recon", "red-white nostalgic stands exist (ROLLS_STAND); no source "
                             "for pink Zuckerwatte livery -> GAP-driven design choice"),
     "booth_side_door_width": (0.70, "m", I, "recon", "rear-side entrance for the operator"),
+    "machine_table_height": (0.62, "m", I, "recon", "lowered stainless machine table so the pan rim sits at elbow "
+                             "height (checked in site/checks.py); a machine on the 0.90 m counter puts the rim at "
+                             "1.34 m"),
+    "handwash_unit": ((0.45, 0.45, 0.85), "m", A, "MS_MB25", "mobile hand-wash station with fresh/waste water "
+                      "canisters, typical market-trader unit; dimensions illustrative"),
+    "gn16_size": ((0.176, 0.162), "m", SV, "DIN_EN631", "Gastronorm 1/6 container 176 x 162 mm"),
+    "side_shelf_depth": (0.30, "m", I, "recon", "3-level shelf on the right wall (sugar tubs, sticks, bag stock)"),
     # ---------------------------------------------------------------- booth regulation / equipment
     "reg_fliegende_bauten_limit": (75.0, "m2", ST, "MBO76", "sales stands up to 75 m2 need no Ausfuehrungs-"
                                    "genehmigung (MBO par. 76(2)); this booth is 4 m2"),
@@ -280,6 +294,10 @@ P = {
                         "just above the pan rim"),
     "op_rim_above_elbow_max": (0.10, "m", I, "recon", "winding happens at/just above the pan rim: rim <= elbow + 0.10"),
     "op_rim_below_elbow_max": (0.25, "m", I, "recon", "rim no lower than elbow - 0.25 (no deep stooping)"),
+    "asr_move_area": (1.50, "m2", SV, "ASR_A12", "free movement area at the workplace; applies to the operator"),
+    "asr_move_width": (1.00, "m", SV, "ASR_A12", "min. width and depth of the movement area (standing work)"),
+    "asr_headroom": (2.00, "m", SV, "ASR_A18", "clear height over traffic routes; used for the open flap above "
+                     "customers (a market stall is not a building; applied as a design rule)"),
     # ---------------------------------------------------------------- environment
     "env_surface": ("concrete pavers", "-", I, "recon", "fair squares are paved/asphalt (MS_MB25 requires solid floor)"),
     "env_rh": (60.0, "%RH", I, "recon", "German autumn evening; drives the floss collapse model"),
