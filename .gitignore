@@ -21,3 +21,5 @@ report/*.fdb_latexmk
 report/*.out
 report/*.toc
 report/*.pdf
+# generated ontology exports (rebuild: cram/run.sh python -m cotton_candy.ontology.owl; ontology/reason.py)
+ontology/build/
