@@ -237,8 +237,9 @@ P = {
     "head_slip_rings": (2, "-", S, "GM_MAN_EXP", "slip rings 42126HD + carbon brushes 55007"),
     "head_fill_fraction": (0.90, "-", S, "GM_MAN_EXP", "'fill head 90% full ... necessary to obtain a balanced "
                            "condition'"),
-    "head_sugar_capacity": (0.025, "kg", I, "recon", "absolute capacity not published (GAP); 25 g ~ one portion "
-                            "+ start-up, consistent with 2-3 servings/min"),
+    "head_sugar_capacity": (0.060, "kg", C, "GM_SHOP_3017", "absolute capacity not published (GAP); CALIBRATED so "
+                            "one fill (90 %) lasts ~1 min at the rated 2-3 servings/min - a 25 g head would force a "
+                            "stop/refill/35 s warm-up after every portion, contradicting the rated output"),
     "head_ribbon": ("nickel-wire flat-coil ribbon", "-", S, "GM_MAN_EXP", "'Floss Ribbons (heat elements) are made "
                     "of nickel wire'; export head uses double ribbon"),
     "head_band_coating": ("anodized aluminium, slotted", "-", S, "PAT_US4872821", "slotted aluminium wall with "
