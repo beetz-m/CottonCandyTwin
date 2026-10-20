@@ -25,3 +25,4 @@ report/*.pdf
 ontology/build/
 report/*.tex
 test_reports/*.txt
+report/web/
