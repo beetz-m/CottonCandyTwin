@@ -16,13 +16,13 @@ from cotton_candy.actions import (
     CleanFlossMachineAction,
     FillSpinnerHeadAction,
     MakeCottonCandyAction,
-    OperateElementAction,
     PrepareFlossMachineAction,
     SellCottonCandyAction,
     ShutDownFlossMachineAction,
     StartFlossMachineAction,
     StopFlossMachineAction,
 )
+from cotton_candy.manipulation_categories import ManipulationActionCategory as C, PressingButtonAction, category_profile
 from cotton_candy.booth_world import BoothWorldBuilder, RobotStation, TwinModule
 from cotton_candy.process import (
     FlossMachinePhase,
@@ -45,7 +45,7 @@ def booth():
     """
     The booth world with a PR2 at the machine station, its context and the machine's process.
     """
-    world = BoothWorldBuilder().build()
+    world = BoothWorldBuilder(machine_set_up=False).build()
     robot = world.get_semantic_annotations_by_type(PR2)[0]
     machine = world.get_semantic_annotations_by_type(CottonCandyMachine)[0]
     process = FlossMachineProcess(machine, FlossMachineTimings.from_twin_register(TwinModule.PARAMS.load()))
@@ -120,12 +120,37 @@ def test_process_follows_the_manual(booth):
 # %% designators: plans and conditions
 
 
-def test_operating_an_element_grasps_moves_and_lets_go(booth):
+def test_pressing_a_button_closes_the_gripper_pushes_and_lets_go(booth):
     world, robot, context, machine, process = booth
-    action = OperateElementAction(machine.motor_switch, robot.right_arm, 1.0)
+    action = PressingButtonAction(machine.motor_switch, robot.right_arm, 1.0)
     sequential([action], context)
     names = [type(node.designator).__name__ for node in action._action_plan.children]
-    assert names == ["GraspingAction", "OpeningMotion", "MoveGripperMotion", "MoveToolCenterPointMotion"]
+    assert names == ["ParkArmsAction", "MoveGripperMotion", "GraspingAction", "OpeningMotion", "MoveGripperMotion",
+                     "MoveToolCenterPointMotion"]
+
+
+def test_top_level_designators_map_onto_manipulation_categories(booth):
+    """
+    The mapping table of cotton_candy.actions, read from the plans themselves.
+    """
+    world, robot, context, machine, process = booth
+    arm = robot.right_arm
+    one = lambda t: world.get_semantic_annotations_by_type(t)[0]
+    expected = [
+        (PrepareFlossMachineAction(machine, arm), [C.TURNING, C.TURNING]),
+        (FillSpinnerHeadAction(machine, process, one(SugarScoop), one(SugarTray), arm),
+         [C.TRANSPORTING, C.SCOOPING, C.POURING, C.TRANSPORTING]),
+        (StartFlossMachineAction(machine, process, arm),
+         [C.PRESSING_BUTTON, C.MONITORING, C.PRESSING_BUTTON, C.TURNING, C.MONITORING, C.TURNING]),
+        (MakeCottonCandyAction(machine, process, one(CandyStick), arm),
+         [C.TRANSPORTING, C.MONITORING, C.GATHERING, C.WRAPPING]),
+        (StopFlossMachineAction(machine, process, arm),
+         [C.PRESSING_BUTTON, C.MONITORING, C.PRESSING_BUTTON, C.MONITORING]),
+        (CleanFlossMachineAction(machine, process, one(Sponge), arm), [C.TRANSPORTING, C.WIPING, C.TRANSPORTING]),
+    ]
+    for action, categories in expected:
+        sequential([action], context)
+        assert category_profile(action) == categories, type(action).__name__
 
 
 def test_fill_needs_a_stopped_head(booth):

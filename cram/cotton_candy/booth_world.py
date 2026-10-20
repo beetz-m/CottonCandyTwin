@@ -22,6 +22,7 @@ from enum import Enum
 from typing_extensions import Dict, List, Tuple, Type
 
 from semantic_digital_twin.adapters.urdf import URDFParser
+from semantic_digital_twin.datastructures.definitions import StaticJointState
 from semantic_digital_twin.datastructures.prefixed_name import PrefixedName
 from semantic_digital_twin.robots.robot_parts import AbstractRobot
 from semantic_digital_twin.robots.pr2 import PR2
@@ -142,12 +143,12 @@ class RobotStation(Enum):
     """
     Where the robot's base stands to work (x, y, yaw in the booth frame), facing the sales front (-y).
 
-    Chosen for a PR2 (0.67 m square base): MACHINE puts the right shoulder ~0.77 m from the spinner head with the
-    base front against the machine table; SERVING puts the base front against the counter so the left arm reaches
+    Chosen for a PR2 (0.67 m square base): MACHINE keeps the parked arms clear of the machine table and the
+    counter (the full-body controller moves the base closer when an arm needs it); SERVING puts the base front against the counter so the left arm reaches
     the handover zone (~0.62 m). Both footprints are clear of the table, counter, shelf and hand-wash station.
     """
 
-    MACHINE = (-0.05, 0.29, -math.pi / 2)
+    MACHINE = (-0.20, 0.34, -math.pi / 2)
     SERVING = (0.32, -0.04, -math.pi / 2)
 
     def pose(self, reference_frame: Body) -> Pose:
@@ -236,6 +237,13 @@ class BoothWorldBuilder:
     Where the robot's base stands when the world is built (x, y, yaw).
     """
 
+    machine_set_up: bool = True
+    """
+    Whether the booth has been set up: the Lock-N-Go transport handles stand UNLOCKED. They sit under the pan's
+    overhang where a PR2 gripper cannot reach (kinematic test, 2026-10-20), and the manual uses them "for transport
+    ONLY", so unlocking is a set-up task for the staff.
+    """
+
     params: object = field(init=False)
     """
     The twin's parameter register module.
@@ -296,12 +304,22 @@ class BoothWorldBuilder:
             old_root = world.root
             self.root = Body(name=PrefixedName("map"))
             odom = Body(name=PrefixedName("odom_combined"))
-            world.add_connection(Connection6DoF.create_with_dofs(world, self.root, odom))
+            map_C_odom = Connection6DoF.create_with_dofs(world, self.root, odom)
+            world.add_connection(map_C_odom)
             drive = self.robot_type.get_drive_connection_type().create_with_dofs(
                 parent=odom, child=old_root, world=world
             )
             world.add_connection(drive)
             drive.has_hardware_interface = True
+        # the robot stands on the booth floor, which is raised above the paving
+        map_C_odom.origin = HomogeneousTransformationMatrix.from_xyz_rpy(
+            z=self.layout.FLOOR_Z, reference_frame=self.root
+        )
+        robot = world.get_semantic_annotations_by_type(self.robot_type)[0]
+        for arm in robot.all_arms:
+            park = arm.get_joint_state_by_type(StaticJointState.PARK)
+            for connection, value in zip(park.connections, park.target_values):
+                connection.position = value
         x, y, yaw = self.robot_xy_yaw
         drive.origin = HomogeneousTransformationMatrix.from_xyz_rpy(x=x, y=y, yaw=yaw, reference_frame=self.root)
         return world
@@ -380,8 +398,15 @@ class BoothWorldBuilder:
     def _booth_shell(self) -> None:
         g, L = self.params.get, self.layout
         width, depth = g("booth_width"), g("booth_depth")
-        self._add(box_body("Paving", (6.0, 6.0, 0.02), Finish.PAVING), (0.0, -1.0, -0.01))
-        self._add(box_body("BoothFloor", (width, depth, L.FLOOR_Z), Finish.SPRUCE), (0.0, 0.0, L.FLOOR_Z / 2))
+        # ground surfaces are visual only: the robot stands on them kinematically, and a collision shape at
+        # contact distance 0 makes giskard's collision monitor flicker around its violation threshold
+        for name, size, finish, xyz in (
+            ("Paving", (6.0, 6.0, 0.02), Finish.PAVING, (0.0, -1.0, -0.01)),
+            ("BoothFloor", (width, depth, L.FLOOR_Z), Finish.SPRUCE, (0.0, 0.0, L.FLOOR_Z / 2)),
+        ):
+            ground = box_body(name, size, finish)
+            ground.collision = ShapeCollection([])
+            self._add(ground, xyz)
         items = {item["name"]: item for item in L.items()}
         for name in ("WallLeft", "WallRight", "WallBack", "WallFrontBelowCounter", "WallFrontHeader"):
             finish = Finish.PINK_PAINT if name.startswith("WallFront") else Finish.WHITE_PAINT
@@ -521,6 +546,9 @@ class BoothWorldBuilder:
             lock_handles=handles,
         )
         self.world.add_semantic_annotation_recursively(machine)
+        if self.machine_set_up:
+            for handle in handles:
+                handle.movable_joint.position = handle.movable_joint.dof.limits.upper.position
         return machine
 
     # %% tools and consumables

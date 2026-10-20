@@ -1,10 +1,10 @@
 {
  "_provenance": {
-  "git": "940e977",
-  "generated": "2026-10-20T12:16:02",
+  "git": "375c2a4",
+  "generated": "2026-10-20T12:20:44",
   "inputs": {
    "site/params.py": "44bb00adbc0bcb56",
-   "site/layout.py": "4c31ec4c4cc3a671",
+   "site/layout.py": "7f6b8dbe7730b78c",
    "site/checks.py": "ca96a6fdf25b9659"
   }
  },
@@ -48,7 +48,7 @@
   {
    "test": "C6 operator movement area >= 1.5 m2 containing a 1.0 x 1.0 m square",
    "passed": true,
-   "area_m2": 1.935,
+   "area_m2": 1.939,
    "square_fits": true,
    "operator_in_free_region": true
   },

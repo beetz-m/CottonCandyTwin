@@ -66,7 +66,7 @@ def items():
         box("SideShelf", "shelf", (X1 - sh, -0.30, FLOOR_Z), (X1, 0.40, FLOOR_Z + 1.60), True, material="spruce"),
         box("HandwashStation", "handwash", (X1 - hw[0], Y1 - hw[1], FLOOR_Z), (X1, Y1, FLOOR_Z + hw[2]), True,
             regulation="EU852 Annex II Ch.III 2(a); MS_MB25"),
-        box("FireExtinguisher", "safety", (X0, 0.55, FLOOR_Z + 0.75), (X0 + 0.16, 0.72, FLOOR_Z + 1.35), False,
+        box("FireExtinguisher", "safety", (X0, Y1 - 0.17, FLOOR_Z + 0.75), (X0 + 0.135, Y1, FLOOR_Z + 1.35), False,
             regulation="6 kg ABC, EN 3"),
         box("PowerDistributor", "electrical", (X1 - 0.12, 0.62, FLOOR_Z + 1.30), (X1, 0.92, FLOOR_Z + 1.60), False,
             regulation="RCD 30 mA, IP44"),
