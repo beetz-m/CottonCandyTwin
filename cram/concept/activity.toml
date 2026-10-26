@@ -1,0 +1,22 @@
+# The cotton candy booth as a conceptual CRAM research activity (ccram, ~/Documents/ConceptualCRAM).
+[activity]
+name = "cotton-candy-booth"
+title = "Cotton candy booth"
+description = "A PR2 runs a cotton candy booth: fills the spinner head, makes and hands over candy, closes for the day."
+
+[language]
+modules = ["ontology/booth.ttl"]            # beside the ccram core (ccram-lang, ccram-actions, DUL/SOMA imports)
+library = ["booth.lisp"]
+rules = ["rules/*.lisp"]
+
+[twin]
+path = [".."]                               # cram/: demo.py and the cotton_candy package
+demonstration = "demo:CottonCandyBoothDemonstration"
+adapter = "adapter:make_adapter"
+default_plan = "fill-spinner-head"
+python = "~/.virtualenvs/cram-env/bin/python"           # the twin's environment (ccram run re-enters it)
+setup = ["/opt/ros/jazzy/setup.bash", "~/ros_ws/install/setup.bash"]
+
+[workbench]
+port = 8780
+bridge = 8767

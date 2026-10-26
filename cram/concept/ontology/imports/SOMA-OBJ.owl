@@ -1,0 +1,2266 @@
+Prefix(:=<http://www.ease-crc.org/ont/SOMA-OBJ.owl#>)
+Prefix(dc:=<http://purl.org/dc/elements/1.1/>)
+Prefix(owl:=<http://www.w3.org/2002/07/owl#>)
+Prefix(rdf:=<http://www.w3.org/1999/02/22-rdf-syntax-ns#>)
+Prefix(xml:=<http://www.w3.org/XML/1998/namespace>)
+Prefix(xsd:=<http://www.w3.org/2001/XMLSchema#>)
+Prefix(SOMA:=<http://www.ease-crc.org/ont/SOMA.owl#>)
+Prefix(rdfs:=<http://www.w3.org/2000/01/rdf-schema#>)
+
+
+Ontology(<http://www.ease-crc.org/ont/SOMA-OBJ.owl>
+Import(<http://www.ease-crc.org/ont/SOMA.owl>)
+Annotation(rdfs:comment "SOMA-OBJ.owl provides definitions for high level concepts related to objects and their qualities. 
+
+This includes
+
+- the upper layer of a hierarchy of designed artifacts and of design types
+- the upper layer of a hierarchy of physical qualities, including Dispositions of objects, and of regions associated with these
+- a formal definition of an Affordance concept as a Relation between Dispositions
+- the upper layer of a taxonomy of roles played by participants in an Event or Relation
+
+The above concepts are fairly general-purpose, but some concepts specific to the robotics domain are also defined here:
+
+- FunctionalPart, DesignedComponent
+- the various types of joints encountered in robotics
+- an upper layer for a taxonomy of effectors
+- physical attributes characterizing mechanical interactions, control parameters for robotics actuators, and object locations
+
+SOMA-OBJ does not and will not import other SOMA files except for the common list of external imports SOMA.owl. Instead, it is a base upon which most other SOMA modules are built. 
+
+This is related to a design decision between \"primacy of objects\" and \"primacy of events\" modelling. That is, should we define events in terms of what objects participate in them and in what roles, or objects in terms of the events they can participate in and the nature of that participation? 
+
+We do not argue here that one of these approaches is better -- they seem equally powerful in terms of what they can express. Our decision for primacy of objects is merely an aesthetic choice based on what seemed more intuitive.")
+
+Declaration(Class(SOMA:Accessor))
+Declaration(Class(SOMA:AestheticDesign))
+Declaration(Class(SOMA:Affordance))
+Declaration(Class(SOMA:AgentRole))
+Declaration(Class(SOMA:AlteredObject))
+Declaration(Class(SOMA:Appliance))
+Declaration(Class(SOMA:Arm))
+Declaration(Class(SOMA:ArtificialAgent))
+Declaration(Class(SOMA:AvoidedObject))
+Declaration(Class(SOMA:Barrier))
+Declaration(Class(SOMA:BeneficiaryRole))
+Declaration(Class(SOMA:Blockage))
+Declaration(Class(SOMA:BlockedObject))
+Declaration(Class(SOMA:BoxShape))
+Declaration(Class(SOMA:CanCut))
+Declaration(Class(SOMA:Capability))
+Declaration(Class(SOMA:Capacity))
+Declaration(Class(SOMA:CausalEventRole))
+Declaration(Class(SOMA:CausativeRole))
+Declaration(Class(SOMA:CircularCylinder))
+Declaration(Class(SOMA:Clean))
+Declaration(Class(SOMA:Cleanliness))
+Declaration(Class(SOMA:CleanlinessRegion))
+Declaration(Class(SOMA:Color))
+Declaration(Class(SOMA:ColorRegion))
+Declaration(Class(SOMA:CommitedObject))
+Declaration(Class(SOMA:Composing))
+Declaration(Class(SOMA:ConnectedObject))
+Declaration(Class(SOMA:Connectivity))
+Declaration(Class(SOMA:Container))
+Declaration(Class(SOMA:Containment))
+Declaration(Class(SOMA:ContinuousJoint))
+Declaration(Class(SOMA:Cover))
+Declaration(Class(SOMA:Coverage))
+Declaration(Class(SOMA:CoveredObject))
+Declaration(Class(SOMA:CreatedObject))
+Declaration(Class(SOMA:CutObject))
+Declaration(Class(SOMA:Cuttability))
+Declaration(Class(SOMA:Cutter))
+Declaration(Class(SOMA:CylinderShape))
+Declaration(Class(SOMA:DependentPlace))
+Declaration(Class(SOMA:Deposit))
+Declaration(Class(SOMA:DepositedObject))
+Declaration(Class(SOMA:Deposition))
+Declaration(Class(SOMA:DesignedComponent))
+Declaration(Class(SOMA:DesignedContainer))
+Declaration(Class(SOMA:DesignedFurniture))
+Declaration(Class(SOMA:DesignedTool))
+Declaration(Class(SOMA:Destination))
+Declaration(Class(SOMA:DestroyedObject))
+Declaration(Class(SOMA:DetectedObject))
+Declaration(Class(SOMA:DeviceState))
+Declaration(Class(SOMA:DeviceStateRange))
+Declaration(Class(SOMA:DeviceTurnedOff))
+Declaration(Class(SOMA:DeviceTurnedOn))
+Declaration(Class(SOMA:Dirty))
+Declaration(Class(SOMA:Disposition))
+Declaration(Class(SOMA:Effort))
+Declaration(Class(SOMA:EnclosedObject))
+Declaration(Class(SOMA:Enclosing))
+Declaration(Class(SOMA:EventAdjacentRole))
+Declaration(Class(SOMA:ExcludedObject))
+Declaration(Class(SOMA:ExistingObjectRole))
+Declaration(Class(SOMA:ExperiencerRole))
+Declaration(Class(SOMA:ExtractedObject))
+Declaration(Class(SOMA:Extrinsic))
+Declaration(Class(SOMA:Feature))
+Declaration(Class(SOMA:Finger))
+Declaration(Class(SOMA:FixedJoint))
+Declaration(Class(SOMA:FloatingJoint))
+Declaration(Class(SOMA:ForceAttribute))
+Declaration(Class(SOMA:FrictionAttribute))
+Declaration(Class(SOMA:FunctionalDesign))
+Declaration(Class(SOMA:FunctionalPart))
+Declaration(Class(SOMA:GoalRole))
+Declaration(Class(SOMA:Graspability))
+Declaration(Class(SOMA:GreenColor))
+Declaration(Class(SOMA:Gripper))
+Declaration(Class(SOMA:Hand))
+Declaration(Class(SOMA:HasQualityRegion))
+Declaration(Class(SOMA:Head))
+Declaration(Class(SOMA:HingeJoint))
+Declaration(Class(SOMA:Impediment))
+Declaration(Class(SOMA:IncludedObject))
+Declaration(Class(SOMA:InsertedObject))
+Declaration(Class(SOMA:Insertion))
+Declaration(Class(SOMA:Instrument))
+Declaration(Class(SOMA:Intrinsic))
+Declaration(Class(SOMA:Item))
+Declaration(Class(SOMA:Joint))
+Declaration(Class(SOMA:JointLimit))
+Declaration(Class(SOMA:JointState))
+Declaration(Class(SOMA:KineticFrictionAttribute))
+Declaration(Class(SOMA:Leg))
+Declaration(Class(SOMA:Limb))
+Declaration(Class(SOMA:Linkage))
+Declaration(Class(SOMA:LinkedObject))
+Declaration(Class(SOMA:Localization))
+Declaration(Class(SOMA:Location))
+Declaration(Class(SOMA:LocatumRole))
+Declaration(Class(SOMA:MassAttribute))
+Declaration(Class(SOMA:Material))
+Declaration(Class(SOMA:MeshShape))
+Declaration(Class(SOMA:MovableJoint))
+Declaration(Class(SOMA:MovedObject))
+Declaration(Class(SOMA:NetForce))
+Declaration(Class(SOMA:Obstacle))
+Declaration(Class(SOMA:Origin))
+Declaration(Class(SOMA:PathRole))
+Declaration(Class(SOMA:Patient))
+Declaration(Class(SOMA:PerformerRole))
+Declaration(Class(SOMA:PhysicalEffector))
+Declaration(Class(SOMA:PhysicalQuality))
+Declaration(Class(SOMA:PlanarJoint))
+Declaration(Class(SOMA:Pourable))
+Declaration(Class(SOMA:PouredObject))
+Declaration(Class(SOMA:PrehensileEffector))
+Declaration(Class(SOMA:PrismaticJoint))
+Declaration(Class(SOMA:Protector))
+Declaration(Class(SOMA:Purification))
+Declaration(Class(SOMA:QualityTransition))
+Declaration(Class(SOMA:RecipientRole))
+Declaration(Class(SOMA:RedColor))
+Declaration(Class(SOMA:RelationAdjacentRole))
+Declaration(Class(SOMA:RelatumRole))
+Declaration(Class(SOMA:RelevantPart))
+Declaration(Class(SOMA:RemovedObject))
+Declaration(Class(SOMA:ResourceRole))
+Declaration(Class(SOMA:RestrictedObject))
+Declaration(Class(SOMA:Restrictor))
+Declaration(Class(SOMA:ResultRole))
+Declaration(Class(SOMA:RevoluteJoint))
+Declaration(Class(SOMA:Room))
+Declaration(Class(SOMA:RoomSurface))
+Declaration(Class(SOMA:SelectedObject))
+Declaration(Class(SOMA:Setpoint))
+Declaration(Class(SOMA:Shape))
+Declaration(Class(SOMA:ShapeRegion))
+Declaration(Class(SOMA:ShapedObject))
+Declaration(Class(SOMA:Shaping))
+Declaration(Class(SOMA:Sharpness))
+Declaration(Class(SOMA:Shifting))
+Declaration(Class(SOMA:Size))
+Declaration(Class(SOMA:SocialQuality))
+Declaration(Class(SOMA:SourceMaterialRole))
+Declaration(Class(SOMA:SpatialRelationRole))
+Declaration(Class(SOMA:SpatioTemporalRole))
+Declaration(Class(SOMA:SphereShape))
+Declaration(Class(SOMA:StaticFrictionAttribute))
+Declaration(Class(SOMA:StimulusRole))
+Declaration(Class(SOMA:Storage))
+Declaration(Class(SOMA:StoredObject))
+Declaration(Class(SOMA:StructuralDesign))
+Declaration(Class(SOMA:SupportedObject))
+Declaration(Class(SOMA:Supporter))
+Declaration(Class(SOMA:Surface))
+Declaration(Class(SOMA:Temperature))
+Declaration(Class(SOMA:TemperatureRegion))
+Declaration(Class(SOMA:Tempering))
+Declaration(Class(SOMA:TimeRole))
+Declaration(Class(SOMA:Tool))
+Declaration(Class(SOMA:Transient))
+Declaration(Class(SOMA:Variability))
+Declaration(Class(<http://www.ease-crc.org/ont/SOMA.owl#3DPosition>))
+Declaration(Class(<http://www.ease-crc.org/ont/SOMA.owl#6DPose>))
+Declaration(Class(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Design>))
+Declaration(ObjectProperty(SOMA:affordanceDefines))
+Declaration(ObjectProperty(SOMA:affordanceDefinesTask))
+Declaration(ObjectProperty(SOMA:affordsBearer))
+Declaration(ObjectProperty(SOMA:affordsConcept))
+Declaration(ObjectProperty(SOMA:affordsPerformer))
+Declaration(ObjectProperty(SOMA:affordsSetpoint))
+Declaration(ObjectProperty(SOMA:affordsTask))
+Declaration(ObjectProperty(SOMA:affordsTrigger))
+Declaration(ObjectProperty(SOMA:containsObject))
+Declaration(ObjectProperty(SOMA:definesBearer))
+Declaration(ObjectProperty(SOMA:definesEventType))
+Declaration(ObjectProperty(SOMA:definesParameter))
+Declaration(ObjectProperty(SOMA:definesPerformer))
+Declaration(ObjectProperty(SOMA:definesSetpoint))
+Declaration(ObjectProperty(SOMA:definesTrigger))
+Declaration(ObjectProperty(SOMA:describesQuality))
+Declaration(ObjectProperty(SOMA:hasAlterationResult))
+Declaration(ObjectProperty(SOMA:hasChildLink))
+Declaration(ObjectProperty(SOMA:hasColor))
+Declaration(ObjectProperty(SOMA:hasDisposition))
+Declaration(ObjectProperty(SOMA:hasEndLink))
+Declaration(ObjectProperty(SOMA:hasFeature))
+Declaration(ObjectProperty(SOMA:hasFrictionAttribute))
+Declaration(ObjectProperty(SOMA:hasJointLimit))
+Declaration(ObjectProperty(SOMA:hasJointState))
+Declaration(ObjectProperty(SOMA:hasLink))
+Declaration(ObjectProperty(SOMA:hasLocalization))
+Declaration(ObjectProperty(SOMA:hasMassAttribute))
+Declaration(ObjectProperty(SOMA:hasNetForce))
+Declaration(ObjectProperty(SOMA:hasParentLink))
+Declaration(ObjectProperty(SOMA:hasPhysicalComponent))
+Declaration(ObjectProperty(SOMA:hasQuale))
+Declaration(ObjectProperty(SOMA:hasRootLink))
+Declaration(ObjectProperty(SOMA:hasShape))
+Declaration(ObjectProperty(SOMA:hasShapeRegion))
+Declaration(ObjectProperty(SOMA:hasSpaceRegion))
+Declaration(ObjectProperty(SOMA:involvesEffector))
+Declaration(ObjectProperty(SOMA:isAlterationResultOf))
+Declaration(ObjectProperty(SOMA:isBearerAffordedBy))
+Declaration(ObjectProperty(SOMA:isBearerDefinedIn))
+Declaration(ObjectProperty(SOMA:isChildLinkOf))
+Declaration(ObjectProperty(SOMA:isColorOf))
+Declaration(ObjectProperty(SOMA:isConceptAffordedBy))
+Declaration(ObjectProperty(SOMA:isDefinedInAffordance))
+Declaration(ObjectProperty(SOMA:isDepositOf))
+Declaration(ObjectProperty(SOMA:isDispositionOf))
+Declaration(ObjectProperty(SOMA:isEffectorInvolvedIn))
+Declaration(ObjectProperty(SOMA:isEndLinkOf))
+Declaration(ObjectProperty(SOMA:isExecutorDefinedIn))
+Declaration(ObjectProperty(SOMA:isFeatureOf))
+Declaration(ObjectProperty(SOMA:isInsideOf))
+Declaration(ObjectProperty(SOMA:isJointLimitOf))
+Declaration(ObjectProperty(SOMA:isJointStateOf))
+Declaration(ObjectProperty(SOMA:isLinkOf))
+Declaration(ObjectProperty(SOMA:isLinkedTo))
+Declaration(ObjectProperty(SOMA:isLocalizationOf))
+Declaration(ObjectProperty(SOMA:isMassAttributeOf))
+Declaration(ObjectProperty(SOMA:isNetForceOf))
+Declaration(ObjectProperty(SOMA:isOntopOf))
+Declaration(ObjectProperty(SOMA:isParameterDefinedIn))
+Declaration(ObjectProperty(SOMA:isParentLinkOf))
+Declaration(ObjectProperty(SOMA:isPerformerAffordedBy))
+Declaration(ObjectProperty(SOMA:isPerformerDefinedIn))
+Declaration(ObjectProperty(SOMA:isPhysicallyContainedIn))
+Declaration(ObjectProperty(SOMA:isQualeOf))
+Declaration(ObjectProperty(SOMA:isQualityDescribedBy))
+Declaration(ObjectProperty(SOMA:isRootLinkOf))
+Declaration(ObjectProperty(SOMA:isSetpointAffordedBy))
+Declaration(ObjectProperty(SOMA:isSetpointDefinedIn))
+Declaration(ObjectProperty(SOMA:isShapeOf))
+Declaration(ObjectProperty(SOMA:isShapeRegionOf))
+Declaration(ObjectProperty(SOMA:isSpaceRegionFor))
+Declaration(ObjectProperty(SOMA:isSupportedBy))
+Declaration(ObjectProperty(SOMA:isTaskAffordedBy))
+Declaration(ObjectProperty(SOMA:isTaskDefinedInAffordance))
+Declaration(ObjectProperty(SOMA:isTriggerAffordedBy))
+Declaration(ObjectProperty(SOMA:isTriggerDefinedIn))
+Declaration(ObjectProperty(SOMA:supports))
+Declaration(ObjectProperty(SOMA:transitionsBack))
+Declaration(ObjectProperty(SOMA:transitionsFrom))
+Declaration(ObjectProperty(SOMA:transitionsTo))
+Declaration(ObjectProperty(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasQuality>))
+Declaration(ObjectProperty(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isDescribedBy>))
+Declaration(DataProperty(SOMA:hasColorValue))
+Declaration(DataProperty(SOMA:hasDepth))
+Declaration(DataProperty(SOMA:hasFilePath))
+Declaration(DataProperty(SOMA:hasForceValue))
+Declaration(DataProperty(SOMA:hasFrictionValue))
+Declaration(DataProperty(SOMA:hasHSVValue))
+Declaration(DataProperty(SOMA:hasHeight))
+Declaration(DataProperty(SOMA:hasJointEffort))
+Declaration(DataProperty(SOMA:hasJointEffortLimit))
+Declaration(DataProperty(SOMA:hasJointParameter))
+Declaration(DataProperty(SOMA:hasJointPosition))
+Declaration(DataProperty(SOMA:hasJointPositionMax))
+Declaration(DataProperty(SOMA:hasJointPositionMin))
+Declaration(DataProperty(SOMA:hasJointVelocity))
+Declaration(DataProperty(SOMA:hasJointVelocityLimit))
+Declaration(DataProperty(SOMA:hasLength))
+Declaration(DataProperty(SOMA:hasMassValue))
+Declaration(DataProperty(SOMA:hasPositionData))
+Declaration(DataProperty(SOMA:hasRGBValue))
+Declaration(DataProperty(SOMA:hasRadius))
+Declaration(DataProperty(SOMA:hasReferenceFrame))
+Declaration(DataProperty(SOMA:hasShapeParameter))
+Declaration(DataProperty(SOMA:hasShapeScale))
+Declaration(DataProperty(SOMA:hasSpaceParameter))
+Declaration(DataProperty(SOMA:hasWidth))
+
+############################
+#   Object Properties
+############################
+
+# Object Property: SOMA:affordanceDefines (affordance defines)
+
+AnnotationAssertion(rdfs:comment SOMA:affordanceDefines "A relation between an Affordance and a Concept (often an EventType).")
+AnnotationAssertion(rdfs:label SOMA:affordanceDefines "affordance defines")
+SubObjectPropertyOf(SOMA:affordanceDefines <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#defines>)
+InverseObjectProperties(SOMA:affordanceDefines SOMA:isDefinedInAffordance)
+ObjectPropertyDomain(SOMA:affordanceDefines SOMA:Affordance)
+ObjectPropertyRange(SOMA:affordanceDefines <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Concept>)
+
+# Object Property: SOMA:affordanceDefinesTask (affordance defines task)
+
+AnnotationAssertion(rdfs:comment SOMA:affordanceDefinesTask "A relation between an Affordance and a Task")
+AnnotationAssertion(rdfs:label SOMA:affordanceDefinesTask "affordance defines task")
+SubObjectPropertyOf(SOMA:affordanceDefinesTask SOMA:affordanceDefines)
+SubObjectPropertyOf(SOMA:affordanceDefinesTask <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#definesTask>)
+InverseObjectProperties(SOMA:affordanceDefinesTask SOMA:isTaskDefinedInAffordance)
+ObjectPropertyDomain(SOMA:affordanceDefinesTask SOMA:Affordance)
+ObjectPropertyRange(SOMA:affordanceDefinesTask <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Task>)
+
+# Object Property: SOMA:affordsBearer (affords bearer)
+
+AnnotationAssertion(rdfs:comment SOMA:affordsBearer "Relates a disposition to the bearer role defined by the affordance describing the disposition.")
+AnnotationAssertion(rdfs:label SOMA:affordsBearer "affords bearer")
+SubObjectPropertyOf(SOMA:affordsBearer SOMA:affordsConcept)
+InverseObjectProperties(SOMA:affordsBearer SOMA:isBearerAffordedBy)
+ObjectPropertyDomain(SOMA:affordsBearer SOMA:Disposition)
+ObjectPropertyRange(SOMA:affordsBearer <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role>)
+
+# Object Property: SOMA:affordsConcept (affords concept)
+
+AnnotationAssertion(rdfs:comment SOMA:affordsConcept "A relation between a disposition and a concept defined in the affordance that describes the disposition.")
+AnnotationAssertion(rdfs:label SOMA:affordsConcept "affords concept")
+SubObjectPropertyOf(SOMA:affordsConcept <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#associatedWith>)
+InverseObjectProperties(SOMA:affordsConcept SOMA:isConceptAffordedBy)
+ObjectPropertyDomain(SOMA:affordsConcept SOMA:Disposition)
+ObjectPropertyRange(SOMA:affordsConcept <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Concept>)
+
+# Object Property: SOMA:affordsPerformer (affords performer)
+
+AnnotationAssertion(rdfs:comment SOMA:affordsPerformer "Relates a disposition to the performer role defined by the affordance describing the disposition."@en)
+AnnotationAssertion(rdfs:label SOMA:affordsPerformer "affords performer"@en)
+SubObjectPropertyOf(SOMA:affordsPerformer SOMA:affordsConcept)
+InverseObjectProperties(SOMA:affordsPerformer SOMA:isPerformerAffordedBy)
+ObjectPropertyDomain(SOMA:affordsPerformer SOMA:Disposition)
+ObjectPropertyRange(SOMA:affordsPerformer <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role>)
+
+# Object Property: SOMA:affordsSetpoint (affords setpoint)
+
+AnnotationAssertion(rdfs:comment SOMA:affordsSetpoint "Relates a disposition to the setpoint parameter defined by the affordance describing the disposition.")
+AnnotationAssertion(rdfs:label SOMA:affordsSetpoint "affords setpoint")
+SubObjectPropertyOf(SOMA:affordsSetpoint SOMA:affordsConcept)
+InverseObjectProperties(SOMA:affordsSetpoint SOMA:isSetpointAffordedBy)
+ObjectPropertyDomain(SOMA:affordsSetpoint SOMA:Disposition)
+ObjectPropertyRange(SOMA:affordsSetpoint SOMA:Setpoint)
+
+# Object Property: SOMA:affordsTask (affords task)
+
+AnnotationAssertion(rdfs:comment SOMA:affordsTask "Relates a disposition to the task defined by the affordance describing the disposition.")
+AnnotationAssertion(rdfs:label SOMA:affordsTask "affords task")
+SubObjectPropertyOf(SOMA:affordsTask SOMA:affordsConcept)
+InverseObjectProperties(SOMA:affordsTask SOMA:isTaskAffordedBy)
+ObjectPropertyDomain(SOMA:affordsTask SOMA:Disposition)
+ObjectPropertyRange(SOMA:affordsTask <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Task>)
+
+# Object Property: SOMA:affordsTrigger (affords trigger)
+
+AnnotationAssertion(rdfs:comment SOMA:affordsTrigger "Relates a disposition to the trigger role defined by the affordance describing the disposition.")
+AnnotationAssertion(rdfs:label SOMA:affordsTrigger "affords trigger")
+SubObjectPropertyOf(SOMA:affordsTrigger SOMA:affordsConcept)
+InverseObjectProperties(SOMA:affordsTrigger SOMA:isTriggerAffordedBy)
+ObjectPropertyDomain(SOMA:affordsTrigger SOMA:Disposition)
+ObjectPropertyRange(SOMA:affordsTrigger <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role>)
+
+# Object Property: SOMA:containsObject (contains object)
+
+AnnotationAssertion(rdfs:comment SOMA:containsObject "A spatial relation holding between a container, and objects it contains.")
+AnnotationAssertion(rdfs:label SOMA:containsObject "contains object")
+SubObjectPropertyOf(SOMA:containsObject SOMA:contains)
+SubObjectPropertyOf(SOMA:containsObject <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isLocationOf>)
+InverseObjectProperties(SOMA:containsObject SOMA:isInsideOf)
+TransitiveObjectProperty(SOMA:containsObject)
+ObjectPropertyDomain(SOMA:containsObject <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+ObjectPropertyRange(SOMA:containsObject <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+
+# Object Property: SOMA:definesBearer (defines bearer)
+
+AnnotationAssertion(rdfs:comment SOMA:definesBearer "Relates an affordance which is a relation between a bearer and a trigger, to the role of the bearer when the affordance is manifested.")
+AnnotationAssertion(rdfs:label SOMA:definesBearer "defines bearer")
+SubObjectPropertyOf(SOMA:definesBearer <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#definesRole>)
+InverseObjectProperties(SOMA:definesBearer SOMA:isBearerDefinedIn)
+ObjectPropertyDomain(SOMA:definesBearer SOMA:Affordance)
+ObjectPropertyRange(SOMA:definesBearer <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role>)
+
+# Object Property: SOMA:definesParameter (defines parameter)
+
+AnnotationAssertion(rdfs:comment SOMA:definesParameter "A relation between a description and a parameter.")
+AnnotationAssertion(rdfs:label SOMA:definesParameter "defines parameter")
+SubObjectPropertyOf(SOMA:definesParameter <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#defines>)
+InverseObjectProperties(SOMA:definesParameter SOMA:isParameterDefinedIn)
+ObjectPropertyDomain(SOMA:definesParameter <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Description>)
+ObjectPropertyRange(SOMA:definesParameter <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Parameter>)
+
+# Object Property: SOMA:definesPerformer (defines performer)
+
+AnnotationAssertion(rdfs:comment SOMA:definesPerformer "Relates an affordance which is a relation between a bearer and a trigger, to the role of the performer when the affordance is manifested."@en)
+AnnotationAssertion(rdfs:label SOMA:definesPerformer "defines performer"@en)
+SubObjectPropertyOf(SOMA:definesPerformer <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#definesRole>)
+InverseObjectProperties(SOMA:definesPerformer SOMA:isPerformerDefinedIn)
+ObjectPropertyDomain(SOMA:definesPerformer SOMA:Affordance)
+ObjectPropertyRange(SOMA:definesPerformer <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role>)
+
+# Object Property: SOMA:definesSetpoint (defines setpoint)
+
+AnnotationAssertion(rdfs:comment SOMA:definesSetpoint "Defines the dedicated goal region of a description.")
+AnnotationAssertion(rdfs:label SOMA:definesSetpoint "defines setpoint")
+SubObjectPropertyOf(SOMA:definesSetpoint SOMA:definesParameter)
+InverseObjectProperties(SOMA:definesSetpoint SOMA:isSetpointDefinedIn)
+ObjectPropertyDomain(SOMA:definesSetpoint <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Description>)
+ObjectPropertyRange(SOMA:definesSetpoint SOMA:Setpoint)
+
+# Object Property: SOMA:definesTrigger (defines trigger)
+
+AnnotationAssertion(rdfs:comment SOMA:definesTrigger "Relates an affordance which is a relation between a bearer and a trigger, to the role of the trigger when the affordance is manifested.")
+AnnotationAssertion(rdfs:label SOMA:definesTrigger "defines trigger")
+SubObjectPropertyOf(SOMA:definesTrigger <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#definesRole>)
+InverseObjectProperties(SOMA:definesTrigger SOMA:isTriggerDefinedIn)
+ObjectPropertyDomain(SOMA:definesTrigger SOMA:Affordance)
+ObjectPropertyRange(SOMA:definesTrigger <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role>)
+
+# Object Property: SOMA:describesQuality (describes quality)
+
+AnnotationAssertion(rdfs:comment SOMA:describesQuality "Relates a description to a quality that it describes.")
+AnnotationAssertion(rdfs:label SOMA:describesQuality "describes quality")
+SubObjectPropertyOf(SOMA:describesQuality <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#describes>)
+InverseObjectProperties(SOMA:describesQuality SOMA:isQualityDescribedBy)
+ObjectPropertyDomain(SOMA:describesQuality <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Description>)
+ObjectPropertyRange(SOMA:describesQuality <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality>)
+
+# Object Property: SOMA:hasAlterationResult (has alteration result)
+
+AnnotationAssertion(rdfs:comment SOMA:hasAlterationResult "Relates an action that alters an object to the region that the alteration reached during the action.")
+AnnotationAssertion(rdfs:label SOMA:hasAlterationResult "has alteration result")
+SubObjectPropertyOf(SOMA:hasAlterationResult <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegion>)
+InverseObjectProperties(SOMA:hasAlterationResult SOMA:isAlterationResultOf)
+ObjectPropertyDomain(SOMA:hasAlterationResult <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Action>)
+ObjectPropertyRange(SOMA:hasAlterationResult <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Region>)
+
+# Object Property: SOMA:hasChildLink (has child link)
+
+AnnotationAssertion(rdfs:comment SOMA:hasChildLink "Relates a joint to the link it connects which is closer to the end of the kinematic chain.")
+AnnotationAssertion(rdfs:label SOMA:hasChildLink "has child link")
+SubObjectPropertyOf(SOMA:hasChildLink <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasConstituent>)
+InverseObjectProperties(SOMA:hasChildLink SOMA:isChildLinkOf)
+ObjectPropertyDomain(SOMA:hasChildLink SOMA:Joint)
+ObjectPropertyRange(SOMA:hasChildLink <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+
+# Object Property: SOMA:hasColor (has color)
+
+AnnotationAssertion(rdfs:comment SOMA:hasColor "Relates an object to its color quality.")
+AnnotationAssertion(rdfs:label SOMA:hasColor "has color")
+SubObjectPropertyOf(SOMA:hasColor <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasQuality>)
+InverseObjectProperties(SOMA:hasColor SOMA:isColorOf)
+ObjectPropertyDomain(SOMA:hasColor <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+ObjectPropertyRange(SOMA:hasColor SOMA:Color)
+
+# Object Property: SOMA:hasDisposition (has disposition)
+
+AnnotationAssertion(rdfs:comment SOMA:hasDisposition "Associates an object to one of its dispositions.")
+AnnotationAssertion(rdfs:label SOMA:hasDisposition "has disposition")
+SubObjectPropertyOf(SOMA:hasDisposition <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasQuality>)
+InverseObjectProperties(SOMA:hasDisposition SOMA:isDispositionOf)
+ObjectPropertyDomain(SOMA:hasDisposition <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Object>)
+ObjectPropertyRange(SOMA:hasDisposition SOMA:Disposition)
+
+# Object Property: SOMA:hasEndLink (has end link)
+
+AnnotationAssertion(rdfs:comment SOMA:hasEndLink "Relates an object to kinematic components at the end of the kinematic chain.")
+AnnotationAssertion(rdfs:label SOMA:hasEndLink "has end link")
+SubObjectPropertyOf(SOMA:hasEndLink SOMA:hasLink)
+InverseObjectProperties(SOMA:hasEndLink SOMA:isEndLinkOf)
+ObjectPropertyDomain(SOMA:hasEndLink <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+ObjectPropertyRange(SOMA:hasEndLink <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+
+# Object Property: SOMA:hasFeature (has feature)
+
+AnnotationAssertion(rdfs:comment SOMA:hasFeature "Associates a physical object to one of its features.")
+AnnotationAssertion(rdfs:label SOMA:hasFeature "has feature")
+SubObjectPropertyOf(SOMA:hasFeature <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasConstituent>)
+InverseObjectProperties(SOMA:hasFeature SOMA:isFeatureOf)
+ObjectPropertyDomain(SOMA:hasFeature <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+ObjectPropertyRange(SOMA:hasFeature SOMA:Feature)
+
+# Object Property: SOMA:hasFrictionAttribute (has friction attribute)
+
+AnnotationAssertion(rdfs:comment SOMA:hasFrictionAttribute "A relation between physical objects and their friction attribute.")
+AnnotationAssertion(rdfs:label SOMA:hasFrictionAttribute "has friction attribute")
+SubObjectPropertyOf(SOMA:hasFrictionAttribute <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegion>)
+ObjectPropertyDomain(SOMA:hasFrictionAttribute <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+ObjectPropertyRange(SOMA:hasFrictionAttribute SOMA:FrictionAttribute)
+
+# Object Property: SOMA:hasJointLimit (has joint limit)
+
+AnnotationAssertion(rdfs:comment SOMA:hasJointLimit "Relates a joint to its physical limits.")
+AnnotationAssertion(rdfs:label SOMA:hasJointLimit "has joint limit")
+SubObjectPropertyOf(SOMA:hasJointLimit <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegion>)
+InverseObjectProperties(SOMA:hasJointLimit SOMA:isJointLimitOf)
+ObjectPropertyDomain(SOMA:hasJointLimit SOMA:Joint)
+ObjectPropertyRange(SOMA:hasJointLimit SOMA:JointLimit)
+
+# Object Property: SOMA:hasJointState (has joint state)
+
+AnnotationAssertion(rdfs:comment SOMA:hasJointState "Relates a joint to its state.")
+AnnotationAssertion(rdfs:label SOMA:hasJointState "has joint state")
+SubObjectPropertyOf(SOMA:hasJointState <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegion>)
+InverseObjectProperties(SOMA:hasJointState SOMA:isJointStateOf)
+ObjectPropertyDomain(SOMA:hasJointState SOMA:Joint)
+ObjectPropertyRange(SOMA:hasJointState SOMA:JointState)
+
+# Object Property: SOMA:hasLink (has link)
+
+AnnotationAssertion(rdfs:comment SOMA:hasLink "Relates an object to its kinematic components.")
+AnnotationAssertion(rdfs:label SOMA:hasLink "has link")
+SubObjectPropertyOf(SOMA:hasLink <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasComponent>)
+InverseObjectProperties(SOMA:hasLink SOMA:isLinkOf)
+ObjectPropertyDomain(SOMA:hasLink <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+ObjectPropertyRange(SOMA:hasLink <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+
+# Object Property: SOMA:hasLocalization (has localization)
+
+AnnotationAssertion(rdfs:comment SOMA:hasLocalization "Relates an object to its localization quality.")
+AnnotationAssertion(rdfs:label SOMA:hasLocalization "has localization")
+SubObjectPropertyOf(SOMA:hasLocalization <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasQuality>)
+InverseObjectProperties(SOMA:hasLocalization SOMA:isLocalizationOf)
+ObjectPropertyDomain(SOMA:hasLocalization <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+ObjectPropertyRange(SOMA:hasLocalization SOMA:Localization)
+
+# Object Property: SOMA:hasMassAttribute (has mass attribute)
+
+AnnotationAssertion(rdfs:comment SOMA:hasMassAttribute "A relation between physical objects and their mass.")
+AnnotationAssertion(rdfs:label SOMA:hasMassAttribute "has mass attribute")
+SubObjectPropertyOf(SOMA:hasMassAttribute <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegion>)
+InverseObjectProperties(SOMA:hasMassAttribute SOMA:isMassAttributeOf)
+ObjectPropertyDomain(SOMA:hasMassAttribute <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+ObjectPropertyRange(SOMA:hasMassAttribute SOMA:MassAttribute)
+
+# Object Property: SOMA:hasNetForce (has net force)
+
+AnnotationAssertion(rdfs:comment SOMA:hasNetForce "A relation between a physical object and the total force acting on it.")
+AnnotationAssertion(rdfs:label SOMA:hasNetForce "has net force")
+SubObjectPropertyOf(SOMA:hasNetForce <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegion>)
+InverseObjectProperties(SOMA:hasNetForce SOMA:isNetForceOf)
+ObjectPropertyDomain(SOMA:hasNetForce <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+ObjectPropertyRange(SOMA:hasNetForce SOMA:NetForce)
+
+# Object Property: SOMA:hasParentLink (has parent link)
+
+AnnotationAssertion(rdfs:comment SOMA:hasParentLink "Relates a joint to the link it connects which is closer to the root of the kinematic chain.")
+AnnotationAssertion(rdfs:label SOMA:hasParentLink "has parent link")
+SubObjectPropertyOf(SOMA:hasParentLink <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasConstituent>)
+InverseObjectProperties(SOMA:hasParentLink SOMA:isParentLinkOf)
+ObjectPropertyDomain(SOMA:hasParentLink SOMA:Joint)
+ObjectPropertyRange(SOMA:hasParentLink <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+
+# Object Property: SOMA:hasQuale (has quale)
+
+AnnotationAssertion(rdfs:comment SOMA:hasQuale "Relates a quality to its \"value\", called quale, which is an atomic quality region.")
+AnnotationAssertion(rdfs:label SOMA:hasQuale "has quale")
+SubObjectPropertyOf(SOMA:hasQuale <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegion>)
+InverseObjectProperties(SOMA:hasQuale SOMA:isQualeOf)
+ObjectPropertyDomain(SOMA:hasQuale <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality>)
+ObjectPropertyRange(SOMA:hasQuale <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Region>)
+
+# Object Property: SOMA:hasRootLink (has root link)
+
+AnnotationAssertion(rdfs:comment SOMA:hasRootLink "Relates an object to kinematic components at the root of the kinematic chain.")
+AnnotationAssertion(rdfs:label SOMA:hasRootLink "has root link")
+SubObjectPropertyOf(SOMA:hasRootLink SOMA:hasLink)
+InverseObjectProperties(SOMA:hasRootLink SOMA:isRootLinkOf)
+ObjectPropertyDomain(SOMA:hasRootLink <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+ObjectPropertyRange(SOMA:hasRootLink <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+
+# Object Property: SOMA:hasShape (has shape)
+
+AnnotationAssertion(rdfs:comment SOMA:hasShape "Relates an object to its shape quality.")
+AnnotationAssertion(rdfs:label SOMA:hasShape "has shape")
+SubObjectPropertyOf(SOMA:hasShape <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasQuality>)
+InverseObjectProperties(SOMA:hasShape SOMA:isShapeOf)
+ObjectPropertyDomain(SOMA:hasShape <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+ObjectPropertyRange(SOMA:hasShape SOMA:Shape)
+
+# Object Property: SOMA:hasShapeRegion (has shape region)
+
+AnnotationAssertion(rdfs:comment SOMA:hasShapeRegion "A relation between physical objects and their shape attribute.")
+AnnotationAssertion(rdfs:label SOMA:hasShapeRegion "has shape region")
+SubObjectPropertyOf(SOMA:hasShapeRegion <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegion>)
+InverseObjectProperties(SOMA:hasShapeRegion SOMA:isShapeRegionOf)
+ObjectPropertyDomain(SOMA:hasShapeRegion ObjectUnionOf(SOMA:Shape <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>))
+ObjectPropertyRange(SOMA:hasShapeRegion SOMA:ShapeRegion)
+
+# Object Property: SOMA:hasSpaceRegion (has space region)
+
+AnnotationAssertion(rdfs:comment SOMA:hasSpaceRegion "Relates an entity to a space region.")
+AnnotationAssertion(rdfs:label SOMA:hasSpaceRegion "has space region")
+SubObjectPropertyOf(SOMA:hasSpaceRegion <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegion>)
+InverseObjectProperties(SOMA:hasSpaceRegion SOMA:isSpaceRegionFor)
+ObjectPropertyDomain(SOMA:hasSpaceRegion ObjectUnionOf(SOMA:Localization SOMA:ShapeRegion <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>))
+ObjectPropertyRange(SOMA:hasSpaceRegion <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#SpaceRegion>)
+
+# Object Property: SOMA:involvesEffector (involves effector)
+
+AnnotationAssertion(rdfs:comment SOMA:involvesEffector "Effector participation.")
+AnnotationAssertion(rdfs:label SOMA:involvesEffector "involves effector")
+SubObjectPropertyOf(SOMA:involvesEffector <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasParticipant>)
+InverseObjectProperties(SOMA:involvesEffector SOMA:isEffectorInvolvedIn)
+ObjectPropertyDomain(SOMA:involvesEffector <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event>)
+ObjectPropertyRange(SOMA:involvesEffector SOMA:PhysicalEffector)
+
+# Object Property: SOMA:isAlterationResultOf (is alteration result of)
+
+AnnotationAssertion(rdfs:comment SOMA:isAlterationResultOf "Relates an action that alters an object to the region that the alteration reached during the action.")
+AnnotationAssertion(rdfs:label SOMA:isAlterationResultOf "is alteration result of")
+SubObjectPropertyOf(SOMA:isAlterationResultOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isRegionFor>)
+ObjectPropertyDomain(SOMA:isAlterationResultOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Region>)
+ObjectPropertyRange(SOMA:isAlterationResultOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Action>)
+
+# Object Property: SOMA:isBearerAffordedBy (is bearer afforded by)
+
+AnnotationAssertion(rdfs:comment SOMA:isBearerAffordedBy "Relates a disposition to the bearer role defined by the affordance describing the disposition.")
+AnnotationAssertion(rdfs:label SOMA:isBearerAffordedBy "is bearer afforded by")
+SubObjectPropertyOf(SOMA:isBearerAffordedBy SOMA:isConceptAffordedBy)
+ObjectPropertyDomain(SOMA:isBearerAffordedBy <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role>)
+ObjectPropertyRange(SOMA:isBearerAffordedBy SOMA:Disposition)
+
+# Object Property: SOMA:isBearerDefinedIn (is bearer defined in)
+
+AnnotationAssertion(rdfs:comment SOMA:isBearerDefinedIn "Relates an affordance which is a relation between a bearer and a trigger, to the role of the bearer when the affordance is manifested.")
+AnnotationAssertion(rdfs:label SOMA:isBearerDefinedIn "is bearer defined in")
+SubObjectPropertyOf(SOMA:isBearerDefinedIn <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isRoleDefinedIn>)
+ObjectPropertyDomain(SOMA:isBearerDefinedIn <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role>)
+ObjectPropertyRange(SOMA:isBearerDefinedIn SOMA:Affordance)
+
+# Object Property: SOMA:isChildLinkOf (is child link of)
+
+AnnotationAssertion(rdfs:comment SOMA:isChildLinkOf "Relates a joint to the link it connects which is closer to the end of the kinematic chain.")
+AnnotationAssertion(rdfs:label SOMA:isChildLinkOf "is child link of")
+SubObjectPropertyOf(SOMA:isChildLinkOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isConstituentOf>)
+ObjectPropertyDomain(SOMA:isChildLinkOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+ObjectPropertyRange(SOMA:isChildLinkOf SOMA:Joint)
+
+# Object Property: SOMA:isColorOf (is color of)
+
+AnnotationAssertion(rdfs:comment SOMA:isColorOf "Relates a color quality to the object the color belongs to.")
+AnnotationAssertion(rdfs:label SOMA:isColorOf "is color of")
+SubObjectPropertyOf(SOMA:isColorOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isQualityOf>)
+ObjectPropertyDomain(SOMA:isColorOf SOMA:Color)
+ObjectPropertyRange(SOMA:isColorOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+
+# Object Property: SOMA:isConceptAffordedBy (is concept afforded by)
+
+AnnotationAssertion(rdfs:comment SOMA:isConceptAffordedBy "A relation between a disposition and a concept defined in the affordance that describes the disposition.")
+AnnotationAssertion(rdfs:label SOMA:isConceptAffordedBy "is concept afforded by")
+SubObjectPropertyOf(SOMA:isConceptAffordedBy <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#associatedWith>)
+ObjectPropertyDomain(SOMA:isConceptAffordedBy <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Concept>)
+ObjectPropertyRange(SOMA:isConceptAffordedBy SOMA:Disposition)
+
+# Object Property: SOMA:isDefinedInAffordance (is defined in affordance)
+
+AnnotationAssertion(rdfs:comment SOMA:isDefinedInAffordance "A relation between a Concept and an Affordance.")
+AnnotationAssertion(rdfs:label SOMA:isDefinedInAffordance "is defined in affordance")
+SubObjectPropertyOf(SOMA:isDefinedInAffordance <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isDefinedIn>)
+ObjectPropertyDomain(SOMA:isDefinedInAffordance <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Concept>)
+ObjectPropertyRange(SOMA:isDefinedInAffordance SOMA:Affordance)
+
+# Object Property: SOMA:isDepositOf (is deposit of)
+
+AnnotationAssertion(rdfs:comment SOMA:isDepositOf "A spatial relation holding between an object (the deposit), and objects that are located ontop of it.")
+AnnotationAssertion(rdfs:label SOMA:isDepositOf "is deposit of")
+SubObjectPropertyOf(SOMA:isDepositOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isLocationOf>)
+InverseObjectProperties(SOMA:isDepositOf SOMA:isOntopOf)
+ObjectPropertyDomain(SOMA:isDepositOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+ObjectPropertyRange(SOMA:isDepositOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+
+# Object Property: SOMA:isDispositionOf (is disposition of)
+
+AnnotationAssertion(rdfs:comment SOMA:isDispositionOf "Associates a disposition quality to the object holding it.")
+AnnotationAssertion(rdfs:label SOMA:isDispositionOf "is disposition of")
+SubObjectPropertyOf(SOMA:isDispositionOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isQualityOf>)
+ObjectPropertyDomain(SOMA:isDispositionOf SOMA:Disposition)
+ObjectPropertyRange(SOMA:isDispositionOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Object>)
+
+# Object Property: SOMA:isEffectorInvolvedIn (is effector involved in)
+
+AnnotationAssertion(rdfs:comment SOMA:isEffectorInvolvedIn "Effector participation.")
+AnnotationAssertion(rdfs:label SOMA:isEffectorInvolvedIn "is effector involved in")
+SubObjectPropertyOf(SOMA:isEffectorInvolvedIn <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isParticipantIn>)
+ObjectPropertyDomain(SOMA:isEffectorInvolvedIn SOMA:PhysicalEffector)
+ObjectPropertyRange(SOMA:isEffectorInvolvedIn <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event>)
+
+# Object Property: SOMA:isEndLinkOf (is end link of)
+
+AnnotationAssertion(rdfs:comment SOMA:isEndLinkOf "Relates an object to kinematic components at the end of the kinematic chain.")
+AnnotationAssertion(rdfs:label SOMA:isEndLinkOf "is end link of")
+SubObjectPropertyOf(SOMA:isEndLinkOf SOMA:isLinkOf)
+ObjectPropertyDomain(SOMA:isEndLinkOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+ObjectPropertyRange(SOMA:isEndLinkOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+
+# Object Property: SOMA:isFeatureOf (is feature of)
+
+AnnotationAssertion(rdfs:comment SOMA:isFeatureOf "Associates a feature to the physical object it belongs to.")
+AnnotationAssertion(rdfs:label SOMA:isFeatureOf "is feature of")
+SubObjectPropertyOf(SOMA:isFeatureOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isConstituentOf>)
+ObjectPropertyDomain(SOMA:isFeatureOf SOMA:Feature)
+ObjectPropertyRange(SOMA:isFeatureOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+
+# Object Property: SOMA:isInsideOf (is inside of)
+
+AnnotationAssertion(rdfs:comment SOMA:isInsideOf "A spatial relation holding between an object (the container), and objects it contains.")
+AnnotationAssertion(rdfs:label SOMA:isInsideOf "is inside of")
+SubObjectPropertyOf(SOMA:isInsideOf SOMA:isContainedIn)
+SubObjectPropertyOf(SOMA:isInsideOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasLocation>)
+TransitiveObjectProperty(SOMA:isInsideOf)
+ObjectPropertyDomain(SOMA:isInsideOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+ObjectPropertyRange(SOMA:isInsideOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+
+# Object Property: SOMA:isJointLimitOf (is joint limit of)
+
+AnnotationAssertion(rdfs:comment SOMA:isJointLimitOf "Relates a joint to its physical limits.")
+AnnotationAssertion(rdfs:label SOMA:isJointLimitOf "is joint limit of")
+SubObjectPropertyOf(SOMA:isJointLimitOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isRegionFor>)
+ObjectPropertyDomain(SOMA:isJointLimitOf SOMA:JointLimit)
+ObjectPropertyRange(SOMA:isJointLimitOf SOMA:Joint)
+
+# Object Property: SOMA:isJointStateOf (is joint state of)
+
+AnnotationAssertion(rdfs:comment SOMA:isJointStateOf "Relates a joint to its state.")
+AnnotationAssertion(rdfs:label SOMA:isJointStateOf "is joint state of")
+SubObjectPropertyOf(SOMA:isJointStateOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isRegionFor>)
+ObjectPropertyDomain(SOMA:isJointStateOf SOMA:JointState)
+ObjectPropertyRange(SOMA:isJointStateOf SOMA:Joint)
+
+# Object Property: SOMA:isLinkOf (is link of)
+
+AnnotationAssertion(rdfs:comment SOMA:isLinkOf "Relates an object to its kinematic components.")
+AnnotationAssertion(rdfs:label SOMA:isLinkOf "is link of")
+SubObjectPropertyOf(SOMA:isLinkOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isComponentOf>)
+ObjectPropertyDomain(SOMA:isLinkOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+ObjectPropertyRange(SOMA:isLinkOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+
+# Object Property: SOMA:isLinkedTo (is linked to)
+
+AnnotationAssertion(rdfs:comment SOMA:isLinkedTo "A spatial relation holding between objects that are linked with each other such that they resist spatial separation.")
+AnnotationAssertion(rdfs:label SOMA:isLinkedTo "is linked to")
+SubObjectPropertyOf(SOMA:isLinkedTo <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasLocation>)
+SymmetricObjectProperty(SOMA:isLinkedTo)
+ObjectPropertyDomain(SOMA:isLinkedTo <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+ObjectPropertyRange(SOMA:isLinkedTo <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+
+# Object Property: SOMA:isLocalizationOf (is localization of)
+
+AnnotationAssertion(rdfs:comment SOMA:isLocalizationOf "Relates a localization quality to the object the localization belongs to.")
+AnnotationAssertion(rdfs:label SOMA:isLocalizationOf "is localization of")
+SubObjectPropertyOf(SOMA:isLocalizationOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isQualityOf>)
+ObjectPropertyDomain(SOMA:isLocalizationOf SOMA:Localization)
+ObjectPropertyRange(SOMA:isLocalizationOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+
+# Object Property: SOMA:isMassAttributeOf (is mass attribute of)
+
+AnnotationAssertion(rdfs:comment SOMA:isMassAttributeOf "A relation between physical objects and their mass.")
+AnnotationAssertion(rdfs:label SOMA:isMassAttributeOf "is mass attribute of")
+SubObjectPropertyOf(SOMA:isMassAttributeOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isRegionFor>)
+ObjectPropertyDomain(SOMA:isMassAttributeOf SOMA:MassAttribute)
+ObjectPropertyRange(SOMA:isMassAttributeOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+
+# Object Property: SOMA:isNetForceOf (is net force of)
+
+AnnotationAssertion(rdfs:comment SOMA:isNetForceOf "A relation between a physical object and the total force acting on it.")
+AnnotationAssertion(rdfs:label SOMA:isNetForceOf "is net force of")
+SubObjectPropertyOf(SOMA:isNetForceOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isRegionFor>)
+ObjectPropertyDomain(SOMA:isNetForceOf SOMA:NetForce)
+ObjectPropertyRange(SOMA:isNetForceOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+
+# Object Property: SOMA:isOntopOf (is ontop of)
+
+AnnotationAssertion(rdfs:comment SOMA:isOntopOf "A spatial relation holding between an object (the deposit), and objects that are located ontop of it.")
+AnnotationAssertion(rdfs:label SOMA:isOntopOf "is ontop of")
+SubObjectPropertyOf(SOMA:isOntopOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasLocation>)
+ObjectPropertyDomain(SOMA:isOntopOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+ObjectPropertyRange(SOMA:isOntopOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+
+# Object Property: SOMA:isParameterDefinedIn (is parameter defined in)
+
+AnnotationAssertion(rdfs:comment SOMA:isParameterDefinedIn "A relation between a description and a parameter.")
+AnnotationAssertion(rdfs:label SOMA:isParameterDefinedIn "is parameter defined in")
+SubObjectPropertyOf(SOMA:isParameterDefinedIn <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isDefinedIn>)
+ObjectPropertyDomain(SOMA:isParameterDefinedIn <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Parameter>)
+ObjectPropertyRange(SOMA:isParameterDefinedIn <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Description>)
+
+# Object Property: SOMA:isParentLinkOf (is parent link of)
+
+AnnotationAssertion(rdfs:comment SOMA:isParentLinkOf "Relates a joint to the link it connects which is closer to the root of the kinematic chain.")
+AnnotationAssertion(rdfs:label SOMA:isParentLinkOf "is parent link of")
+SubObjectPropertyOf(SOMA:isParentLinkOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isConstituentOf>)
+ObjectPropertyDomain(SOMA:isParentLinkOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+ObjectPropertyRange(SOMA:isParentLinkOf SOMA:Joint)
+
+# Object Property: SOMA:isPerformerAffordedBy (is performer afforded by)
+
+AnnotationAssertion(rdfs:label SOMA:isPerformerAffordedBy "Relates a disposition to the performer role defined by the affordance describing the disposition."@en)
+AnnotationAssertion(rdfs:label SOMA:isPerformerAffordedBy "is performer afforded by"@en)
+SubObjectPropertyOf(SOMA:isPerformerAffordedBy SOMA:isConceptAffordedBy)
+ObjectPropertyDomain(SOMA:isPerformerAffordedBy <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role>)
+ObjectPropertyRange(SOMA:isPerformerAffordedBy SOMA:Disposition)
+
+# Object Property: SOMA:isPerformerDefinedIn (is performer defined in)
+
+AnnotationAssertion(rdfs:comment SOMA:isPerformerDefinedIn "Relates an affordance which is a relation between a bearer and a trigger, to the role of the performer when the affordance is manifested."@en)
+AnnotationAssertion(rdfs:label SOMA:isPerformerDefinedIn "is performer defined in"@en)
+SubObjectPropertyOf(SOMA:isPerformerDefinedIn <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isRoleDefinedIn>)
+ObjectPropertyDomain(SOMA:isPerformerDefinedIn <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role>)
+ObjectPropertyRange(SOMA:isPerformerDefinedIn <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Description>)
+
+# Object Property: SOMA:isPhysicallyContainedIn (is physically contained in)
+
+AnnotationAssertion(rdfs:comment SOMA:isPhysicallyContainedIn "A spatial relation holding between an object (the container), and objects it contains.")
+AnnotationAssertion(rdfs:label SOMA:isPhysicallyContainedIn "is physically contained in")
+SubObjectPropertyOf(SOMA:isPhysicallyContainedIn <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isLocationOf>)
+ObjectPropertyDomain(SOMA:isPhysicallyContainedIn <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity>)
+ObjectPropertyRange(SOMA:isPhysicallyContainedIn <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity>)
+
+# Object Property: SOMA:isQualeOf (is quale of)
+
+AnnotationAssertion(rdfs:comment SOMA:isQualeOf "Relates a quality to its \"value\", called quale, which is an atomic quality region.")
+AnnotationAssertion(rdfs:label SOMA:isQualeOf "is quale of")
+SubObjectPropertyOf(SOMA:isQualeOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isRegionFor>)
+ObjectPropertyDomain(SOMA:isQualeOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Region>)
+ObjectPropertyRange(SOMA:isQualeOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality>)
+
+# Object Property: SOMA:isQualityDescribedBy (is quality described by)
+
+AnnotationAssertion(rdfs:comment SOMA:isQualityDescribedBy "Relates a description to a quality it describes.")
+AnnotationAssertion(rdfs:label SOMA:isQualityDescribedBy "is quality described by")
+SubObjectPropertyOf(SOMA:isQualityDescribedBy <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isDescribedBy>)
+ObjectPropertyDomain(SOMA:isQualityDescribedBy <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality>)
+ObjectPropertyRange(SOMA:isQualityDescribedBy <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Description>)
+
+# Object Property: SOMA:isRootLinkOf (is root link of)
+
+AnnotationAssertion(rdfs:comment SOMA:isRootLinkOf "Relates an object to kinematic components at the root of the kinematic chain.")
+AnnotationAssertion(rdfs:label SOMA:isRootLinkOf "is root link of")
+SubObjectPropertyOf(SOMA:isRootLinkOf SOMA:isLinkOf)
+ObjectPropertyDomain(SOMA:isRootLinkOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+ObjectPropertyRange(SOMA:isRootLinkOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+
+# Object Property: SOMA:isSetpointAffordedBy (is setpoint afforded by)
+
+AnnotationAssertion(rdfs:comment SOMA:isSetpointAffordedBy "Relates a disposition to the setpoint parameter defined by the affordance describing the disposition.")
+AnnotationAssertion(rdfs:label SOMA:isSetpointAffordedBy "is setpoint afforded by")
+SubObjectPropertyOf(SOMA:isSetpointAffordedBy SOMA:isConceptAffordedBy)
+ObjectPropertyDomain(SOMA:isSetpointAffordedBy SOMA:Setpoint)
+ObjectPropertyRange(SOMA:isSetpointAffordedBy SOMA:Disposition)
+
+# Object Property: SOMA:isSetpointDefinedIn (is setpoint defined in)
+
+AnnotationAssertion(rdfs:comment SOMA:isSetpointDefinedIn "Defines the dedicated goal region of a description.")
+AnnotationAssertion(rdfs:label SOMA:isSetpointDefinedIn "is setpoint defined in")
+SubObjectPropertyOf(SOMA:isSetpointDefinedIn SOMA:isParameterDefinedIn)
+ObjectPropertyDomain(SOMA:isSetpointDefinedIn SOMA:Setpoint)
+ObjectPropertyRange(SOMA:isSetpointDefinedIn <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Description>)
+
+# Object Property: SOMA:isShapeOf (is shape of)
+
+AnnotationAssertion(rdfs:comment SOMA:isShapeOf "Relates a shape quality to the object the shape belongs to.")
+AnnotationAssertion(rdfs:label SOMA:isShapeOf "is shape of")
+SubObjectPropertyOf(SOMA:isShapeOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isQualityOf>)
+ObjectPropertyDomain(SOMA:isShapeOf SOMA:Shape)
+ObjectPropertyRange(SOMA:isShapeOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+
+# Object Property: SOMA:isShapeRegionOf (is shape region of)
+
+AnnotationAssertion(rdfs:comment SOMA:isShapeRegionOf "Relates a shape to a physical object that has it.")
+AnnotationAssertion(rdfs:label SOMA:isShapeRegionOf "is shape region of")
+SubObjectPropertyOf(SOMA:isShapeRegionOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isRegionFor>)
+ObjectPropertyDomain(SOMA:isShapeRegionOf SOMA:ShapeRegion)
+ObjectPropertyRange(SOMA:isShapeRegionOf ObjectUnionOf(SOMA:Shape <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>))
+
+# Object Property: SOMA:isSpaceRegionFor (is space region for)
+
+AnnotationAssertion(rdfs:comment SOMA:isSpaceRegionFor "Relates a space region to an entity.")
+AnnotationAssertion(rdfs:label SOMA:isSpaceRegionFor "is space region for")
+SubObjectPropertyOf(SOMA:isSpaceRegionFor <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isRegionFor>)
+ObjectPropertyDomain(SOMA:isSpaceRegionFor <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#SpaceRegion>)
+ObjectPropertyRange(SOMA:isSpaceRegionFor ObjectUnionOf(SOMA:Localization <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>))
+
+# Object Property: SOMA:isSupportedBy (is supported by)
+
+AnnotationAssertion(rdfs:comment SOMA:isSupportedBy "Relates a supportee to one of its supporters.")
+AnnotationAssertion(rdfs:label SOMA:isSupportedBy "is supported by")
+SubObjectPropertyOf(SOMA:isSupportedBy <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasCommonBoundary>)
+InverseObjectProperties(SOMA:isSupportedBy SOMA:supports)
+ObjectPropertyDomain(SOMA:isSupportedBy <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity>)
+ObjectPropertyRange(SOMA:isSupportedBy <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity>)
+
+# Object Property: SOMA:isTaskAffordedBy (is task afforded by)
+
+AnnotationAssertion(rdfs:comment SOMA:isTaskAffordedBy "Relates a disposition to the task defined by the affordance describing the disposition.")
+AnnotationAssertion(rdfs:label SOMA:isTaskAffordedBy "is task afforded by")
+SubObjectPropertyOf(SOMA:isTaskAffordedBy SOMA:isConceptAffordedBy)
+ObjectPropertyDomain(SOMA:isTaskAffordedBy <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Task>)
+ObjectPropertyRange(SOMA:isTaskAffordedBy SOMA:Disposition)
+
+# Object Property: SOMA:isTaskDefinedInAffordance (is task defined in affordance)
+
+AnnotationAssertion(rdfs:comment SOMA:isTaskDefinedInAffordance "A relation between a Task and an Affordance, such that the task is defined in terms of using the affordance.")
+AnnotationAssertion(rdfs:label SOMA:isTaskDefinedInAffordance "is task defined in affordance")
+SubObjectPropertyOf(SOMA:isTaskDefinedInAffordance SOMA:isDefinedInAffordance)
+SubObjectPropertyOf(SOMA:isTaskDefinedInAffordance <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isTaskDefinedIn>)
+ObjectPropertyDomain(SOMA:isTaskDefinedInAffordance <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Task>)
+ObjectPropertyRange(SOMA:isTaskDefinedInAffordance SOMA:Affordance)
+
+# Object Property: SOMA:isTriggerAffordedBy (is trigger afforded by)
+
+AnnotationAssertion(rdfs:comment SOMA:isTriggerAffordedBy "Relates a disposition to the trigger role defined by the affordance describing the disposition.")
+AnnotationAssertion(rdfs:label SOMA:isTriggerAffordedBy "is trigger afforded by")
+SubObjectPropertyOf(SOMA:isTriggerAffordedBy SOMA:isConceptAffordedBy)
+ObjectPropertyDomain(SOMA:isTriggerAffordedBy <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role>)
+ObjectPropertyRange(SOMA:isTriggerAffordedBy SOMA:Disposition)
+
+# Object Property: SOMA:isTriggerDefinedIn (is trigger defined in)
+
+AnnotationAssertion(rdfs:comment SOMA:isTriggerDefinedIn "Relates an affordance which is a relation between a bearer and a trigger, to the role of the trigger when the affordance is manifested.")
+AnnotationAssertion(rdfs:label SOMA:isTriggerDefinedIn "is trigger defined in")
+SubObjectPropertyOf(SOMA:isTriggerDefinedIn <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isRoleDefinedIn>)
+ObjectPropertyDomain(SOMA:isTriggerDefinedIn <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role>)
+ObjectPropertyRange(SOMA:isTriggerDefinedIn SOMA:Affordance)
+
+# Object Property: SOMA:supports (SOMA:supports)
+
+AnnotationAssertion(rdfs:comment SOMA:supports "Relates a supportee to one of its supporters.")
+SubObjectPropertyOf(SOMA:supports <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasCommonBoundary>)
+ObjectPropertyDomain(SOMA:supports <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity>)
+ObjectPropertyRange(SOMA:supports <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity>)
+
+# Object Property: SOMA:transitionsBack (transitions back)
+
+AnnotationAssertion(rdfs:comment SOMA:transitionsBack "A property which relates a Transient to an Object it both changes from and changes into. This is useful to model objects which, through participation in a process, transform themselves so that an ontological reclassification is necessary, however this transformation is reversible and at the end of the process the objects revert to their previous kind. An example of this is catalysts in chemistry.")
+AnnotationAssertion(rdfs:label SOMA:transitionsBack "transitions back"@en)
+SubObjectPropertyOf(SOMA:transitionsBack SOMA:transitionsFrom)
+SubObjectPropertyOf(SOMA:transitionsBack SOMA:transitionsTo)
+ObjectPropertyDomain(SOMA:transitionsBack SOMA:Transient)
+ObjectPropertyRange(SOMA:transitionsBack <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Object>)
+
+# Object Property: SOMA:transitionsFrom (transitions from)
+
+AnnotationAssertion(rdfs:comment SOMA:transitionsFrom "A property which relates a Transient to an Object it changes from. This is useful to model objects which, through participation in a process, transform themselves so that an ontological reclassification is necessary. An example of this is dough undergoing the Maillard reaction through baking.")
+AnnotationAssertion(rdfs:label SOMA:transitionsFrom "transitions from"@en)
+SubObjectPropertyOf(SOMA:transitionsFrom <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasCommonBoundary>)
+ObjectPropertyDomain(SOMA:transitionsFrom SOMA:Transient)
+ObjectPropertyRange(SOMA:transitionsFrom <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Object>)
+
+# Object Property: SOMA:transitionsTo (transitions to)
+
+AnnotationAssertion(rdfs:comment SOMA:transitionsTo "A property which relates a Transient to an Object it changes into. This is useful to model objects which, through participation in a process, transform themselves so that an ontological reclassification is necessary. An example of this is baked dough eventually becoming bread by completing a baking process.")
+AnnotationAssertion(rdfs:label SOMA:transitionsTo "transitions to"@en)
+SubObjectPropertyOf(SOMA:transitionsTo <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasCommonBoundary>)
+ObjectPropertyDomain(SOMA:transitionsTo SOMA:Transient)
+ObjectPropertyRange(SOMA:transitionsTo <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Object>)
+
+
+############################
+#   Data Properties
+############################
+
+# Data Property: SOMA:hasColorValue (has color value)
+
+AnnotationAssertion(rdfs:comment SOMA:hasColorValue "Associates a ColorRegion to numerical data describing the color.")
+AnnotationAssertion(rdfs:label SOMA:hasColorValue "has color value")
+SubDataPropertyOf(SOMA:hasColorValue <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegionDataValue>)
+DataPropertyDomain(SOMA:hasColorValue SOMA:ColorRegion)
+
+# Data Property: SOMA:hasDepth (has depth)
+
+AnnotationAssertion(rdfs:comment SOMA:hasDepth "The depth of a shape.")
+AnnotationAssertion(rdfs:label SOMA:hasDepth "has depth")
+SubDataPropertyOf(SOMA:hasDepth SOMA:hasShapeParameter)
+DataPropertyDomain(SOMA:hasDepth SOMA:ShapeRegion)
+DataPropertyRange(SOMA:hasDepth xsd:float)
+
+# Data Property: SOMA:hasFilePath (has file path)
+
+AnnotationAssertion(rdfs:comment SOMA:hasFilePath "Associates an entity to some file containing data about it. For example, can be used to describe physical objects via a mesh file.")
+AnnotationAssertion(rdfs:label SOMA:hasFilePath "has file path")
+SubDataPropertyOf(SOMA:hasFilePath <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasDataValue>)
+DataPropertyDomain(SOMA:hasFilePath <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity>)
+DataPropertyRange(SOMA:hasFilePath xsd:string)
+
+# Data Property: SOMA:hasForceValue (has force value)
+
+AnnotationAssertion(rdfs:comment SOMA:hasForceValue "A value that quantifies a force given in Newton.")
+AnnotationAssertion(rdfs:label SOMA:hasForceValue "has force value")
+SubDataPropertyOf(SOMA:hasForceValue <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegionDataValue>)
+DataPropertyDomain(SOMA:hasForceValue SOMA:ForceAttribute)
+DataPropertyRange(SOMA:hasForceValue SOMA:array_double)
+
+# Data Property: SOMA:hasFrictionValue (has friction value)
+
+AnnotationAssertion(rdfs:comment SOMA:hasFrictionValue "The coefficient of friction denotes the ratio of friction force between touching objects. The coefficient is dimensionless.")
+AnnotationAssertion(rdfs:label SOMA:hasFrictionValue "has friction value")
+SubDataPropertyOf(SOMA:hasFrictionValue <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegionDataValue>)
+DataPropertyDomain(SOMA:hasFrictionValue SOMA:FrictionAttribute)
+DataPropertyRange(SOMA:hasFrictionValue xsd:double)
+
+# Data Property: SOMA:hasHSVValue (has hsv value)
+
+AnnotationAssertion(rdfs:comment SOMA:hasHSVValue "Associates a ColorRegion to numerical data describing the color. This data uses the Hue-Saturation-Value color space.")
+AnnotationAssertion(rdfs:label SOMA:hasHSVValue "has hsv value")
+SubDataPropertyOf(SOMA:hasHSVValue SOMA:hasColorValue)
+DataPropertyDomain(SOMA:hasHSVValue SOMA:ColorRegion)
+DataPropertyRange(SOMA:hasHSVValue xsd:string)
+
+# Data Property: SOMA:hasHeight (has height)
+
+AnnotationAssertion(rdfs:comment SOMA:hasHeight "The height of a shape.")
+AnnotationAssertion(rdfs:label SOMA:hasHeight "has height")
+SubDataPropertyOf(SOMA:hasHeight SOMA:hasShapeParameter)
+DataPropertyDomain(SOMA:hasHeight SOMA:ShapeRegion)
+DataPropertyRange(SOMA:hasHeight xsd:float)
+
+# Data Property: SOMA:hasJointEffort (has joint effort)
+
+AnnotationAssertion(rdfs:comment SOMA:hasJointEffort "The effort applied in a joint given in N (prismatic joint) or N*m (hinged joints).")
+AnnotationAssertion(rdfs:label SOMA:hasJointEffort "has joint effort")
+SubDataPropertyOf(SOMA:hasJointEffort SOMA:hasJointParameter)
+DataPropertyDomain(SOMA:hasJointEffort SOMA:JointState)
+DataPropertyRange(SOMA:hasJointEffort xsd:double)
+
+# Data Property: SOMA:hasJointEffortLimit (has joint effort limit)
+
+AnnotationAssertion(rdfs:comment SOMA:hasJointEffortLimit "The maximum effort applied in a joint given in N (prismatic joint) or N*m (hinged joints).")
+AnnotationAssertion(rdfs:label SOMA:hasJointEffortLimit "has joint effort limit")
+SubDataPropertyOf(SOMA:hasJointEffortLimit SOMA:hasJointParameter)
+DataPropertyDomain(SOMA:hasJointEffortLimit SOMA:JointLimit)
+DataPropertyRange(SOMA:hasJointEffortLimit xsd:double)
+
+# Data Property: SOMA:hasJointParameter (has joint parameter)
+
+AnnotationAssertion(rdfs:comment SOMA:hasJointParameter "Assigns a value for an attribute of a joint.")
+AnnotationAssertion(rdfs:label SOMA:hasJointParameter "has joint parameter")
+SubDataPropertyOf(SOMA:hasJointParameter <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegionDataValue>)
+DataPropertyDomain(SOMA:hasJointParameter <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalAttribute>)
+DataPropertyRange(SOMA:hasJointParameter xsd:double)
+
+# Data Property: SOMA:hasJointPosition (has joint position)
+
+AnnotationAssertion(rdfs:comment SOMA:hasJointPosition "The position of a joint given in m (prismatic joints) or rad (hinged joints).")
+AnnotationAssertion(rdfs:label SOMA:hasJointPosition "has joint position")
+SubDataPropertyOf(SOMA:hasJointPosition SOMA:hasJointParameter)
+DataPropertyDomain(SOMA:hasJointPosition SOMA:JointState)
+DataPropertyRange(SOMA:hasJointPosition xsd:double)
+
+# Data Property: SOMA:hasJointPositionMax (has joint position max)
+
+AnnotationAssertion(rdfs:comment SOMA:hasJointPositionMax "The maximum position of a joint given in m (prismatic joints) or rad (hinged joints).")
+AnnotationAssertion(rdfs:label SOMA:hasJointPositionMax "has joint position max")
+SubDataPropertyOf(SOMA:hasJointPositionMax SOMA:hasJointParameter)
+DataPropertyDomain(SOMA:hasJointPositionMax SOMA:JointLimit)
+DataPropertyRange(SOMA:hasJointPositionMax xsd:double)
+
+# Data Property: SOMA:hasJointPositionMin (has joint position min)
+
+AnnotationAssertion(rdfs:comment SOMA:hasJointPositionMin "The minimum position of a joint given in m (prismatic joints) or rad (hinged joints).")
+AnnotationAssertion(rdfs:label SOMA:hasJointPositionMin "has joint position min")
+SubDataPropertyOf(SOMA:hasJointPositionMin SOMA:hasJointParameter)
+DataPropertyDomain(SOMA:hasJointPositionMin SOMA:JointLimit)
+DataPropertyRange(SOMA:hasJointPositionMin xsd:double)
+
+# Data Property: SOMA:hasJointVelocity (has joint velocity)
+
+AnnotationAssertion(rdfs:comment SOMA:hasJointVelocity "The velocity of a joint given in m/s (prismatic joints) or rad/s (hinged joints).")
+AnnotationAssertion(rdfs:label SOMA:hasJointVelocity "has joint velocity")
+SubDataPropertyOf(SOMA:hasJointVelocity SOMA:hasJointParameter)
+DataPropertyDomain(SOMA:hasJointVelocity SOMA:JointState)
+DataPropertyRange(SOMA:hasJointVelocity xsd:double)
+
+# Data Property: SOMA:hasJointVelocityLimit (has joint velocity limit)
+
+AnnotationAssertion(rdfs:comment SOMA:hasJointVelocityLimit "The maximum velocity of a joint given in m/s (prismatic joints) or rad/s (hinged joints).")
+AnnotationAssertion(rdfs:label SOMA:hasJointVelocityLimit "has joint velocity limit")
+SubDataPropertyOf(SOMA:hasJointVelocityLimit SOMA:hasJointParameter)
+DataPropertyDomain(SOMA:hasJointVelocityLimit SOMA:JointLimit)
+DataPropertyRange(SOMA:hasJointVelocityLimit xsd:double)
+
+# Data Property: SOMA:hasLength (has length)
+
+AnnotationAssertion(rdfs:comment SOMA:hasLength "The length of a shape.")
+AnnotationAssertion(rdfs:label SOMA:hasLength "has length")
+SubDataPropertyOf(SOMA:hasLength SOMA:hasShapeParameter)
+DataPropertyDomain(SOMA:hasLength SOMA:ShapeRegion)
+DataPropertyRange(SOMA:hasLength xsd:float)
+
+# Data Property: SOMA:hasMassValue (has mass value)
+
+AnnotationAssertion(rdfs:comment SOMA:hasMassValue "The mass value of a physical object in kilogram.")
+AnnotationAssertion(rdfs:label SOMA:hasMassValue "has mass value")
+SubDataPropertyOf(SOMA:hasMassValue <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegionDataValue>)
+DataPropertyDomain(SOMA:hasMassValue SOMA:MassAttribute)
+DataPropertyRange(SOMA:hasMassValue xsd:double)
+
+# Data Property: SOMA:hasPositionData (has position data)
+
+AnnotationAssertion(rdfs:comment SOMA:hasPositionData "Associates a spatial region to a position.")
+AnnotationAssertion(rdfs:label SOMA:hasPositionData "has position data")
+SubDataPropertyOf(SOMA:hasPositionData SOMA:hasSpaceParameter)
+DataPropertyDomain(SOMA:hasPositionData <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#SpaceRegion>)
+DataPropertyRange(SOMA:hasPositionData xsd:string)
+
+# Data Property: SOMA:hasRGBValue (has rgb value)
+
+AnnotationAssertion(rdfs:comment SOMA:hasRGBValue "Associates a ColorRegion to numerical data describing the color. This data uses the Red-Green-Blue color space.")
+AnnotationAssertion(rdfs:label SOMA:hasRGBValue "has rgb value")
+SubDataPropertyOf(SOMA:hasRGBValue SOMA:hasColorValue)
+DataPropertyDomain(SOMA:hasRGBValue SOMA:ColorRegion)
+DataPropertyRange(SOMA:hasRGBValue xsd:string)
+
+# Data Property: SOMA:hasRadius (has radius)
+
+AnnotationAssertion(rdfs:comment SOMA:hasRadius "The radius of a circular or oval shape.")
+AnnotationAssertion(rdfs:label SOMA:hasRadius "has radius")
+SubDataPropertyOf(SOMA:hasRadius SOMA:hasShapeParameter)
+DataPropertyDomain(SOMA:hasRadius SOMA:ShapeRegion)
+DataPropertyRange(SOMA:hasRadius xsd:float)
+
+# Data Property: SOMA:hasReferenceFrame (has reference frame)
+
+AnnotationAssertion(rdfs:comment SOMA:hasReferenceFrame "Gives the name associated to the local coordinate frame of a SpaceRegion.")
+AnnotationAssertion(rdfs:label SOMA:hasReferenceFrame "has reference frame")
+SubDataPropertyOf(SOMA:hasReferenceFrame SOMA:hasSpaceParameter)
+DataPropertyDomain(SOMA:hasReferenceFrame <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#SpaceRegion>)
+DataPropertyRange(SOMA:hasReferenceFrame xsd:string)
+
+# Data Property: SOMA:hasShapeParameter (has shape parameter)
+
+AnnotationAssertion(rdfs:comment SOMA:hasShapeParameter "Associates a SpaceRegion to some parameter value describing its shape. This is a fairly generic property, and to capture the semantics of the information associated to the SpaceRegion, its more specific subproperties should be used.")
+AnnotationAssertion(rdfs:label SOMA:hasShapeParameter "has shape parameter")
+SubDataPropertyOf(SOMA:hasShapeParameter <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegionDataValue>)
+DataPropertyDomain(SOMA:hasShapeParameter SOMA:ShapeRegion)
+DataPropertyRange(SOMA:hasShapeParameter DataUnionOf(SOMA:array_double xsd:double xsd:float xsd:string))
+
+# Data Property: SOMA:hasShapeScale (has shape scale)
+
+AnnotationAssertion(rdfs:comment SOMA:hasShapeScale "The scale of a shape, given as a vector of three real numbers to adjust x, y, z components of vertex vectors. In cases where a shape needs to be flipped compared to the shape described by a mesh, one of the scale components will be negative. 
+
+It is often the case that shapes need to be altered from their description in a shape file, and a typical example of this is scaling a mesh. 
+
+In robotics, it is not uncommon to encounter shapes that are flipped compared to the shape in a mesh file. This is because robots often have bilateral symmetry, thus it makes sense to reuse the same meshes for corresponding links of the left and right arms.")
+AnnotationAssertion(rdfs:label SOMA:hasShapeScale "has shape scale")
+SubDataPropertyOf(SOMA:hasShapeScale SOMA:hasShapeParameter)
+DataPropertyDomain(SOMA:hasShapeScale SOMA:ShapeRegion)
+DataPropertyRange(SOMA:hasShapeScale SOMA:array_double)
+
+# Data Property: SOMA:hasSpaceParameter (has space parameter)
+
+AnnotationAssertion(rdfs:comment SOMA:hasSpaceParameter "Associates a SpaceRegion to some parameter value describing it. This is a fairly generic property, and to capture the semantics of the information associated to the SpaceRegion, its more specific subproperties should be used.")
+AnnotationAssertion(rdfs:label SOMA:hasSpaceParameter "has space parameter")
+SubDataPropertyOf(SOMA:hasSpaceParameter <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegionDataValue>)
+DataPropertyDomain(SOMA:hasSpaceParameter <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#SpaceRegion>)
+
+# Data Property: SOMA:hasWidth (has width)
+
+AnnotationAssertion(rdfs:comment SOMA:hasWidth "The width of a shape.")
+AnnotationAssertion(rdfs:label SOMA:hasWidth "has width")
+SubDataPropertyOf(SOMA:hasWidth SOMA:hasShapeParameter)
+DataPropertyDomain(SOMA:hasWidth SOMA:ShapeRegion)
+DataPropertyRange(SOMA:hasWidth xsd:float)
+
+
+
+############################
+#   Classes
+############################
+
+# Class: SOMA:Accessor (SOMA:Accessor)
+
+AnnotationAssertion(rdfs:comment SOMA:Accessor "A role classifying an object used to gain access to some other entity.")
+SubClassOf(SOMA:Accessor SOMA:Instrument)
+
+# Class: SOMA:AestheticDesign (Aesthetic Design)
+
+AnnotationAssertion(rdfs:comment SOMA:AestheticDesign "A design that describes an aesthetic quality of an object.
+
+Aesthetics is the philosophical study of beauty and taste. The term stems from the Greek word 'aisthetikos', meaning 'of sense perception', and is related to the study of sensory values. From design point of view, aesthetics refers to the visual attractiveness of an object. Visual aesthetics have these key elements: Color, Shape, Pattern, Line, Texture, Visual weight, Balance, Scale, Proximity and Movement.")
+AnnotationAssertion(rdfs:label SOMA:AestheticDesign "Aesthetic Design")
+SubClassOf(SOMA:AestheticDesign <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Design>)
+
+# Class: SOMA:Affordance (SOMA:Affordance)
+
+AnnotationAssertion(rdfs:comment SOMA:Affordance "A relation between an object (the bearer) and others (the triggers) that describes the disposition of the bearer to be involved in an action execution that also involves some trigger object.")
+SubClassOf(SOMA:Affordance <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Relation>)
+SubClassOf(SOMA:Affordance ObjectAllValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#describes> SOMA:Disposition))
+SubClassOf(SOMA:Affordance ObjectExactCardinality(1 SOMA:definesBearer <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role>))
+SubClassOf(SOMA:Affordance ObjectExactCardinality(1 SOMA:definesTrigger <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role>))
+SubClassOf(SOMA:Affordance ObjectExactCardinality(1 <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#definesTask> <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Task>))
+
+# Class: SOMA:AgentRole (Agent role)
+
+AnnotationAssertion(rdfs:comment SOMA:AgentRole "A role classifying an Agent responsible for performing an Action.
+
+The entity playing an AgentRole is endowed with sentience and the capacity to deliberately choose actions in pursuit of goals. This distinguishes Agents from other causes that could bring an event about.")
+AnnotationAssertion(rdfs:label SOMA:AgentRole "Agent role"@en)
+SubClassOf(SOMA:AgentRole SOMA:CausativeRole)
+SubClassOf(SOMA:AgentRole ObjectAllValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies> <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Agent>))
+
+# Class: SOMA:AlteredObject (Altered object)
+
+AnnotationAssertion(rdfs:comment SOMA:AlteredObject "An object undergoing modifications.")
+AnnotationAssertion(rdfs:label SOMA:AlteredObject "Altered object"@en)
+SubClassOf(SOMA:AlteredObject SOMA:Patient)
+
+# Class: SOMA:Appliance (SOMA:Appliance)
+
+AnnotationAssertion(rdfs:comment SOMA:Appliance "A device designed to perform a specific task, and that can be operated in some way.")
+SubClassOf(SOMA:Appliance <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#DesignedArtifact>)
+
+# Class: SOMA:Arm (SOMA:Arm)
+
+AnnotationAssertion(rdfs:comment SOMA:Arm "A limb used to reach for objects.")
+SubClassOf(SOMA:Arm SOMA:Limb)
+
+# Class: SOMA:ArtificialAgent (Artificial agent)
+
+AnnotationAssertion(rdfs:comment SOMA:ArtificialAgent "A physical object with artificial characteristics, which can perform actions to achieve desired goals, and typically has sensors and/or actuators.
+
+There can be non-physical artificial agents such as software programs but they are not considered here in the scope of artificial agent.")
+AnnotationAssertion(rdfs:label SOMA:ArtificialAgent "Artificial agent")
+SubClassOf(SOMA:ArtificialAgent <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalAgent>)
+
+# Class: SOMA:AvoidedObject (Avoided object)
+
+AnnotationAssertion(rdfs:comment SOMA:AvoidedObject "An object that is avoided.")
+AnnotationAssertion(rdfs:label SOMA:AvoidedObject "Avoided object"@en)
+SubClassOf(SOMA:AvoidedObject SOMA:Patient)
+
+# Class: SOMA:Barrier (SOMA:Barrier)
+
+AnnotationAssertion(rdfs:comment SOMA:Barrier "A role classifying an object used to prevent others from entering or leaving a restricted space or group.")
+SubClassOf(SOMA:Barrier SOMA:Restrictor)
+
+# Class: SOMA:BeneficiaryRole (Beneficiary role)
+
+AnnotationAssertion(rdfs:comment SOMA:BeneficiaryRole "A role classifying an agent for whose benefit an action is performed.")
+AnnotationAssertion(rdfs:label SOMA:BeneficiaryRole "Beneficiary role"@en)
+SubClassOf(SOMA:BeneficiaryRole SOMA:GoalRole)
+
+# Class: SOMA:Blockage (SOMA:Blockage)
+
+AnnotationAssertion(rdfs:comment SOMA:Blockage "The disposition of an object (the barrier) to prevent others from accessing, leaving, or seeing a restricted space, or group.")
+SubClassOf(SOMA:Blockage SOMA:Disposition)
+SubClassOf(SOMA:Blockage ObjectAllValuesFrom(SOMA:affordsBearer SOMA:Barrier))
+SubClassOf(SOMA:Blockage ObjectAllValuesFrom(SOMA:affordsTrigger SOMA:BlockedObject))
+
+# Class: SOMA:BlockedObject (Blocked object)
+
+AnnotationAssertion(rdfs:comment SOMA:BlockedObject "An object that is blocked from accessing something.")
+AnnotationAssertion(rdfs:label SOMA:BlockedObject "Blocked object"@en)
+SubClassOf(SOMA:BlockedObject SOMA:Patient)
+
+# Class: SOMA:BoxShape (Box shape)
+
+AnnotationAssertion(rdfs:comment SOMA:BoxShape "A symmetrical shape, either solid or hollow, contained by six rectangles.")
+AnnotationAssertion(rdfs:label SOMA:BoxShape "Box shape")
+SubClassOf(SOMA:BoxShape SOMA:ShapeRegion)
+SubClassOf(SOMA:BoxShape DataExactCardinality(1 SOMA:hasHeight xsd:float))
+SubClassOf(SOMA:BoxShape DataExactCardinality(1 SOMA:hasLength xsd:float))
+SubClassOf(SOMA:BoxShape DataExactCardinality(1 SOMA:hasWidth xsd:float))
+
+# Class: SOMA:CanCut (SOMA:CanCut)
+
+AnnotationAssertion(rdfs:comment SOMA:CanCut "The disposition of an object (the tool) to cut other objects. Such as a knife has cutting ability to cut a cucumber into pieces.")
+SubClassOf(SOMA:CanCut SOMA:Variability)
+SubClassOf(SOMA:CanCut ObjectAllValuesFrom(SOMA:affordsBearer SOMA:Cutter))
+SubClassOf(SOMA:CanCut ObjectAllValuesFrom(SOMA:affordsTrigger SOMA:CutObject))
+
+# Class: SOMA:Capability (SOMA:Capability)
+
+AnnotationAssertion(rdfs:comment SOMA:Capability "The disposition of an agent to bring about certain effects, and to achieve certain goals.")
+SubClassOf(SOMA:Capability SOMA:Disposition)
+
+# Class: SOMA:Capacity (SOMA:Capacity)
+
+AnnotationAssertion(rdfs:comment SOMA:Capacity "The maximum amount an object can contain.")
+SubClassOf(SOMA:Capacity SOMA:Intrinsic)
+
+# Class: SOMA:CausalEventRole (Causal event role)
+
+AnnotationAssertion(rdfs:comment SOMA:CausalEventRole "A role filled by a description of some action or process that brings about a motion.
+
+As an example, consider the utterance \"the tennisman served the ball by hitting it with the racket.\" In this utterance, the filler of the CausalEventRole is expressed by the \"by hitting it with the racket\" constituent.")
+AnnotationAssertion(rdfs:label SOMA:CausalEventRole "Causal event role"@en)
+SubClassOf(SOMA:CausalEventRole SOMA:CausativeRole)
+
+# Class: SOMA:CausativeRole (Causative role)
+
+AnnotationAssertion(rdfs:comment SOMA:CausativeRole "A role classifying objects that are responsible in bringing about an event.
+
+The paradigmatic example is the Agent performing an Action -- the Agent is the effective cause of the Action it performs. However, not all objects causing events are agents.")
+AnnotationAssertion(rdfs:label SOMA:CausativeRole "Causative role"@en)
+SubClassOf(SOMA:CausativeRole SOMA:EventAdjacentRole)
+
+# Class: SOMA:CircularCylinder (Circular cylinder)
+
+AnnotationAssertion(rdfs:comment SOMA:CircularCylinder "A cylinder figure with circular cross section.")
+AnnotationAssertion(rdfs:label SOMA:CircularCylinder "Circular cylinder")
+SubClassOf(SOMA:CircularCylinder SOMA:CylinderShape)
+SubClassOf(SOMA:CircularCylinder DataExactCardinality(1 SOMA:hasRadius xsd:float))
+
+# Class: SOMA:Clean (SOMA:Clean)
+
+AnnotationAssertion(rdfs:comment SOMA:Clean "A cleanliness region with values considered as clean.")
+SubClassOf(SOMA:Clean SOMA:CleanlinessRegion)
+
+# Class: SOMA:Cleanliness (SOMA:Cleanliness)
+
+AnnotationAssertion(rdfs:comment SOMA:Cleanliness "The quality of being clean.")
+SubClassOf(SOMA:Cleanliness SOMA:SocialQuality)
+SubClassOf(SOMA:Cleanliness ObjectSomeValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegion> SOMA:CleanlinessRegion))
+SubClassOf(SOMA:Cleanliness ObjectAllValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegion> SOMA:CleanlinessRegion))
+
+# Class: SOMA:CleanlinessRegion (Cleanliness region)
+
+AnnotationAssertion(rdfs:comment SOMA:CleanlinessRegion "Encodes the cleanliness of an object.")
+AnnotationAssertion(rdfs:label SOMA:CleanlinessRegion "Cleanliness region"@en)
+SubClassOf(SOMA:CleanlinessRegion <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Region>)
+
+# Class: SOMA:Color (Color)
+
+AnnotationAssertion(rdfs:comment SOMA:Color "The color of an object. Color regions encode the color value in some space such as RGB or HSV, and may further be used to classify the color as red, dark, etc. The color of an object may have different facets, e.g. a red and blue color.")
+AnnotationAssertion(rdfs:label SOMA:Color "Color")
+SubClassOf(SOMA:Color SOMA:Extrinsic)
+SubClassOf(SOMA:Color ObjectSomeValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegion> SOMA:ColorRegion))
+SubClassOf(SOMA:Color ObjectAllValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegion> SOMA:ColorRegion))
+
+# Class: SOMA:ColorRegion (Color region)
+
+AnnotationAssertion(rdfs:comment SOMA:ColorRegion "Encodes the color of an object.")
+AnnotationAssertion(rdfs:label SOMA:ColorRegion "Color region")
+SubClassOf(SOMA:ColorRegion <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalAttribute>)
+SubClassOf(SOMA:ColorRegion ObjectAllValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isRegionFor> SOMA:Color))
+
+# Class: SOMA:CommitedObject (Commited object)
+
+AnnotationAssertion(rdfs:comment SOMA:CommitedObject "An object committed to a bigger whole. After being committed, the object does not exist anymore in its old form.")
+AnnotationAssertion(rdfs:label SOMA:CommitedObject "Commited object"@en)
+SubClassOf(SOMA:CommitedObject SOMA:ConnectedObject)
+
+# Class: SOMA:Composing (SOMA:Composing)
+
+AnnotationAssertion(rdfs:comment SOMA:Composing "The disposition of an object (the tool) to change the compositional structure of others.")
+SubClassOf(SOMA:Composing SOMA:Variability)
+SubClassOf(SOMA:Composing ObjectAllValuesFrom(SOMA:affordsTrigger SOMA:ConnectedObject))
+
+# Class: SOMA:ConnectedObject (Connected object)
+
+AnnotationAssertion(rdfs:comment SOMA:ConnectedObject "An object that is combined with another object.")
+AnnotationAssertion(rdfs:label SOMA:ConnectedObject "Connected object"@en)
+SubClassOf(SOMA:ConnectedObject SOMA:Patient)
+
+# Class: SOMA:Connectivity (SOMA:Connectivity)
+
+AnnotationAssertion(rdfs:comment SOMA:Connectivity "The disposition of an object (the connected object) to establish a connection with others.")
+SubClassOf(SOMA:Connectivity SOMA:Disposition)
+SubClassOf(SOMA:Connectivity ObjectAllValuesFrom(SOMA:affordsBearer SOMA:ConnectedObject))
+SubClassOf(SOMA:Connectivity ObjectAllValuesFrom(SOMA:affordsTrigger SOMA:ConnectedObject))
+
+# Class: SOMA:Container (SOMA:Container)
+
+AnnotationAssertion(rdfs:comment SOMA:Container "A role classifying an object used to contain others.")
+SubClassOf(SOMA:Container SOMA:Restrictor)
+
+# Class: SOMA:Containment (SOMA:Containment)
+
+AnnotationAssertion(rdfs:comment SOMA:Containment "The disposition of an object (the container) to contain others.")
+SubClassOf(SOMA:Containment SOMA:Disposition)
+SubClassOf(SOMA:Containment ObjectAllValuesFrom(SOMA:affordsBearer SOMA:Container))
+SubClassOf(SOMA:Containment ObjectAllValuesFrom(SOMA:affordsTrigger SOMA:IncludedObject))
+SubClassOf(SOMA:Containment ObjectAllValuesFrom(SOMA:isDispositionOf ObjectSomeValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasQuality> SOMA:Capacity)))
+
+# Class: SOMA:ContinuousJoint (Continuous joint)
+
+AnnotationAssertion(rdfs:comment SOMA:ContinuousJoint "A continuous hinge joint that rotates around an axis and has no upper and lower limits.")
+AnnotationAssertion(rdfs:label SOMA:ContinuousJoint "Continuous joint")
+SubClassOf(SOMA:ContinuousJoint SOMA:HingeJoint)
+
+# Class: SOMA:Cover (SOMA:Cover)
+
+AnnotationAssertion(rdfs:comment SOMA:Cover "An object used to cover up others, such as a lid used as a cover for a pot.")
+SubClassOf(SOMA:Cover SOMA:Barrier)
+
+# Class: SOMA:Coverage (SOMA:Coverage)
+
+AnnotationAssertion(rdfs:comment SOMA:Coverage "The disposition of an object (the cover) to hide or to protect objects by covering them. An example is a door that covers items in a container to e.g. prevent dust getting inside of the container.")
+SubClassOf(SOMA:Coverage SOMA:Blockage)
+SubClassOf(SOMA:Coverage ObjectAllValuesFrom(SOMA:affordsBearer SOMA:Cover))
+SubClassOf(SOMA:Coverage ObjectAllValuesFrom(SOMA:affordsTrigger SOMA:CoveredObject))
+
+# Class: SOMA:CoveredObject (Covered object)
+
+AnnotationAssertion(rdfs:comment SOMA:CoveredObject "An object that is covered.")
+AnnotationAssertion(rdfs:label SOMA:CoveredObject "Covered object"@en)
+SubClassOf(SOMA:CoveredObject SOMA:BlockedObject)
+
+# Class: SOMA:CreatedObject (Created object)
+
+AnnotationAssertion(rdfs:comment SOMA:CreatedObject "An object that is created.")
+AnnotationAssertion(rdfs:label SOMA:CreatedObject "Created object"@en)
+SubClassOf(SOMA:CreatedObject SOMA:Patient)
+
+# Class: SOMA:CutObject (Cut object)
+
+AnnotationAssertion(rdfs:comment SOMA:CutObject "An object being cut down into pieces.")
+AnnotationAssertion(rdfs:label SOMA:CutObject "Cut object")
+SubClassOf(SOMA:CutObject SOMA:AlteredObject)
+
+# Class: SOMA:Cuttability (SOMA:Cuttability)
+
+AnnotationAssertion(rdfs:comment SOMA:Cuttability "The disposition of an object (the barrier) which makes it able to be cut down (into pieces) usually by some other object with role as a Cutter. Such as a cucumber has cuttability disposition which can be cut by a knife.")
+SubClassOf(SOMA:Cuttability SOMA:Disposition)
+SubClassOf(SOMA:Cuttability ObjectAllValuesFrom(SOMA:affordsBearer SOMA:CutObject))
+SubClassOf(SOMA:Cuttability ObjectAllValuesFrom(SOMA:affordsTrigger SOMA:Cutter))
+
+# Class: SOMA:Cutter (SOMA:Cutter)
+
+AnnotationAssertion(rdfs:comment SOMA:Cutter "A role to classify an object used to cut other objects. Usually should poses sharpness as a quality. Execptions are not considered in this context. Such as a wind, water, or other natural agents cutting(eroding) the rocks.")
+SubClassOf(SOMA:Cutter SOMA:Tool)
+
+# Class: SOMA:CylinderShape (Cylinder shape)
+
+AnnotationAssertion(rdfs:comment SOMA:CylinderShape "A solid geometrical figure with straight parallel sides and a circular or oval cross section.")
+AnnotationAssertion(rdfs:label SOMA:CylinderShape "Cylinder shape")
+SubClassOf(SOMA:CylinderShape SOMA:ShapeRegion)
+SubClassOf(SOMA:CylinderShape DataSomeValuesFrom(SOMA:hasRadius xsd:float))
+SubClassOf(SOMA:CylinderShape DataExactCardinality(1 SOMA:hasLength xsd:float))
+
+# Class: SOMA:DependentPlace (Dependent place)
+
+AnnotationAssertion(rdfs:comment SOMA:DependentPlace "A feature that is not part of its host, like a hole in a piece of cheese.")
+AnnotationAssertion(rdfs:label SOMA:DependentPlace "Dependent place"@en)
+SubClassOf(SOMA:DependentPlace SOMA:Feature)
+
+# Class: SOMA:Deposit (SOMA:Deposit)
+
+AnnotationAssertion(rdfs:comment SOMA:Deposit "A role classifying an object ontop which others are put to e.g. store them, or to place them in a meaningful way for future activities.")
+SubClassOf(SOMA:Deposit SOMA:Instrument)
+
+# Class: SOMA:DepositedObject (Deposited object)
+
+AnnotationAssertion(rdfs:comment SOMA:DepositedObject "An object placed ontop of another one.")
+AnnotationAssertion(rdfs:label SOMA:DepositedObject "Deposited object"@en)
+SubClassOf(SOMA:DepositedObject SOMA:Patient)
+
+# Class: SOMA:Deposition (SOMA:Deposition)
+
+AnnotationAssertion(rdfs:comment SOMA:Deposition "The disposition to support objects.")
+SubClassOf(SOMA:Deposition SOMA:Disposition)
+SubClassOf(SOMA:Deposition ObjectAllValuesFrom(SOMA:affordsBearer SOMA:Deposit))
+SubClassOf(SOMA:Deposition ObjectAllValuesFrom(SOMA:affordsTrigger SOMA:DepositedObject))
+
+# Class: SOMA:DesignedComponent (Designed component)
+
+AnnotationAssertion(rdfs:comment SOMA:DesignedComponent "An object designed to be part or element of a larger whole.")
+AnnotationAssertion(rdfs:label SOMA:DesignedComponent "Designed component")
+SubClassOf(SOMA:DesignedComponent SOMA:FunctionalPart)
+SubClassOf(SOMA:DesignedComponent <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#DesignedArtifact>)
+SubClassOf(SOMA:DesignedComponent ObjectSomeValuesFrom(SOMA:hasDisposition SOMA:Connectivity))
+
+# Class: SOMA:DesignedContainer (Designed container)
+
+AnnotationAssertion(rdfs:comment SOMA:DesignedContainer "An item designed to be able to hold some other items, preventing their free movement and/or protecting them from outside influence. Containers may be used for storage, or to obtain control over items that are otherwise hard to manipulate directly (e.g. liquids).")
+AnnotationAssertion(rdfs:label SOMA:DesignedContainer "Designed container")
+SubClassOf(SOMA:DesignedContainer <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#DesignedArtifact>)
+SubClassOf(SOMA:DesignedContainer ObjectSomeValuesFrom(SOMA:hasDisposition SOMA:Containment))
+
+# Class: SOMA:DesignedFurniture (Designed furniture)
+
+AnnotationAssertion(rdfs:comment SOMA:DesignedFurniture "An object used to make a room or building suitable for living or working.")
+AnnotationAssertion(rdfs:label SOMA:DesignedFurniture "Designed furniture")
+SubClassOf(SOMA:DesignedFurniture <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#DesignedArtifact>)
+
+# Class: SOMA:DesignedTool (Designed tool)
+
+AnnotationAssertion(rdfs:comment SOMA:DesignedTool "An item designed to enable some action, in which it will play an instrumental role.")
+AnnotationAssertion(rdfs:label SOMA:DesignedTool "Designed tool")
+SubClassOf(SOMA:DesignedTool <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#DesignedArtifact>)
+
+# Class: SOMA:Destination (SOMA:Destination)
+
+AnnotationAssertion(rdfs:comment SOMA:Destination "A role classifying the location where an event or object is directed towards.")
+SubClassOf(SOMA:Destination SOMA:Location)
+
+# Class: SOMA:DestroyedObject (Destroyed object)
+
+AnnotationAssertion(rdfs:comment SOMA:DestroyedObject "An object that is detroyed.")
+AnnotationAssertion(rdfs:label SOMA:DestroyedObject "Destroyed object"@en)
+SubClassOf(SOMA:DestroyedObject SOMA:Patient)
+
+# Class: SOMA:DetectedObject (Detected object)
+
+AnnotationAssertion(rdfs:comment SOMA:DetectedObject "An object that is detected.")
+AnnotationAssertion(rdfs:label SOMA:DetectedObject "Detected object"@en)
+SubClassOf(SOMA:DetectedObject SOMA:Patient)
+
+# Class: SOMA:DeviceState (SOMA:DeviceState)
+
+AnnotationAssertion(rdfs:comment SOMA:DeviceState "A quality belonging to a device which indicates its overall functional state.")
+SubClassOf(SOMA:DeviceState SOMA:Intrinsic)
+
+# Class: SOMA:DeviceStateRange (Device state range)
+
+AnnotationAssertion(rdfs:comment SOMA:DeviceStateRange "This class defines the values that a device state can take.")
+AnnotationAssertion(rdfs:label SOMA:DeviceStateRange "Device state range"@en)
+EquivalentClasses(SOMA:DeviceStateRange ObjectUnionOf(SOMA:DeviceTurnedOff SOMA:DeviceTurnedOn))
+SubClassOf(SOMA:DeviceStateRange <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Region>)
+
+# Class: SOMA:DeviceTurnedOff (Device turned off)
+
+AnnotationAssertion(rdfs:comment SOMA:DeviceTurnedOff "A value indicating a device is not in operation.")
+AnnotationAssertion(rdfs:label SOMA:DeviceTurnedOff "Device turned off"@en)
+SubClassOf(SOMA:DeviceTurnedOff SOMA:DeviceStateRange)
+
+# Class: SOMA:DeviceTurnedOn (Device turned on)
+
+AnnotationAssertion(rdfs:comment SOMA:DeviceTurnedOn "A value indicating a device is in operation.")
+AnnotationAssertion(rdfs:label SOMA:DeviceTurnedOn "Device turned on"@en)
+SubClassOf(SOMA:DeviceTurnedOn SOMA:DeviceStateRange)
+
+# Class: SOMA:Dirty (SOMA:Dirty)
+
+AnnotationAssertion(rdfs:comment SOMA:Dirty "A cleanliness region with values considered as dirty.")
+SubClassOf(SOMA:Dirty SOMA:CleanlinessRegion)
+
+# Class: SOMA:Disposition (SOMA:Disposition)
+
+AnnotationAssertion(rdfs:comment SOMA:Disposition "The tendency of an object (the bearer) to make certain events happen with others (the triggers).")
+AnnotationAssertion(rdfs:comment SOMA:Disposition "extrinsic")
+SubClassOf(SOMA:Disposition SOMA:Extrinsic)
+SubClassOf(SOMA:Disposition ObjectExactCardinality(1 <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isDescribedBy> SOMA:Affordance))
+SubClassOf(SOMA:Disposition ObjectExactCardinality(1 <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isDescribedBy> ObjectIntersectionOf(SOMA:Affordance ObjectExactCardinality(1 SOMA:definesBearer <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role>) ObjectExactCardinality(1 SOMA:definesEventType <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#EventType>) ObjectExactCardinality(1 SOMA:definesTrigger <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role>))))
+
+# Class: SOMA:Effort (SOMA:Effort)
+
+AnnotationAssertion(rdfs:comment SOMA:Effort "A parameter describing the amount of force to be exerted by some actuator.")
+SubClassOf(SOMA:Effort <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Parameter>)
+
+# Class: SOMA:EnclosedObject (Enclosed object)
+
+AnnotationAssertion(rdfs:comment SOMA:EnclosedObject "An object included within the spatial boundaries of another object.")
+AnnotationAssertion(rdfs:label SOMA:EnclosedObject "Enclosed object"@en)
+SubClassOf(SOMA:EnclosedObject SOMA:IncludedObject)
+
+# Class: SOMA:Enclosing (SOMA:Enclosing)
+
+AnnotationAssertion(rdfs:comment SOMA:Enclosing "The disposition of an object (the container) to contain other objects by enclosing them to prevent their free movement.")
+SubClassOf(SOMA:Enclosing SOMA:Containment)
+SubClassOf(SOMA:Enclosing ObjectAllValuesFrom(SOMA:affordsTrigger SOMA:EnclosedObject))
+
+# Class: SOMA:EventAdjacentRole (Event adjacent role)
+
+AnnotationAssertion(rdfs:comment SOMA:EventAdjacentRole "A role classifying a participant in an event.
+
+In linguistics, this is also known as a thematic role.")
+AnnotationAssertion(rdfs:label SOMA:EventAdjacentRole "Event adjacent role"@en)
+AnnotationAssertion(rdfs:label SOMA:EventAdjacentRole "Thematic role"@en)
+SubClassOf(SOMA:EventAdjacentRole <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role>)
+
+# Class: SOMA:ExcludedObject (Excluded object)
+
+AnnotationAssertion(rdfs:comment SOMA:ExcludedObject "An object that is not contained in something. This is meant very general and includes, e.g., elements excluded from a set, or things that are spatially excluded from the boundaries of some object.")
+AnnotationAssertion(rdfs:label SOMA:ExcludedObject "Excluded object")
+SubClassOf(SOMA:ExcludedObject SOMA:Patient)
+
+# Class: SOMA:ExistingObjectRole (Existing object role)
+
+AnnotationAssertion(rdfs:comment SOMA:ExistingObjectRole "A role that requires of its filler simply to exist, unlike other roles that may demand e.g. agentive or instrumental participation in some executable schema or plan (AgentRole and Instrument respectively).
+
+The intention behind such a simple role is to have a way to represent, in a schematic formalism used to describe some scene, that an object is present. In particular, the schema used to convey this information is the ESTSchemaTheory, which has ExistingObjectRole as its sole defined role.")
+AnnotationAssertion(rdfs:label SOMA:ExistingObjectRole "Existing object role"@en)
+SubClassOf(SOMA:ExistingObjectRole SOMA:RelationAdjacentRole)
+SubClassOf(SOMA:ExistingObjectRole ObjectAllValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies> <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>))
+
+# Class: SOMA:ExperiencerRole (Experiencer role)
+
+AnnotationAssertion(rdfs:comment SOMA:ExperiencerRole "A role used in frame semantics to classify agents performing perception actions, or being the subjects affected by some biological process.")
+AnnotationAssertion(rdfs:label SOMA:ExperiencerRole "Experiencer role"@en)
+SubClassOf(SOMA:ExperiencerRole SOMA:PerformerRole)
+
+# Class: SOMA:ExtractedObject (Extracted object)
+
+AnnotationAssertion(rdfs:comment SOMA:ExtractedObject "An object that is removed from a container or system.")
+AnnotationAssertion(rdfs:label SOMA:ExtractedObject "Extracted object"@en)
+SubClassOf(SOMA:ExtractedObject SOMA:Patient)
+
+# Class: SOMA:Extrinsic (SOMA:Extrinsic)
+
+AnnotationAssertion(rdfs:comment SOMA:Extrinsic "A physical quality that depends on relationships to other objects, such as the color of an object which depends on light conditions in the environment.")
+SubClassOf(SOMA:Extrinsic SOMA:PhysicalQuality)
+DisjointClasses(SOMA:Extrinsic SOMA:Intrinsic)
+
+# Class: SOMA:Feature (SOMA:Feature)
+
+AnnotationAssertion(rdfs:comment SOMA:Feature "Features are 'parasitic' entities that only exist insofar their host exists. Typical examples are holes, bumps, boundaries, or spots of color.")
+SubClassOf(SOMA:Feature <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Object>)
+SubClassOf(SOMA:Feature ObjectAllValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasPart> SOMA:Feature))
+SubClassOf(SOMA:Feature ObjectExactCardinality(1 SOMA:isFeatureOf <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>))
+DisjointClasses(SOMA:Feature <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Agent>)
+DisjointClasses(SOMA:Feature <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)
+DisjointClasses(SOMA:Feature <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#SocialObject>)
+
+# Class: SOMA:Finger (SOMA:Finger)
+
+AnnotationAssertion(rdfs:comment SOMA:Finger "A limb used for grasping objects.")
+SubClassOf(SOMA:Finger SOMA:Limb)
+SubClassOf(SOMA:Finger ObjectSomeValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isPartOf> SOMA:Hand))
+
+# Class: SOMA:FixedJoint (Fixed joint)
+
+AnnotationAssertion(rdfs:comment SOMA:FixedJoint "A joint that cannot move, designed to fixiate links.")
+AnnotationAssertion(rdfs:label SOMA:FixedJoint "Fixed joint")
+SubClassOf(SOMA:FixedJoint SOMA:Joint)
+SubClassOf(SOMA:FixedJoint ObjectExactCardinality(0 SOMA:hasJointState <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity>))
+DisjointClasses(SOMA:FixedJoint SOMA:MovableJoint)
+
+# Class: SOMA:FloatingJoint (Floating joint)
+
+AnnotationAssertion(rdfs:comment SOMA:FloatingJoint "A joint that allows motion for all 6 degrees of freedom.")
+AnnotationAssertion(rdfs:label SOMA:FloatingJoint "Floating joint")
+SubClassOf(SOMA:FloatingJoint SOMA:MovableJoint)
+
+# Class: SOMA:ForceAttribute (Force attribute)
+
+AnnotationAssertion(rdfs:comment SOMA:ForceAttribute "The value of a force dynamical characteristic. An example is the force exerted on another object when pushing it.")
+AnnotationAssertion(rdfs:label SOMA:ForceAttribute "Force attribute")
+SubClassOf(SOMA:ForceAttribute <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalAttribute>)
+SubClassOf(SOMA:ForceAttribute DataExactCardinality(1 SOMA:hasForceValue SOMA:array_double))
+
+# Class: SOMA:FrictionAttribute (Friction attribute)
+
+AnnotationAssertion(rdfs:comment SOMA:FrictionAttribute "The resistance that one surface or object encounters when moving over another.")
+AnnotationAssertion(rdfs:label SOMA:FrictionAttribute "Friction attribute")
+SubClassOf(SOMA:FrictionAttribute <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalAttribute>)
+SubClassOf(SOMA:FrictionAttribute DataExactCardinality(1 SOMA:hasFrictionValue xsd:double))
+
+# Class: SOMA:FunctionalDesign (Functional Design)
+
+AnnotationAssertion(rdfs:comment SOMA:FunctionalDesign "The design of an object from functionality point of view. A functional design is useful to develop complex modular objects with components that have a specific purpose, and can function with minimum side effect on other components of that object. ")
+AnnotationAssertion(rdfs:label SOMA:FunctionalDesign "Functional Design")
+SubClassOf(SOMA:FunctionalDesign <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Design>)
+
+# Class: SOMA:FunctionalPart (Functional part)
+
+AnnotationAssertion(rdfs:comment SOMA:FunctionalPart "Parts of an agent or an artifact are considered as functional parts.")
+AnnotationAssertion(rdfs:label SOMA:FunctionalPart "Functional part")
+SubClassOf(SOMA:FunctionalPart <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalBody>)
+SubClassOf(SOMA:FunctionalPart ObjectAllValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isComponentOf> ObjectUnionOf(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Agent> <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#DesignedArtifact>)))
+
+# Class: SOMA:GoalRole (Goal role)
+
+AnnotationAssertion(rdfs:comment SOMA:GoalRole "A role classifying objects that constitute the goal of an action.")
+AnnotationAssertion(rdfs:label SOMA:GoalRole "Goal role"@en)
+SubClassOf(SOMA:GoalRole SOMA:EventAdjacentRole)
+
+# Class: SOMA:Graspability (SOMA:Graspability)
+
+AnnotationAssertion(rdfs:comment SOMA:Graspability "The disposition of an object (e.g. the handle) to afford grasping the object.")
+SubClassOf(SOMA:Graspability SOMA:Disposition)
+
+# Class: SOMA:GreenColor (Green color)
+
+AnnotationAssertion(rdfs:comment SOMA:GreenColor "A color region with dominant green color.")
+AnnotationAssertion(rdfs:label SOMA:GreenColor "Green color")
+SubClassOf(SOMA:GreenColor SOMA:ColorRegion)
+
+# Class: SOMA:Gripper (SOMA:Gripper)
+
+AnnotationAssertion(rdfs:comment SOMA:Gripper "A mechanical device that grasps and holds things.")
+SubClassOf(SOMA:Gripper SOMA:PrehensileEffector)
+
+# Class: SOMA:Hand (SOMA:Hand)
+
+AnnotationAssertion(rdfs:comment SOMA:Hand "A prehensile effector including palm, fingers, and thumb.")
+SubClassOf(SOMA:Hand SOMA:PrehensileEffector)
+
+# Class: SOMA:HasQualityRegion (Has quality region)
+
+AnnotationAssertion(rdfs:comment SOMA:HasQualityRegion "The relation between an individual quality and a region.")
+AnnotationAssertion(rdfs:comment SOMA:HasQualityRegion "todo(DB): added for NEEMs (quale change), but not sure yet about it...")
+SubClassOf(SOMA:HasQualityRegion <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Relation>)
+SubClassOf(SOMA:HasQualityRegion ObjectExactCardinality(1 <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasQuality> <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality>))
+SubClassOf(SOMA:HasQualityRegion ObjectExactCardinality(1 <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegion> <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Region>))
+
+# Class: SOMA:Head (SOMA:Head)
+
+AnnotationAssertion(rdfs:comment SOMA:Head "A functional part of the body responsible for carrying high bandwidth sensors, i.e., camera.")
+SubClassOf(SOMA:Head SOMA:FunctionalPart)
+
+# Class: SOMA:HingeJoint (Hinge joint)
+
+AnnotationAssertion(rdfs:comment SOMA:HingeJoint "A joint that rotates along an axis.")
+AnnotationAssertion(rdfs:label SOMA:HingeJoint "Hinge joint")
+SubClassOf(SOMA:HingeJoint SOMA:MovableJoint)
+
+# Class: SOMA:Impediment (SOMA:Impediment)
+
+AnnotationAssertion(rdfs:comment SOMA:Impediment "The disposition of an object (the obstacle) to prohibit certain ways of entering or leaving a space or group. An example is a doorstopper constraining a door, prohibiting it to enter the area behind it.")
+SubClassOf(SOMA:Impediment SOMA:Blockage)
+SubClassOf(SOMA:Impediment ObjectAllValuesFrom(SOMA:affordsBearer SOMA:Obstacle))
+SubClassOf(SOMA:Impediment ObjectAllValuesFrom(SOMA:affordsTrigger SOMA:RestrictedObject))
+
+# Class: SOMA:IncludedObject (Included object)
+
+AnnotationAssertion(rdfs:comment SOMA:IncludedObject "An object that is contained in something. This is meant very general and includes, e.g., elements contained in a set, or things that are spatially contained within the boundaries of some object.")
+AnnotationAssertion(rdfs:label SOMA:IncludedObject "Included object"@en)
+SubClassOf(SOMA:IncludedObject SOMA:Patient)
+
+# Class: SOMA:InsertedObject (Inserted object)
+
+AnnotationAssertion(rdfs:comment SOMA:InsertedObject "An object inserted into another object.")
+AnnotationAssertion(rdfs:label SOMA:InsertedObject "Inserted object"@en)
+SubClassOf(SOMA:InsertedObject SOMA:EnclosedObject)
+
+# Class: SOMA:Insertion (SOMA:Insertion)
+
+AnnotationAssertion(rdfs:comment SOMA:Insertion "The disposition of an object (the container) to contain other objects that can be inserted into the container through a portal.")
+SubClassOf(SOMA:Insertion SOMA:Enclosing)
+SubClassOf(SOMA:Insertion ObjectAllValuesFrom(SOMA:affordsTrigger SOMA:InsertedObject))
+
+# Class: SOMA:Instrument (SOMA:Instrument)
+
+AnnotationAssertion(rdfs:comment SOMA:Instrument "An object used to carry out the event.")
+SubClassOf(SOMA:Instrument SOMA:ResourceRole)
+
+# Class: SOMA:Intrinsic (SOMA:Intrinsic)
+
+AnnotationAssertion(rdfs:comment SOMA:Intrinsic "A physical quality that is independent of context.")
+AnnotationAssertion(rdfs:comment SOMA:Intrinsic "intrinsic")
+SubClassOf(SOMA:Intrinsic SOMA:PhysicalQuality)
+
+# Class: SOMA:Item (SOMA:Item)
+
+AnnotationAssertion(rdfs:comment SOMA:Item "A role played by a non-agentive object operated on by an action.")
+SubClassOf(SOMA:Item SOMA:Patient)
+
+# Class: SOMA:Joint (SOMA:Joint)
+
+AnnotationAssertion(rdfs:comment SOMA:Joint "An object that is used to articulate links in a kinematic structure.")
+EquivalentClasses(SOMA:Joint ObjectUnionOf(SOMA:FixedJoint SOMA:MovableJoint))
+SubClassOf(SOMA:Joint <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalBody>)
+SubClassOf(SOMA:Joint ObjectExactCardinality(1 SOMA:hasChildLink <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>))
+SubClassOf(SOMA:Joint ObjectExactCardinality(1 SOMA:hasParentLink <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>))
+SubClassOf(SOMA:Joint ObjectMaxCardinality(1 SOMA:hasJointState SOMA:JointState))
+
+# Class: SOMA:JointLimit (Joint limit)
+
+AnnotationAssertion(rdfs:comment SOMA:JointLimit "The physical limits of a joint.")
+AnnotationAssertion(rdfs:label SOMA:JointLimit "Joint limit")
+SubClassOf(SOMA:JointLimit <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalAttribute>)
+
+# Class: SOMA:JointState (Joint state)
+
+AnnotationAssertion(rdfs:comment SOMA:JointState "The state of a joint in terms of position, velocity of the joint and effort applied to it.")
+AnnotationAssertion(rdfs:label SOMA:JointState "Joint state")
+SubClassOf(SOMA:JointState <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalAttribute>)
+SubClassOf(SOMA:JointState DataExactCardinality(1 SOMA:hasJointPosition xsd:double))
+SubClassOf(SOMA:JointState DataExactCardinality(1 SOMA:hasJointVelocity xsd:double))
+SubClassOf(SOMA:JointState DataMaxCardinality(1 SOMA:hasJointEffort xsd:double))
+
+# Class: SOMA:KineticFrictionAttribute (Kinetic friction attribute)
+
+AnnotationAssertion(rdfs:comment SOMA:KineticFrictionAttribute "Friction that occurs when two touching objects are moving relative to each other.")
+AnnotationAssertion(rdfs:label SOMA:KineticFrictionAttribute "Kinetic friction attribute")
+SubClassOf(SOMA:KineticFrictionAttribute SOMA:FrictionAttribute)
+
+# Class: SOMA:Leg (SOMA:Leg)
+
+AnnotationAssertion(rdfs:comment SOMA:Leg "A limb on which an agent walks or stands.")
+SubClassOf(SOMA:Leg SOMA:Limb)
+
+# Class: SOMA:Limb (SOMA:Limb)
+
+AnnotationAssertion(rdfs:comment SOMA:Limb "An arm or leg of an embodied agent.")
+EquivalentClasses(SOMA:Limb ObjectUnionOf(SOMA:Arm SOMA:Leg))
+SubClassOf(SOMA:Limb SOMA:PhysicalEffector)
+
+# Class: SOMA:Linkage (SOMA:Linkage)
+
+AnnotationAssertion(rdfs:comment SOMA:Linkage "The disposition of an object (the linked object) to establish a connection with others by being linked together.")
+SubClassOf(SOMA:Linkage SOMA:Connectivity)
+SubClassOf(SOMA:Linkage ObjectAllValuesFrom(SOMA:affordsBearer SOMA:LinkedObject))
+SubClassOf(SOMA:Linkage ObjectAllValuesFrom(SOMA:affordsTrigger SOMA:LinkedObject))
+
+# Class: SOMA:LinkedObject (Linked object)
+
+AnnotationAssertion(rdfs:comment SOMA:LinkedObject "An object that is linked to some other object.")
+AnnotationAssertion(rdfs:label SOMA:LinkedObject "Linked object"@en)
+SubClassOf(SOMA:LinkedObject SOMA:ConnectedObject)
+
+# Class: SOMA:Localization (SOMA:Localization)
+
+AnnotationAssertion(rdfs:comment SOMA:Localization "The localization of an object. The region of this quality encodes values to localize the object in a dimensional space, e.g. Euclidean positions that localize the object in Euclidean space.")
+SubClassOf(SOMA:Localization SOMA:Extrinsic)
+SubClassOf(SOMA:Localization ObjectSomeValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegion> <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#SpaceRegion>))
+SubClassOf(SOMA:Localization ObjectAllValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegion> <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#SpaceRegion>))
+
+# Class: SOMA:Location (SOMA:Location)
+
+AnnotationAssertion(rdfs:comment SOMA:Location "A role classifying a location of interest, often specified as a spatial relation between several objects, themselves usually classified by spatial relation roles.")
+SubClassOf(SOMA:Location SOMA:SpatioTemporalRole)
+
+# Class: SOMA:LocatumRole (Locatum role)
+
+AnnotationAssertion(rdfs:comment SOMA:LocatumRole "Denotes the object with primary focal prominence in a spatial or spatio-temporal schema. Terminological variants that appear in the literature on cognitive linguistics include Figure (Talmy 1983) and Trajector (Langacker 1986).")
+AnnotationAssertion(rdfs:label SOMA:LocatumRole "Locatum role"@en)
+SubClassOf(SOMA:LocatumRole SOMA:SpatialRelationRole)
+SubClassOf(SOMA:LocatumRole ObjectAllValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies> <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>))
+
+# Class: SOMA:MassAttribute (Mass attribute)
+
+AnnotationAssertion(rdfs:comment SOMA:MassAttribute "The quantity of matter which a body contains, as measured by its acceleration under given force or by the force exerted on it by a gravitational field.")
+AnnotationAssertion(rdfs:label SOMA:MassAttribute "Mass attribute")
+SubClassOf(SOMA:MassAttribute <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalAttribute>)
+SubClassOf(SOMA:MassAttribute DataExactCardinality(1 SOMA:hasMassValue xsd:double))
+
+# Class: SOMA:Material (SOMA:Material)
+
+AnnotationAssertion(rdfs:comment SOMA:Material "The matter from which a thing is made.")
+SubClassOf(SOMA:Material SOMA:Intrinsic)
+
+# Class: SOMA:MeshShape (Mesh shape)
+
+AnnotationAssertion(rdfs:comment SOMA:MeshShape "A solid geometrical figure described in a mesh file.")
+AnnotationAssertion(rdfs:label SOMA:MeshShape "Mesh shape")
+SubClassOf(SOMA:MeshShape SOMA:ShapeRegion)
+SubClassOf(SOMA:MeshShape DataExactCardinality(1 SOMA:hasFilePath xsd:string))
+SubClassOf(SOMA:MeshShape DataMaxCardinality(1 SOMA:hasShapeScale SOMA:array_double))
+
+# Class: SOMA:MovableJoint (Movable joint)
+
+AnnotationAssertion(rdfs:comment SOMA:MovableJoint "A joint where the two connected links can move relative to each other in some dimension.")
+AnnotationAssertion(rdfs:label SOMA:MovableJoint "Movable joint")
+SubClassOf(SOMA:MovableJoint SOMA:Joint)
+SubClassOf(SOMA:MovableJoint ObjectExactCardinality(1 SOMA:hasJointState SOMA:JointState))
+
+# Class: SOMA:MovedObject (Moved object)
+
+AnnotationAssertion(rdfs:comment SOMA:MovedObject "An object undergoing location change.")
+AnnotationAssertion(rdfs:label SOMA:MovedObject "Moved object"@en)
+SubClassOf(SOMA:MovedObject SOMA:AlteredObject)
+SubClassOf(SOMA:MovedObject ObjectSomeValuesFrom(SOMA:isTriggerDefinedIn ObjectAllValuesFrom(SOMA:describesQuality SOMA:Localization)))
+SubClassOf(SOMA:MovedObject ObjectAllValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies> ObjectSomeValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasQuality> SOMA:Localization)))
+
+# Class: SOMA:NetForce (Net force)
+
+AnnotationAssertion(rdfs:comment SOMA:NetForce "The accumulated force acting upon an object.")
+AnnotationAssertion(rdfs:label SOMA:NetForce "Net force")
+SubClassOf(SOMA:NetForce SOMA:ForceAttribute)
+
+# Class: SOMA:Obstacle (SOMA:Obstacle)
+
+AnnotationAssertion(rdfs:comment SOMA:Obstacle "An object used to restrict access to a protected space or group.")
+SubClassOf(SOMA:Obstacle SOMA:Barrier)
+
+# Class: SOMA:Origin (SOMA:Origin)
+
+AnnotationAssertion(rdfs:comment SOMA:Origin "A role classifying the location where an event or object originated.")
+SubClassOf(SOMA:Origin SOMA:Location)
+
+# Class: SOMA:PathRole (Path role)
+
+AnnotationAssertion(rdfs:comment SOMA:PathRole "A role that classifies the path of a motion.")
+AnnotationAssertion(rdfs:label SOMA:PathRole "Path role"@en)
+SubClassOf(SOMA:PathRole SOMA:SpatioTemporalRole)
+
+# Class: SOMA:Patient (SOMA:Patient)
+
+AnnotationAssertion(rdfs:comment SOMA:Patient "A role classifying an object that undergoes/is the primary object affected by the event.")
+SubClassOf(SOMA:Patient SOMA:EventAdjacentRole)
+
+# Class: SOMA:PerformerRole (Performer role)
+
+AnnotationAssertion(rdfs:comment SOMA:PerformerRole "A role classifying an Agent responsible for performing an Action.
+
+The entity playing an PerformerRole is endowed with sentience and the capacity to deliberately choose actions in pursuit of goals. This distinguishes Agents from other causes that could bring an event about.")
+AnnotationAssertion(rdfs:label SOMA:PerformerRole "Performer role"@en)
+SubClassOf(SOMA:PerformerRole SOMA:CausativeRole)
+SubClassOf(SOMA:PerformerRole ObjectAllValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies> <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Agent>))
+
+# Class: SOMA:PhysicalEffector (Physical effector)
+
+AnnotationAssertion(rdfs:comment SOMA:PhysicalEffector "A functional part belonging to an Agent and which allows that Agent to act upon its surroundings.")
+AnnotationAssertion(rdfs:label SOMA:PhysicalEffector "Physical effector")
+SubClassOf(SOMA:PhysicalEffector SOMA:FunctionalPart)
+SubClassOf(SOMA:PhysicalEffector ObjectSomeValuesFrom(ObjectInverseOf(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasPart>) <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalAgent>))
+
+# Class: SOMA:PhysicalQuality (Physical quality)
+
+AnnotationAssertion(rdfs:comment SOMA:PhysicalQuality "Any aspect of an entity that is dependent on its physical manifestation.")
+AnnotationAssertion(rdfs:label SOMA:PhysicalQuality "Physical quality")
+SubClassOf(SOMA:PhysicalQuality <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality>)
+SubClassOf(SOMA:PhysicalQuality ObjectExactCardinality(1 <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isQualityOf> <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>))
+
+# Class: SOMA:PlanarJoint (Planar joint)
+
+AnnotationAssertion(rdfs:comment SOMA:PlanarJoint "A joint that allows motion in a plane perpendicular to an axis.")
+AnnotationAssertion(rdfs:label SOMA:PlanarJoint "Planar joint")
+SubClassOf(SOMA:PlanarJoint SOMA:MovableJoint)
+
+# Class: SOMA:Pourable (SOMA:Pourable)
+
+AnnotationAssertion(rdfs:comment SOMA:Pourable "The disposition of a fluid or substance which makes it possible to pour it out of a container and into or onto other objects.")
+SubClassOf(SOMA:Pourable SOMA:Disposition)
+SubClassOf(SOMA:Pourable ObjectAllValuesFrom(SOMA:affordsBearer SOMA:PouredObject))
+
+# Class: SOMA:PouredObject (Poured object)
+
+AnnotationAssertion(rdfs:comment SOMA:PouredObject "An object being poured into or onto some other object. A role of some fluid or substance that is the patient of pouring task.")
+AnnotationAssertion(rdfs:label SOMA:PouredObject "Poured object")
+SubClassOf(SOMA:PouredObject SOMA:Patient)
+
+# Class: SOMA:PrehensileEffector (Prehensile effector)
+
+AnnotationAssertion(rdfs:comment SOMA:PrehensileEffector "An effector used to grasp objects, such as a hand of a human, or the long prehensile tail of a monkey.")
+AnnotationAssertion(rdfs:label SOMA:PrehensileEffector "Prehensile effector")
+SubClassOf(SOMA:PrehensileEffector SOMA:PhysicalEffector)
+
+# Class: SOMA:PrismaticJoint (Prismatic joint)
+
+AnnotationAssertion(rdfs:comment SOMA:PrismaticJoint "A sliding joint that slides along an axis, and has a limited range specified by the upper and lower limits.")
+AnnotationAssertion(rdfs:label SOMA:PrismaticJoint "Prismatic joint")
+SubClassOf(SOMA:PrismaticJoint SOMA:MovableJoint)
+SubClassOf(SOMA:PrismaticJoint ObjectExactCardinality(1 SOMA:hasJointLimit SOMA:JointLimit))
+
+# Class: SOMA:Protector (SOMA:Protector)
+
+AnnotationAssertion(rdfs:comment SOMA:Protector "A role classifying an object that protects another by preventing other entities from coming in contact with the protected object.")
+SubClassOf(SOMA:Protector SOMA:Restrictor)
+
+# Class: SOMA:Purification (SOMA:Purification)
+
+AnnotationAssertion(rdfs:comment SOMA:Purification "The disposition of an object (the tool) to change the cleanliness of others.")
+SubClassOf(SOMA:Purification SOMA:Variability)
+SubClassOf(SOMA:Purification ObjectAllValuesFrom(SOMA:affordsSetpoint ObjectAllValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies> ObjectIntersectionOf(SOMA:Clean ObjectAllValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isRegionFor> SOMA:Cleanliness)))))
+SubClassOf(SOMA:Purification ObjectAllValuesFrom(SOMA:affordsTrigger ObjectAllValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies> <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>)))
+
+# Class: SOMA:QualityTransition (Quality transition)
+
+AnnotationAssertion(rdfs:comment SOMA:QualityTransition "todo(DB): added for NEEMs (quale change), but not sure yet about it...")
+AnnotationAssertion(rdfs:label SOMA:QualityTransition "Quality transition"@en)
+SubClassOf(SOMA:QualityTransition <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Transition>)
+
+# Class: SOMA:RecipientRole (Recipent role)
+
+AnnotationAssertion(rdfs:comment SOMA:RecipientRole "A role which classifies an agent who receives an object modified or created by an action.")
+AnnotationAssertion(rdfs:label SOMA:RecipientRole "Recipent role"@en)
+SubClassOf(SOMA:RecipientRole SOMA:BeneficiaryRole)
+
+# Class: SOMA:RedColor (Red color)
+
+AnnotationAssertion(rdfs:comment SOMA:RedColor "A color region with dominant red color.")
+AnnotationAssertion(rdfs:label SOMA:RedColor "Red color")
+SubClassOf(SOMA:RedColor SOMA:ColorRegion)
+
+# Class: SOMA:RelationAdjacentRole (Relation adjacent role)
+
+AnnotationAssertion(rdfs:comment SOMA:RelationAdjacentRole "A role classifying an object participating in some relation, e.g. a participant in a spatial relation or a linguistic fragment in a rhetorical relation to another.")
+AnnotationAssertion(rdfs:label SOMA:RelationAdjacentRole "Relation adjacent role"@en)
+SubClassOf(SOMA:RelationAdjacentRole <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role>)
+
+# Class: SOMA:RelatumRole (Relatum role)
+
+AnnotationAssertion(rdfs:comment SOMA:RelatumRole "Denotes the reference object in a spatial or spatio-temporal schema, i.e. the object with secondary focal prominence. Terminological variants: Ground (Talmy 1983), Landmark (Langacker 1986).")
+AnnotationAssertion(rdfs:label SOMA:RelatumRole "Relatum role"@en)
+SubClassOf(SOMA:RelatumRole SOMA:SpatialRelationRole)
+SubClassOf(SOMA:RelatumRole ObjectAllValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies> <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>))
+
+# Class: SOMA:RelevantPart (Relevant part)
+
+AnnotationAssertion(rdfs:comment SOMA:RelevantPart "Features that are relevant parts of their host, like a bump or an edge.")
+AnnotationAssertion(rdfs:label SOMA:RelevantPart "Relevant part"@en)
+SubClassOf(SOMA:RelevantPart SOMA:Feature)
+
+# Class: SOMA:RemovedObject (Removed object)
+
+AnnotationAssertion(rdfs:comment SOMA:RemovedObject "An object that is removed from another.")
+AnnotationAssertion(rdfs:label SOMA:RemovedObject "Removed object")
+SubClassOf(SOMA:RemovedObject SOMA:ExcludedObject)
+
+# Class: SOMA:ResourceRole (Resource role)
+
+AnnotationAssertion(rdfs:comment SOMA:ResourceRole "A role classifying objects that are useful or even necessary to sustain the unfolding of an event.
+
+Resources are usually not agentive; a different set of roles classifies the agentive participants in actions. Likewise, typically resources do not play causative or goal roles for the event.
+
+Resources are often consumed by their participation in an event, but this need not always be the case. An instrument and capital are examples of resources that are reusable.")
+AnnotationAssertion(rdfs:label SOMA:ResourceRole "Resource role"@en)
+SubClassOf(SOMA:ResourceRole SOMA:EventAdjacentRole)
+
+# Class: SOMA:RestrictedObject (Restricted object)
+
+AnnotationAssertion(rdfs:comment SOMA:RestrictedObject "An object with restrictions to access something.")
+AnnotationAssertion(rdfs:label SOMA:RestrictedObject "Restricted object"@en)
+SubClassOf(SOMA:RestrictedObject SOMA:BlockedObject)
+
+# Class: SOMA:Restrictor (SOMA:Restrictor)
+
+AnnotationAssertion(rdfs:comment SOMA:Restrictor "A role classifying an object used to deny access to some other entity.")
+SubClassOf(SOMA:Restrictor SOMA:Instrument)
+
+# Class: SOMA:ResultRole (Result role)
+
+AnnotationAssertion(rdfs:comment SOMA:ResultRole "A role classifying the object that is the outcome of a creation or modification action or process.")
+AnnotationAssertion(rdfs:label SOMA:ResultRole "Result role"@en)
+SubClassOf(SOMA:ResultRole SOMA:GoalRole)
+
+# Class: SOMA:RevoluteJoint (Revolute joint)
+
+AnnotationAssertion(rdfs:comment SOMA:RevoluteJoint "A hinge joint that rotates along an axis and has a limited range specified by the upper and lower limits.")
+AnnotationAssertion(rdfs:label SOMA:RevoluteJoint "Revolute joint")
+SubClassOf(SOMA:RevoluteJoint SOMA:HingeJoint)
+SubClassOf(SOMA:RevoluteJoint ObjectExactCardinality(1 SOMA:hasJointLimit SOMA:JointLimit))
+
+# Class: SOMA:Room (SOMA:Room)
+
+AnnotationAssertion(rdfs:comment SOMA:Room "Space that can be occupied or where something can be done.")
+SubClassOf(SOMA:Room <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalPlace>)
+
+# Class: SOMA:RoomSurface (Room surface)
+
+AnnotationAssertion(rdfs:comment SOMA:RoomSurface "The surface of a room.")
+AnnotationAssertion(rdfs:label SOMA:RoomSurface "Room surface"@en)
+SubClassOf(SOMA:RoomSurface SOMA:Surface)
+
+# Class: SOMA:SelectedObject (Selected object)
+
+AnnotationAssertion(rdfs:comment SOMA:SelectedObject "An object chosen as the result of some selection task.")
+AnnotationAssertion(rdfs:label SOMA:SelectedObject "Selected object"@en)
+SubClassOf(SOMA:SelectedObject <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role>)
+
+# Class: SOMA:Setpoint (SOMA:Setpoint)
+
+AnnotationAssertion(rdfs:comment SOMA:Setpoint "Classifies some dedicated goal region.")
+SubClassOf(SOMA:Setpoint <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Parameter>)
+
+# Class: SOMA:Shape (SOMA:Shape)
+
+AnnotationAssertion(rdfs:comment SOMA:Shape "The external form, contours, or outline of an object.")
+SubClassOf(SOMA:Shape SOMA:Intrinsic)
+SubClassOf(SOMA:Shape ObjectSomeValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegion> SOMA:ShapeRegion))
+SubClassOf(SOMA:Shape ObjectAllValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegion> SOMA:ShapeRegion))
+
+# Class: SOMA:ShapeRegion (Shape region)
+
+AnnotationAssertion(rdfs:comment SOMA:ShapeRegion "Encodes the shape of an object.
+
+Note that sometimes the shape as actually used for some purpose may be displaced. This is the case, e.g., for robot links which use a mesh file to describe their shape, but the reference pose of the link uses the mesh translated/rotated in the link's local coordinate frame.")
+AnnotationAssertion(rdfs:label SOMA:ShapeRegion "Shape region")
+SubClassOf(SOMA:ShapeRegion <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Region>)
+SubClassOf(SOMA:ShapeRegion ObjectMaxCardinality(1 SOMA:hasSpaceRegion <http://www.ease-crc.org/ont/SOMA.owl#6DPose>))
+
+# Class: SOMA:ShapedObject (Shaped object)
+
+AnnotationAssertion(rdfs:comment SOMA:ShapedObject "An object undergoing shape change.")
+AnnotationAssertion(rdfs:label SOMA:ShapedObject "Shaped object"@en)
+SubClassOf(SOMA:ShapedObject SOMA:AlteredObject)
+SubClassOf(SOMA:ShapedObject ObjectSomeValuesFrom(SOMA:isTriggerDefinedIn ObjectAllValuesFrom(SOMA:describesQuality SOMA:Shape)))
+SubClassOf(SOMA:ShapedObject ObjectAllValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies> ObjectSomeValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasQuality> SOMA:Shape)))
+
+# Class: SOMA:Shaping (SOMA:Shaping)
+
+AnnotationAssertion(rdfs:comment SOMA:Shaping "The disposition of an object (the tool) to change the shape of others.")
+SubClassOf(SOMA:Shaping SOMA:Variability)
+SubClassOf(SOMA:Shaping ObjectAllValuesFrom(SOMA:affordsSetpoint ObjectAllValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies> SOMA:Shape)))
+SubClassOf(SOMA:Shaping ObjectAllValuesFrom(SOMA:affordsTrigger SOMA:ShapedObject))
+
+# Class: SOMA:Sharpness (SOMA:Sharpness)
+
+AnnotationAssertion(rdfs:comment SOMA:Sharpness "The quality of having a thin edge or point that can cut something or make a hole into something. It is worth to note here that the social aspect of sharpness such as the quality of being clear, intelligent etc is not considered as sharpness according to this definition.")
+SubClassOf(SOMA:Sharpness SOMA:Intrinsic)
+
+# Class: SOMA:Shifting (SOMA:Shifting)
+
+AnnotationAssertion(rdfs:comment SOMA:Shifting "The disposition of an object (the tool) to change the localization of others.")
+SubClassOf(SOMA:Shifting SOMA:Variability)
+SubClassOf(SOMA:Shifting ObjectAllValuesFrom(SOMA:affordsSetpoint ObjectAllValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies> SOMA:Localization)))
+SubClassOf(SOMA:Shifting ObjectAllValuesFrom(SOMA:affordsTrigger SOMA:MovedObject))
+
+# Class: SOMA:Size (SOMA:Size)
+
+AnnotationAssertion(rdfs:comment SOMA:Size "The magnitude or dimension of a thing which can be measured as length, width, height, diameter, perimeter, area, volume.")
+SubClassOf(SOMA:Size SOMA:Intrinsic)
+
+# Class: SOMA:SocialQuality (Social quality)
+
+AnnotationAssertion(rdfs:comment SOMA:SocialQuality "Any aspect of an entity that specifies social characteristics.")
+AnnotationAssertion(rdfs:label SOMA:SocialQuality "Social quality")
+SubClassOf(SOMA:SocialQuality <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality>)
+
+# Class: SOMA:SourceMaterialRole (Source material role)
+
+AnnotationAssertion(rdfs:comment SOMA:SourceMaterialRole "A role classifying a substance or object that enters a process of transformation intended to create some other object.")
+AnnotationAssertion(rdfs:label SOMA:SourceMaterialRole "Source material role"@en)
+SubClassOf(SOMA:SourceMaterialRole SOMA:ResourceRole)
+
+# Class: SOMA:SpatialRelationRole (Spatial relation role)
+
+AnnotationAssertion(rdfs:comment SOMA:SpatialRelationRole "Roles classifying entities participating in some spatial relation.")
+AnnotationAssertion(rdfs:label SOMA:SpatialRelationRole "Spatial relation role"@en)
+SubClassOf(SOMA:SpatialRelationRole SOMA:RelationAdjacentRole)
+
+# Class: SOMA:SpatioTemporalRole (Spatio-temporal role)
+
+AnnotationAssertion(rdfs:comment SOMA:SpatioTemporalRole "Roles that classify entities which locate an event or object in space and time.")
+AnnotationAssertion(rdfs:label SOMA:SpatioTemporalRole "Spatio-temporal role"@en)
+SubClassOf(SOMA:SpatioTemporalRole SOMA:EventAdjacentRole)
+
+# Class: SOMA:SphereShape (Sphere shape)
+
+AnnotationAssertion(rdfs:comment SOMA:SphereShape "A round solid figure with every point on its surface equidistant from its centre.")
+AnnotationAssertion(rdfs:label SOMA:SphereShape "Sphere shape")
+SubClassOf(SOMA:SphereShape SOMA:ShapeRegion)
+SubClassOf(SOMA:SphereShape DataExactCardinality(1 SOMA:hasRadius xsd:float))
+
+# Class: SOMA:StaticFrictionAttribute (Static friction attribute)
+
+AnnotationAssertion(rdfs:comment SOMA:StaticFrictionAttribute "Friction between two touching objects that do not move relative to each other.")
+AnnotationAssertion(rdfs:label SOMA:StaticFrictionAttribute "Static friction attribute")
+SubClassOf(SOMA:StaticFrictionAttribute SOMA:FrictionAttribute)
+
+# Class: SOMA:StimulusRole (Stimulus role)
+
+AnnotationAssertion(rdfs:comment SOMA:StimulusRole "A role classifying an object that is perceived by some agent and thus triggers some reaction (e.g., a perception event).")
+AnnotationAssertion(rdfs:label SOMA:StimulusRole "Stimulus role"@en)
+SubClassOf(SOMA:StimulusRole SOMA:CausativeRole)
+
+# Class: SOMA:Storage (SOMA:Storage)
+
+AnnotationAssertion(rdfs:comment SOMA:Storage "The disposition of an object (the container) to store other objects. Storage of an object would facilitate several objectives; such as to store objects in a safe or usual place, to prevent the substances e.g. prevention of milk going bad by storing them in a refrigrator.")
+SubClassOf(SOMA:Storage SOMA:Enclosing)
+SubClassOf(SOMA:Storage ObjectAllValuesFrom(SOMA:affordsTrigger SOMA:StoredObject))
+
+# Class: SOMA:StoredObject (SOMA:StoredObject)
+
+AnnotationAssertion(rdfs:comment SOMA:StoredObject "An object being stored into some other object, usually inside a container.")
+SubClassOf(SOMA:StoredObject SOMA:EnclosedObject)
+
+# Class: SOMA:StructuralDesign (Structural Design)
+
+AnnotationAssertion(rdfs:comment SOMA:StructuralDesign "A design of an object which describes its stability, strength and rigidity, and considers the way in which parts of an object are arranged. 
+        ")
+AnnotationAssertion(rdfs:label SOMA:StructuralDesign "Structural Design")
+SubClassOf(SOMA:StructuralDesign <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Design>)
+
+# Class: SOMA:SupportedObject (Supported object)
+
+AnnotationAssertion(rdfs:comment SOMA:SupportedObject "An object that is supported by some supporter.")
+AnnotationAssertion(rdfs:label SOMA:SupportedObject "Supported object"@en)
+SubClassOf(SOMA:SupportedObject SOMA:ConnectedObject)
+
+# Class: SOMA:Supporter (SOMA:Supporter)
+
+AnnotationAssertion(rdfs:comment SOMA:Supporter "A role classifying an object used to support others.")
+SubClassOf(SOMA:Supporter SOMA:Restrictor)
+
+# Class: SOMA:Surface (SOMA:Surface)
+
+AnnotationAssertion(rdfs:comment SOMA:Surface "The outside part or uppermost layer of something.")
+SubClassOf(SOMA:Surface <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalPlace>)
+
+# Class: SOMA:Temperature (SOMA:Temperature)
+
+AnnotationAssertion(rdfs:comment SOMA:Temperature "The heat present in an object.")
+SubClassOf(SOMA:Temperature SOMA:Intrinsic)
+SubClassOf(SOMA:Temperature ObjectSomeValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegion> SOMA:TemperatureRegion))
+SubClassOf(SOMA:Temperature ObjectAllValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegion> SOMA:TemperatureRegion))
+
+# Class: SOMA:TemperatureRegion (Temperature region)
+
+AnnotationAssertion(rdfs:comment SOMA:TemperatureRegion "Encodes the temperature of an object.")
+AnnotationAssertion(rdfs:label SOMA:TemperatureRegion "Temperature region"@en)
+SubClassOf(SOMA:TemperatureRegion <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Region>)
+
+# Class: SOMA:Tempering (SOMA:Tempering)
+
+AnnotationAssertion(rdfs:comment SOMA:Tempering "The disposition of an object (the tool) to change the temperature of others.")
+SubClassOf(SOMA:Tempering SOMA:Variability)
+SubClassOf(SOMA:Tempering ObjectAllValuesFrom(SOMA:affordsSetpoint ObjectAllValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies> SOMA:Temperature)))
+
+# Class: SOMA:TimeRole (Time role)
+
+AnnotationAssertion(rdfs:comment SOMA:TimeRole "A role filled by a description of the location in time and/or duration of an event or object.")
+AnnotationAssertion(rdfs:label SOMA:TimeRole "Time role"@en)
+SubClassOf(SOMA:TimeRole SOMA:SpatioTemporalRole)
+
+# Class: SOMA:Tool (SOMA:Tool)
+
+AnnotationAssertion(rdfs:comment SOMA:Tool "A role to classify an object used to modify or actuate others.")
+SubClassOf(SOMA:Tool SOMA:Instrument)
+
+# Class: SOMA:Transient (SOMA:Transient)
+
+AnnotationAssertion(rdfs:comment SOMA:Transient "Objects may undergo changes during Processes; however, while the change Process is in operation, one cannot strictly say either the input of the Process still exists, nor that the result exists yet.
+
+A prototypical example is making a pancake on a heater. When PancakeMix is put on the hot plate, it ceases to be PancakeMix-- already, the chemical structure of the substance gets altered-- however it is only after sufficient heating that this object becomes a Pancake.
+
+Transients are the objects undergoing such change processes; they are no longer the initial objects fed into the process, nor are they the objects produced as results.
+
+Instead, a Transient transitionsFrom some initial Object that was fed into a change Process. Typically, a Transient may transitionTo some resulting Object (though not always, some processes simply destroy objects).
+
+It is also possible that a Transient transitionsBack to the initial object. An example is the catalyst in a chemical reaction; another example is a loaf of bread after a slice has been cut off.")
+SubClassOf(SOMA:Transient <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Object>)
+SubClassOf(SOMA:Transient ObjectSomeValuesFrom(SOMA:transitionsFrom <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Object>))
+
+# Class: SOMA:Variability (SOMA:Variability)
+
+AnnotationAssertion(rdfs:comment SOMA:Variability "The disposition of an object (the tool) to change some aspect of others.")
+SubClassOf(SOMA:Variability SOMA:Disposition)
+SubClassOf(SOMA:Variability ObjectAllValuesFrom(SOMA:affordsBearer SOMA:Tool))
+SubClassOf(SOMA:Variability ObjectAllValuesFrom(SOMA:affordsTrigger SOMA:AlteredObject))
+
+# Class: <http://www.ease-crc.org/ont/SOMA.owl#3DPosition> (3D position)
+
+AnnotationAssertion(rdfs:comment <http://www.ease-crc.org/ont/SOMA.owl#3DPosition> "A point in three dimensional space, given as translation.")
+AnnotationAssertion(rdfs:label <http://www.ease-crc.org/ont/SOMA.owl#3DPosition> "3D position"@en)
+SubClassOf(<http://www.ease-crc.org/ont/SOMA.owl#3DPosition> <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#SpaceRegion>)
+SubClassOf(<http://www.ease-crc.org/ont/SOMA.owl#3DPosition> DataExactCardinality(1 SOMA:hasPositionData xsd:string))
+
+# Class: <http://www.ease-crc.org/ont/SOMA.owl#6DPose> (6D pose)
+
+AnnotationAssertion(rdfs:comment <http://www.ease-crc.org/ont/SOMA.owl#6DPose> "A point in three dimensional space, given as translation in a reference coordinate system, and an orientation of a coordinate system centered at that point relative to the reference coordinate system.")
+AnnotationAssertion(rdfs:label <http://www.ease-crc.org/ont/SOMA.owl#6DPose> "6D pose"@en)
+SubClassOf(<http://www.ease-crc.org/ont/SOMA.owl#6DPose> <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#SpaceRegion>)
+SubClassOf(<http://www.ease-crc.org/ont/SOMA.owl#6DPose> DataExactCardinality(1 SOMA:hasPositionData xsd:string))
+
+
+SubObjectPropertyOf(ObjectPropertyChain(SOMA:isBearerDefinedIn <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#describes>) SOMA:isBearerAffordedBy)
+SubObjectPropertyOf(ObjectPropertyChain(SOMA:isDefinedInAffordance <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#describes>) SOMA:isConceptAffordedBy)
+SubObjectPropertyOf(ObjectPropertyChain(SOMA:isPerformerDefinedIn <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#describes>) SOMA:isPerformerAffordedBy)
+SubObjectPropertyOf(ObjectPropertyChain(SOMA:isSetpointDefinedIn <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#describes>) SOMA:isSetpointAffordedBy)
+SubObjectPropertyOf(ObjectPropertyChain(SOMA:isTaskDefinedInAffordance <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#describes>) SOMA:isTaskAffordedBy)
+SubObjectPropertyOf(ObjectPropertyChain(SOMA:isTriggerDefinedIn <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#describes>) SOMA:isTriggerAffordedBy)
+SubObjectPropertyOf(ObjectPropertyChain(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isDescribedBy> SOMA:affordanceDefines) SOMA:affordsConcept)
+SubObjectPropertyOf(ObjectPropertyChain(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isDescribedBy> SOMA:affordanceDefinesTask) SOMA:affordsTask)
+SubObjectPropertyOf(ObjectPropertyChain(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isDescribedBy> SOMA:definesBearer) SOMA:affordsBearer)
+SubObjectPropertyOf(ObjectPropertyChain(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isDescribedBy> SOMA:definesPerformer) SOMA:affordsPerformer)
+SubObjectPropertyOf(ObjectPropertyChain(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isDescribedBy> SOMA:definesSetpoint) SOMA:affordsSetpoint)
+SubObjectPropertyOf(ObjectPropertyChain(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isDescribedBy> SOMA:definesTrigger) SOMA:affordsTrigger)
+)

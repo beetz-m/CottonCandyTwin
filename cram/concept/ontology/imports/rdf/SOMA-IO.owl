@@ -1,0 +1,752 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:swrl="http://www.w3.org/2003/11/swrl#">
+    <owl:Ontology rdf:about="http://www.ease-crc.org/ont/SOMA-IO.owl">
+        <owl:imports rdf:resource="http://www.ease-crc.org/ont/SOMA-ACT.owl"/>
+        <owl:imports rdf:resource="http://www.ease-crc.org/ont/SOMA-OBJ.owl"/>
+        <owl:imports rdf:resource="http://www.ease-crc.org/ont/SOMA-SAY.owl"/>
+        <owl:imports rdf:resource="http://www.ease-crc.org/ont/SOMA.owl"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SOMA-IO.owl defines concepts related to software modules and their interaction.
+
+The concepts defined here are fairly general and cover such topics as interface specifications and communication. Some more specific concepts for the knowledge representation domain are also defined, such as Database and various kinds of reasoners.</comment>
+    </owl:Ontology>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#API_Specification">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#InterfaceSpecification"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">An application programming interface (API) is a way for two or more computer programs to communicate with each other. It is a type of software interface, offering a service to other pieces of software. A document or standard that describes how to build or use an API is called an API specification.
+
+Source: https://en.wikipedia.org/wiki/API</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">API Specification</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Algorithm">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Plan"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">An Algorithm is a finite sequence of well-defined instructions, typically used to solve a class of specific problems or to perform a computation.
+
+From Wikipedia: https://en.wikipedia.org/wiki/Algorithm</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Algorithm</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ArchiveFile">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Digital_File"/>
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Digital_File"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#realizes"/>
+                        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ArchiveText"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">An archive file is a computer file that is composed of one or more files along with metadata.
+
+Source: https://en.wikipedia.org/wiki/Archive_file</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Archive File</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ArchiveFormat">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#File_format"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#givesMeaningTo"/>
+                <owl:allValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ArchiveText"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">An Archive Format is the file format of an archive file.
+
+Source: https://en.wikipedia.org/wiki/Archive_file#Archive_formats</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Archive Format</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ArchiveText">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Structured_Text"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#expresses"/>
+                        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#FileConfiguration"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isGivenMeaningBy"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ArchiveFormat"/>
+            </owl:Restriction>
+        </owl:equivalentClass>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">An Archive is a Structured Text that is composed of one or more Structured Texts along with metadata. Archives are used to collect multiple texts together into a single text for easier portability and storage as Archive Files, or simply to compress text to use less storage space as Computer Files. Archive often store directory structures, error detection and correction information, arbitrary comments, and sometimes use built-in encryption.
+
+Source: https://en.wikipedia.org/wiki/Archive_file</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Archive Text</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Classifier">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#StatisticalReasoner"/>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Classifier</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Client-Server_Specification">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#InterfaceSpecification"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#definesRole"/>
+                        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ClientRole"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#definesRole"/>
+                        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ServerRole"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">An API Secification that describes the well known Client-Server pattern:
+
+The Client-server model is a distributed application structure that partitions tasks or workloads between the providers of a resource or service, called servers, and service requesters, called clients Often clients and servers communicate over a computer network on separate hardware, but both client and server may reside in the same system. A server host runs one or more server programs, which share their resources with clients. A client usually does not share any of its resources, but it requests content or service from a server. Clients, therefore, initiate communication sessions with servers, which await incoming requests. Examples of computer applications that use the client-server model are email, network printing, and the World Wide Web.
+
+Source: https://en.wikipedia.org/wiki/Client%E2%80%93server_model</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Client-Server Specification</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ClientRole">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#InterfaceComponentRole"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isDefinedIn"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Client-Server_Specification"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">The Client-server model is a distributed application structure that partitions tasks or workloads between the providers of a resource or service, called servers, and service requesters, called clients Often clients and servers communicate over a computer network on separate hardware, but both client and server may reside in the same system. A server host runs one or more server programs, which share their resources with clients. A client usually does not share any of its resources, but it requests content or service from a server. Clients, therefore, initiate communication sessions with servers, which await incoming requests. Examples of computer applications that use the client-server model are email, network printing, and the World Wide Web.
+
+Source: https://en.wikipedia.org/wiki/Client%E2%80%93server_model</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Client role</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CognitiveAgent">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Agent"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#SubCognitiveAgent"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">An agent that is capable to act on its own, in contrast to sub-cognitive Agents, that need to have their intentionality bestowed upon some other agent.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">cognitive agent</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Computer_Language">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#FormalLanguage"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A computer language is a formal language used in communication with a computer.
+
+From Wikipedia: https://en.wikipedia.org/wiki/Computer_language</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Computer Language</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Computer_Program">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Structured_Text"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isGivenMeaningBy"/>
+                        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Programming_Language"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Structured_Text"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#expresses"/>
+                        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Algorithm"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">The Program itself (the specific set of instruction in a Programming Language), not the file that it is contained in nor the implemented algorithm!</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Computer program</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Database">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#SoftwareRole"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A Database is a Software that organizes a collection of data stored and and allows for access, usually via some query engine.
+
+Source: https://en.wikipedia.org/wiki/Database</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#DesignedTool"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Digital_File">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#InformationRealization"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:nodeID="bn21"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:nodeID="bn37"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Any file that exists as a digital resource (but not its content), e.g., a text file actually laying on some hard drive, but not the contained text.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Computer File</label>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Digital File</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ExecutableFile">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Digital_File"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#realizes"/>
+                        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Executable_Code"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">An Executable File, sometimes simply referred to as an executable or binary, causes a computer &quot;to perform indicated tasks according to encoded instructions&quot;, as opposed to a data file that must be interpreted (parsed) by a program to be meaningful.
+
+The exact interpretation depends upon the use. &quot;Instructions&quot; is traditionally taken to mean machine code instructions for a physical CPU. In some contexts, a file containing scripting instructions (such as bytecode) may also be considered executable.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Executable File</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ExecutableFormat">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#File_format"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#givesMeaningTo"/>
+                <owl:allValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Executable_Code"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">An Executable Format is a File Format that allows computers to directly execute the content. Examples are MZ (DOS) or COFF.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Executable Format</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ExecutableSoftware">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Software"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasMember"/>
+                        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ExecutableFile"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Executable Software is Software that can directly be executed, in comparison to a Software Library, which might only contain functionality via interfaces, but offers no execution entry point.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Executable Software</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Executable_Code">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Computer_Program"/>
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Computer_Program"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isGivenMeaningBy"/>
+                        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ExecutableFormat"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Executable Code is Code that when compiled / interpreted, has some clear entrance point and can be executed. Note the difference to an Executable File, which is the file that contains such (compiled) code.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Executable Code</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#FaultySoftware">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#SoftwareDiagnosis"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A description of a situation where some software has a bug.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Faulty software</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#FileConfiguration">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Configuration"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasMember"/>
+                        <owl:allValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Digital_File"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A configuration whose members are all files. Used to model, e.g., concrete collections of zip- and jar-files (and so on).</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">File Configuration</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#File_format">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Computer_Language"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A File Format is a standard way that information is encoded for storage in a computer file. It specifies how bits are used to encode information in a digital storage medium.
+
+From Wikipedia: https://en.wikipedia.org/wiki/File_format</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">File Format</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#FormalLanguage">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Language"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#givesMeaningTo"/>
+                <owl:allValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Structured_Text"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A Formal Language consists of words whose letters are taken from an alphabet and are well-formed according to a specific set of rules.
+
+From Wikipedia: https://en.wikipedia.org/wiki/Formal_language</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Formal Language</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#GraphDatabase">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Database"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A Graph Database is a Database that uses graph structures for semantic queries with nodes, edges, and properties to represent and store data.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Graph database</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#GraphQueryLanguage">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#QueryLanguage"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A Query Language that is designed for communication with some Graph Database.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Graph query language</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#HostRole">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#InterfaceComponentRole"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isDefinedIn"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#PluginSpecification"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">In the Plug-in-Host pattern, a Host application provides services which the Plug-in can use, including a way for Plug-ins to register themselves with the Host application and a protocol for the exchange of data withPplug-ins. Plug-ins depend on the services provided by the host application and do not usually work by themselves. Conversely, the host application operates independently of the plug-ins, making it possible for end-users to add and update plug-ins dynamically without needing to make changes to the host application.
+
+Source: https://en.wikipedia.org/wiki/Plug-in_(computing)</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Host role</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Human-readable_Programming_Language">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Programming_Language"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#givesMeaningTo"/>
+                <owl:allValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Source_Code"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A Programming language like Java, Python etc. but not binary machine code.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Human-readable Programming Language</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#IncompatibleSoftware">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#SoftwareDiagnosis"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A description of a situation where two software systems are incompatible with each other.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Incompatible software</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#InterfaceComponentRole">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#SoftwareRole"/>
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SoftwareRole"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isDefinedIn"/>
+                        <owl:allValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#InterfaceSpecification"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Interface component role</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#InterfaceSpecification">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Design"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">The Specification of an Interface between software, computer hardware, peripheral devices, humans and combinations of these.
+
+Source: https://en.wikipedia.org/wiki/Interface_(computing)</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Interface Specification</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#KnowledgeRepresentationLanguage">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Computer_Language"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A Knowledge Representation Language is a Language with fixed semantics and syntax to describe some knowledge. Examples are JSON and the different OWL Profiles.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Knowledge Representation Language</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Language">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#System"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#givesMeaningTo"/>
+                <owl:allValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Text"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A Language is a structured System for communication.
+
+From Wikipedia: https://en.wikipedia.org/wiki/Language</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Language</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Markup_Language">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Computer_Language"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Markup refers to data included in an electronic document which is distinct from the document&apos;s content in that it is typically not included in representations of the document for end users, for example on paper or a computer screen, or in an audio stream. Markup is often used to control the display of the document or to enrich its content to facilitate automated processing. A markup language is a set of rules governing what markup information may be included in a document and how it is combined with the content of the document in a way to facilitate use by humans and computer programs.
+
+From Wikipedia: https://en.wikipedia.org/wiki/Markup_language</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Markup Language</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Natural_Language">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Language"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#givesMeaningTo"/>
+                <owl:allValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Natural_Language_Text"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A Natural Language is any language that has evolved naturally in humans through use and repetition without conscious planning or premeditation.
+
+From Wikipedia: https://en.wikipedia.org/wiki/Natural_language</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Natural Language</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Natural_Language_Text">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Text"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isGivenMeaningBy"/>
+                        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Natural_Language"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A Text in a Natural Language.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Natural language text</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Ontology">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Structured_Text"/>
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Structured_Text"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isGivenMeaningBy"/>
+                        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Ontology_Language"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">An ontology encompasses a representation, formal naming, and definition of the categories, properties, and relations between the concepts, data, and entities that substantiate one, many, or all domains of discourse. More simply, an ontology is a way of showing the properties of a subject area and how they are related, by defining a set of concepts and categories that represent the subject.
+
+From Wikipedia: https://en.wikipedia.org/wiki/Ontology_(information_science)</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Ontology_Language">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#KnowledgeRepresentationLanguage"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#givesMeaningTo"/>
+                <owl:allValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Ontology"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">An Ontology Language is a Knowledge Representation Language to describe knowledge about properties of a subject area and how they are related, by defining a set of concepts and categories that represent the subject using logic. Examples are the different OWL Profiles.
+
+Source: https://en.wikipedia.org/wiki/Ontology_(information_science)</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Ontology Language</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PluginRole">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#InterfaceComponentRole"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isDefinedIn"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#PluginSpecification"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">In the Plug-in-Host pattern, a Host application provides services which the Plug-in can use, including a way for Plug-ins to register themselves with the Host application and a protocol for the exchange of data withPplug-ins. Plug-ins depend on the services provided by the host application and do not usually work by themselves. Conversely, the host application operates independently of the plug-ins, making it possible for end-users to add and update plug-ins dynamically without needing to make changes to the host application.
+
+Source: https://en.wikipedia.org/wiki/Plug-in_(computing)</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Plugin role</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PluginSpecification">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#API_Specification"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#definesRole"/>
+                        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#HostRole"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#definesRole"/>
+                        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#PluginRole"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">The Specification of a Plugin interface defines how a Host and a Plug-in function together and exchange information.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Plugin Specification</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Programming_Language">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Computer_Language"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#givesMeaningTo"/>
+                <owl:allValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Computer_Program"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Any Programming Language, including both human-readable like Java and non-human-readable languages like binary machine code.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Programming language</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#QueryEngine">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#SoftwareRole"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A Query Engine is a Software that can answer some queries.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Query engine</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#QueryLanguage">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Computer_Language"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Query languages, are Computer languages used to make queries in databases and information systems (Source: https://en.wikipedia.org/wiki/Query_language).
+
+Note that despite their name, Query languages typically come with syntax and semantic to not only ask for information, but also provide them, e.g., via SQL Update. In that sense, the term &quot;query&quot; from above refers to any formal object of information exchange with a database.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Query language</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Reasoner">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#SoftwareRole"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A Reasoner is some Software that can infer new, implicit knowlegde from explicitly stated knowledge.
+
+This definition is broad and we consider any System fitting the above description as reasoners. For example, the following can be seen as Reasoners:
+* A simulation, where the explicit knowledge corresponds to the initial situation, and the implicit knowlegde corresponds to the situation that is derived from that by simulating some unfolding processes.
+* A machine learning algorithm, e.g., an image classifier: The explicit knowledge is the visual content of a picture (even down to the pixel), the implicit knowledge is the derived classification.
+* A logic based rule engine, where initial facts are the explicit knowledge, and derived facts are the implicit knowledge.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#RelationalDatabase">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Database"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A Relational Database is a Database based on the relational model of data, which organizes data into one or more tables (or &quot;relations&quot;) of columns and rows, with a unique key identifying each row.
+
+Source: https://en.wikipedia.org/wiki/Relational_database</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Relational database</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#RelationalQueryLanguage">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#QueryLanguage"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A Query Language that is designed for communication with some Relational Database.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Relational query language</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ServerRole">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#InterfaceComponentRole"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isDefinedIn"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Client-Server_Specification"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">The Client-server model is a distributed application structure that partitions tasks or workloads between the providers of a resource or service, called servers, and service requesters, called clients Often clients and servers communicate over a computer network on separate hardware, but both client and server may reside in the same system. A server host runs one or more server programs, which share their resources with clients. A client usually does not share any of its resources, but it requests content or service from a server. Clients, therefore, initiate communication sessions with servers, which await incoming requests. Examples of computer applications that use the client-server model are email, network printing, and the World Wide Web.
+
+Source: https://en.wikipedia.org/wiki/Client%E2%80%93server_model</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Server role</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Simulation_Reasoner">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Reasoner"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A Simulation-based Reasoner is a simulation that is used as a reasoner, where the explicit knowledge corresponds to the initial situation, and the implicit knowlegde corresponds to the situation that is derived from that by simulating some unfolding processes.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Simulation-based reasoner</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Software">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Design"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#describes"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Software_Configuration"/>
+            </owl:Restriction>
+        </subClassOf>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#describes"/>
+                <owl:allValuesFrom>
+                    <owl:Class>
+                        <owl:unionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SoftwareInstance"/>
+                            <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Software_Configuration"/>
+                        </owl:unionOf>
+                    </owl:Class>
+                </owl:allValuesFrom>
+            </owl:Restriction>
+        </subClassOf>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Software</label>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">We see Software as the Design of a DesignedTool: the running instance of said Software. Software as a design also follows the Function-Behaviour-Structure model:
+
+The Function is the purpose or problem solving embodied by the Software Instance, e.g., sorting a list.
+
+The Behaviour are the algoirthms used by the Software Instance, e.g., Bubble Sort.
+
+The Structure is the organization of files, classes, objects and method calls of the program code.</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SoftwareInstance">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#SocialAgent"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#actsFor"/>
+                        <owl:someValuesFrom rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Agent"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </subClassOf>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isDesignedBy"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Software"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A Software instance is an entity to represent the agent that emerges from and while executing software: Some object, that can perform actions and communicate via some interfaces.
+In this view, we see the of an Agent required intentionality its intentionality as bestowed upon the Software instance from the agents who started the program or gave an input (e.g., via a mouse click) to achieve some goal.
+
+Another apporach might be to not model this entity at all and only see Execution of Software as a Process (see, e.g., https://en.wikipedia.org/wiki/Execution_(computing)). However, this would complicate modeling communication between running Software processes.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Software instance</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SoftwareLibrary">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Software"/>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Software Library</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SoftwareRole">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies"/>
+                <owl:allValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Software"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A Software Role is a Role applying to only Software and encoding the purpose of the Software: Its Role within Interface Patterns (e.g. Client vs. Server), its functionality (e.g. Database vs. Comnputer Game), and so on.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Software role</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Software_Configuration">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Configuration"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isDescribedBy"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Software"/>
+            </owl:Restriction>
+        </subClassOf>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Software Configuration</label>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">The part-whole relationship of Software and its components. Every Software has (at least 1) such configuration that exactly describes all Resources that make up the software (i.e., that are needed for the Software to function).
+We support seperate views:
+1. The Software Configuration describes all the necessary files, in which it should also be a File Configuration
+2. It describes a Software Suit, e.g., &apos;Open Office&apos; consists of Writer, Calc, Impress etc. Note that thus. Software can consist of other Software - this pattern may also be useful when describing Software Components, e.g., that some Software relies on a Database Software.
+3. It describes not the files, but their content (the program code), which can also be seen as the part-whole relationship if one abstracts away from the files.</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Source_Code">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Computer_Program"/>
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Computer_Program"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isGivenMeaningBy"/>
+                        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Human-readable_Programming_Language"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">The Source Code itself (the specific set of instruction in a human-readable Programming Language), not the file that it is contained in nor the implemented algorithm!</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Source code</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#StatisticalReasoner">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Reasoner"/>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A Statistical Reasoner is a Reasoner that uses statistical or stochastical data to infer implicit information from explicit information. Examples are Hidden Markov Models and Neural Networks.</label>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Statistical reasoner</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Structured_Text">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Text"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isGivenMeaningBy"/>
+                        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#FormalLanguage"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Any Text that adheres to some rules that are in any way more specific than natural language and that cannot be made sense of without knowing said rules.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Structured text</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SubCognitiveAgent">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Agent"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">An agent that is not capable to act on its own, i.e., that is reactive. Its intentionality needs to be bestowed upon from some other agent, that it acts for.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Sub-cognitive agent</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SymbolicReasoner">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Reasoner"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A Symbolic Reasoner, is a piece of software able to infer logical consequences from a set of asserted facts or axioms.
+
+Source: https://en.wikipedia.org/wiki/Semantic_reasoner</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Symbolic reasoner</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#System">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#SocialObject"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A system is a group of interacting or interrelated elements that act according to a set of rules to form a unified whole.
+
+From Wikipedia: https://en.wikipedia.org/wiki/System</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">System</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Text">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#InformationObject"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isGivenMeaningBy"/>
+                        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Language"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Any Information Object defined using a Language that, when realized through a symbolic writing system, can be read and made sense of.
+
+One may define Text as anything that can be made sense of, including e.g., Speech or Paintings.
+
+However, the argument can be made that Speech or Paintings are not considered Text as they cannot be EXACTLY realized by a symbolic writing system: Speech may loose punctuation, Paintings their original appearance.
+On the other hand, this might not be true as both could be encoded in a binary format that can be interpreted using a language (eg., mp3, png).</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Text</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Triplestore">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#GraphDatabase"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A Triplestore or RDF store is a purpose-built database for the storage and retrieval of triples through semantic queries.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Triplestore</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#UnavailableSoftware">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#SoftwareDiagnosis"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A description of a situation where some software dependency is not available.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Unavailable software</label>
+    </owl:Class>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#encodes">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#associatedWith"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#InformationObject"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#InformationObject"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#SymmetricProperty"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">The relation between two Information Objects that have the same meaning, but are formatted differently. E.g., a text written in UTF-8 encodes a text in a natural writing system (letters) and vice versa.</comment>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#givesMeaningTo">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#associatedWith"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isGivenMeaningBy"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#System"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#InformationObject"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">The relation between a System and Information Object that is given meaning to by said system, e.g., a Language might give meaning to some word, sentence, text, etc., but without the knowledge of said System (Language), the text will not make sense to a reader.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">gives meaning to</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isDesignFor">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#describes"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isDesignedBy"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Design"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Object"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A special relation between a Design and an Object, to indicate that the Design describes a way to construct the Object.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">is design for</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isDesignedBy">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isDescribedBy"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Object"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Design"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A special relation between a Design and an Object, to indicate that the Object is described by the Design.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">is designed by</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isGivenMeaningBy">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#associatedWith"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#InformationObject"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#System"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">The relation between an Information Object and a System that gives meaning to said object, e.g., a word, sentence, text, etc. might be given meaning by a Language and without the knowledge of said System (Language), the text will not make sense to a reader.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">is given meaning by</label>
+    </owl:ObjectProperty>
+    <owl:Restriction rdf:nodeID="bn21">
+        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#realizes"/>
+        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Structured_Text"/>
+    </owl:Restriction>
+    <owl:Axiom>
+        <owl:annotatedSource rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Digital_File"/>
+        <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#subClassOf"/>
+        <owl:annotatedTarget rdf:nodeID="bn21"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">The file content.</comment>
+    </owl:Axiom>
+    <owl:Restriction rdf:nodeID="bn37">
+        <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasNameString"/>
+        <owl:someValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:Restriction>
+    <owl:Axiom>
+        <owl:annotatedSource rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Digital_File"/>
+        <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#subClassOf"/>
+        <owl:annotatedTarget rdf:nodeID="bn37"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">The path of the file on a computer system.</comment>
+    </owl:Axiom>
+    <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#expresses">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isAbout"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isExpressedBy">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isReferenceOf"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasSoftwareAgent">
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#SoftwareInstance"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Agent">
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Generally, agents are goal-directed entities that are able to monitor their environment to select and perform efficient means-ends actions that are available in a given situation to achieve an intended goal. Agency, therefore, implies the ability to perceive and to change the environment of the agent. Crucially, it also entails intentionality to represent the goal-state in the future, equifinal variability to be able to achieve the intended goal-state with different actions in different contexts, and rationality of actions in relation to their goal to produce the most efficient action available (Source: https://en.wikipedia.org/wiki/Agency_(psychology)).
+
+While we follow this definition, we do so loosely: We do not require the intentionality to be sourced by the agent. E.g., a running computer program (see Software instance) can be seen as an actor and therefore participate in Actions, e.g. some Communication Action, while its intentionality has been bestowed upon it from the agents who started the program or gave an input (e.g., via a mouse click) to achieve some goal.</comment>
+    </rdf:Description>
+</rdf:RDF>

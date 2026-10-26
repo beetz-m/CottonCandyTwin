@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:swrl="http://www.w3.org/2003/11/swrl#">
+    <owl:Ontology rdf:about="http://www.ease-crc.org/ont/SOMA-STATE.owl">
+        <owl:imports rdf:resource="http://www.ease-crc.org/ont/SOMA-OBJ.owl"/>
+        <owl:imports rdf:resource="http://www.ease-crc.org/ont/SOMA.owl"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SOMA-STATE.owl defines knowledge related to &quot;States&quot;, which are clasically defined as stative and homeomeric events.
+
+Defines an upper level for a taxonomy of state types and roles that objects can play in states. State types relevant for the robotics domain are defined, such as FunctionalControl, Linkage, Blockage.
+
+The need for &quot;state types&quot; (subclasses of Concept) to connect via dul:classifies to instances of State (itself a subclass of Event) comes from the core SOMA approach, which is to treat the detailed type of an Event as an interpretation of the Event rather than something intrinsic to the Event itself.
+
+Note, the knowledge that states can be changed into other states should be defined in SOMA-ACT.owl, not here. SOMA-STATE.owl should not even indirectly import SOMA-ACT.owl.
+
+This is related to a design decision as to which should be more fundamental, the state or the action. Or in other words, should states be defined (also) in terms of how they result from actions, or should actions be defined (also) in terms of how they connect between states?
+
+These approaches seem equally expressive, we simply chose what felt more intuitive.</comment>
+    </owl:Ontology>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Configuration">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Description"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#describes"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#StateType"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A description of a State. This includes e.g. what acceptable regions for participant objects of the State might look like.
+A configuration of the world is construed to be stable on its own. Outside disturbances may cause state transitions, and the settling into some other, self-stable configuration.
+
+Several other Description subclasses may function as Configurations. For example, a Goal is a description of a desired State. A Norm describes a State that should be maintained. A Diagnosis describes a State that causes certain symptoms etc.
+
+Note a couple of issues here. First one relates to what &quot;configuration&quot; means; in particular, this doesn&apos;t mean a configuration that is unchanging according to any viewpoint. The analogy here is the &quot;macrostate&quot; from thermodynamics: a macrostate with two gases mixed does not mean all gas particles are motionless, but rather that the locations and movements of gas particles are such that any particle is likely to have as many neighbors of one type as the other.
+
+The second issue relates to what is &quot;outside&quot;. The state is a configuration of some, but not necessarily all, Entities in the world. Entities not in this configuration are outside of it.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ConnectedObject"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ContactState">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#StateType"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies"/>
+                <owl:allValuesFrom>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasParticipant"/>
+                        <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">2</owl:minQualifiedCardinality>
+                        <owl:onClass rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject"/>
+                    </owl:Restriction>
+                </owl:allValuesFrom>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Classifies States in which some objects are in contact.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Contact state</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Container"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Containment">
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Classifies States in which an object is placed inside another.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ContainmentState">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#FunctionalControl"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isStateTypeOf"/>
+                <owl:someValuesFrom>
+                    <owl:Class>
+                        <owl:intersectionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Container"/>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies"/>
+                                <owl:allValuesFrom>
+                                    <owl:Restriction>
+                                        <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasDisposition"/>
+                                        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Containment"/>
+                                    </owl:Restriction>
+                                </owl:allValuesFrom>
+                            </owl:Restriction>
+                        </owl:intersectionOf>
+                    </owl:Class>
+                </owl:someValuesFrom>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Classifies States in which an object is kept inside another object.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Containment state</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#FunctionalControl">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#StateType"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isStateTypeOf"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Item"/>
+            </owl:Restriction>
+        </subClassOf>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isStateTypeOf"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Restrictor"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Classifies States in which an object restricts the movement of another, at least partially. Usually neither object is construed to be an agent.
+
+Note that this State focuses on how the interaction of, usually non-agentive, objects restricts their motion. This is in contrast to Blockage/Accessibility states where the placement of some objects influences the access to some of them by a third, usually agentive party.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Functional state</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Item"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#LinkageState">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#StateType"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isStateTypeOf"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#LinkedObject"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Classifies States in which two objects are in a rigid connection, such that the movement of one determines the movement of the other.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Linkage state</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#LinkedObject"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PhysicalAccessibility">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#StateType"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isStateTypeOf"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Item"/>
+            </owl:Restriction>
+        </subClassOf>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isStateTypeOf"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Restrictor"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Classifies States in which an item is placed in a container or protected by a protector, but the placement of the item and container is such that a, usually agentive, accessor may nevertheless reach the item in order to perform a task.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Physical accessibility</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PhysicalBlockage">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#StateType"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isStateTypeOf"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Item"/>
+            </owl:Restriction>
+        </subClassOf>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isStateTypeOf"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Restrictor"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Classifies States in which an object, in general called restrictor, blocks access to an item. A usually agentive accessor, whose access is blocked, may be specified.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Physical blockage</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PhysicalExistence">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#PhysicalState"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A State in which an Entity is said to exist in the physical world.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Physical Existince</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PhysicalState">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#State"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasParticipant"/>
+                <owl:someValuesFrom rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A State describing how Entities in the physical world relate to each other.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Physical state</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Restrictor"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SocialState">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#State"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasParticipant"/>
+                <owl:someValuesFrom rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Agent"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A State which describes how Agents relate to each other.
+
+One can argue that any Social state is a Physical state, since anything the Agents may use to construct a social relationship is made of physical things. The difference is that the physical support of the social relationships is not important here, what matters instead is the nature and content of the social relations, regardless of how they are physically realized.</comment>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Note here a distinction: the Agents involved must be able to communicate. This is because while it is often assumed that an Agent has or aspires to have similar cognitive capacities to a human, This need not be the case; in particular, not all Agents need to maintain theories of mind about each other and therefore not all Agents need to communicate with each other. It is hard to see what sort of meaning Social concepts might have to such Agents, since Social concepts are all about shared constructions.
+
+Note also that the DUL SocialAgent class is not an appropriate restriction however. SocialAgent is one that exists by agreement of PhysicalAgents. For example, a corporation or a nation are SocialAgents. An Agent with the capability to engage socially is not necessarily a DUL SocialAgent.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Social state</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#StateType">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#EventType"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies"/>
+                <owl:allValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#State"/>
+            </owl:Restriction>
+        </subClassOf>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasPart"/>
+                <owl:allValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#StateType"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">An EventType that classifies States.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">State type</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SupportState">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#FunctionalControl"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isStateTypeOf"/>
+                <owl:someValuesFrom>
+                    <owl:Class>
+                        <owl:intersectionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Supporter"/>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies"/>
+                                <owl:allValuesFrom>
+                                    <owl:Restriction>
+                                        <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasDisposition"/>
+                                        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Deposition"/>
+                                    </owl:Restriction>
+                                </owl:allValuesFrom>
+                            </owl:Restriction>
+                        </owl:intersectionOf>
+                    </owl:Class>
+                </owl:someValuesFrom>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Classifies States in which an object is not able to move under gravity because of its placement relative to some other object.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Support state</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Supporter"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Agent"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Description"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#EventType"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasStateType">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isRelatedToConcept"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isStateTypeOf"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#StateType"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation between roles and state types, e.g. &apos;the chair is the supporter of the person sitting on it&apos;.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">has state type</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isStateTypeOf">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isRelatedToConcept"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#StateType"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation between roles and state types, e.g. &apos;the chair is the supporter of the person sitting on it&apos;.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">is state type of</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#definesRole"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#describes"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasPart"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasParticipant"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isDescribedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isRelatedToConcept"/>
+</rdf:RDF>

@@ -1,0 +1,1656 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:swrl="http://www.w3.org/2003/11/swrl#">
+    <owl:Ontology rdf:about="http://www.ease-crc.org/ont/SOMA-ACT.owl">
+        <owl:imports rdf:resource="http://www.ease-crc.org/ont/DUL.owl"/>
+        <owl:imports rdf:resource="http://www.ease-crc.org/ont/SOMA-PROC.owl"/>
+        <owl:imports rdf:resource="http://www.ease-crc.org/ont/SOMA-STATE.owl"/>
+        <owl:imports rdf:resource="http://www.ease-crc.org/ont/SOMA.owl"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SOMA-ACT.owl defines concepts related to actions, i.e. to events driven by some agent participant that executes a task.
+
+This module is chiefly concerned with defining a taxonomy of tasks, including roles and role filler restrictions for these tasks. While this taxonomy contains some fairly general-purpose concepts, it is focused on the robotics domain.
+
+Also defined here are execution state regions, i.e. flags with which to label the status of the execution of an action in terms of whether it is unfolding or completed, and if completed whether completed successfully or not.</comment>
+    </owl:Ontology>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#AbductiveReasoning">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Reasoning"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which the Agent proceeds from some set of statements about a world, and attempts to obtain an explanation for these statements. This explanation is often an inferred cause, such as a final cause or intention. Further, it is often required that there be some guarantees that the explanation produced by AbductiveReasoning have some desirable property, such as being the simplest or most likely given the set of statements to explain.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Abductive reasoning</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Actuating">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#PhysicalTask"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Tasks where the goal is to move an object.
+
+Usually, an agent will use their prehensile effectors, ie. hands, for this purpose, so there is a lot of conceptual overlap between Actuating and Manipulating.
+
+However, these categories are nonetheless distinguished in that there are more ways to actuate objects than simply manipulating them; for example, some tool like a net or frying pan might be used to catch an object.
+
+Another way to look at the difference between Actuating and Manipulating is in what they &quot;profile&quot;, ie. focus on as important.
+
+For Actuating, it is the object&apos;s motion that is paramount.
+
+For Manipulating, it is the movement of the hand(s) and the change in functional relationships (such as kinematic control) between the hand(s) and the manipulated object(s).</comment>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">todo: think about use of tools. force events are generated between artifacts then. also not only the tool would be the &apos;salient artifact&apos; here.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Answer">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Message"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A role that is played by an Information Realization answering some query.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Answer</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#AnsweringTask">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#IllocutionaryTask"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies"/>
+                        <owl:allValuesFrom>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isReactionTo"/>
+                                <owl:allValuesFrom>
+                                    <owl:Restriction>
+                                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isClassifiedBy"/>
+                                        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#CommandingTask"/>
+                                    </owl:Restriction>
+                                </owl:allValuesFrom>
+                            </owl:Restriction>
+                        </owl:allValuesFrom>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isTaskOf"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Answer"/>
+            </owl:Restriction>
+        </owl:equivalentClass>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">An Illocutionary act where the Sender emits some Message to the Receiver as a reaction to some previous Communication task where the Roles where switched, i.e., the Sender (Receiver) of the Answering task has been the Sender (Sender) for the cause.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Answering task</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#AreaSurveying">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Perceiving"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an Agent uses its perception apparatus to gain information about some location.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Area surveying</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Arranging">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Constructing"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an Agent places a collection of objects at some set of relative poses to each other.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Assembling">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Constructing"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an Agent connects some objects such that they form a cohesive whole, and which also imposes constraints on the objects&apos; relative motions. Often, the objects that make up an assemblage can also be separated again.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#AssertionTask">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#IllocutionaryTask"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">An Illocutionary Act where the Sender emits some Message with the intent to change what the Receiver believes to be true in some context. Often, assertions are of facts about the real world, but this need not be the case. Assertions can communicate what someone believes, or refer to a world that is entirely fictional. In all these cases however, assertions are intended to update the listener&apos;s model (of the real world, or of the speaker&apos;s beliefs, or of the fictional world etc.).</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Assertion task</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#AssumingArmPose">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#AssumingPose"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task by which an Agent arranges one/some/all of its arms according to some configuration.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Assuming arm pose</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#AssumingPose">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#PhysicalTask"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task by which an Agent arranges its body, or part of it, according to some configuration.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Assuming pose</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#AttentionShift">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#MentalTask"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A mental task in which the executing Agent shifts his attention from some Information to another.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Attention shifting</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Avoiding">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Navigating"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an Agent moves so as to not enter or pass through a location.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Capability">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Disposition"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isDescribedBy"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass>
+                    <owl:Class>
+                        <owl:intersectionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Affordance"/>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#definesBearer"/>
+                                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                                <owl:onClass rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role"/>
+                            </owl:Restriction>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#definesTrigger"/>
+                                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                                <owl:onClass rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role"/>
+                            </owl:Restriction>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#definesTask"/>
+                                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                                <owl:onClass rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Task"/>
+                            </owl:Restriction>
+                        </owl:intersectionOf>
+                    </owl:Class>
+                </owl:onClass>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Capability</comment>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The tendency of an object (the bearer) to be able to perform certain tasks together with others (the triggers) and in which the Bearer is the executor of the associated Task and will therefore usually be an Agent.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Catching">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Actuating"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#PickingUp"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task by which an Agent stops a moving object and gains kinematic control over it, usually by grasping.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Channel">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#PathRole"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasTask"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#CommunicationTask"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A Channel in a Communication Task is the path of travel by a Message, e.g., via WLAN, air (in the case of a Message classifying soundwaves) or a telephone cable.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Channel</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CheckingObjectPresence">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Perceiving"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task by which an Agent uses its sensors to check for the presence of a specific object and to obtain some other information about it, e.g. pose.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Checking object presence</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Cleaning">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ModifyingPhysicalObject"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isTaskAffordedBy"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Purification"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">This task in which an agent restores all the objects to their destined locations, wiping a specific object</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Closing">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Actuating"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Delivering"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Fetching"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Lifting"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Opening"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Pulling"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Pushing"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Squeezing"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an Agent manipulates a container so as to block access to its interior.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CommandingTask">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#IllocutionaryTask"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">An Illocutionary act where the Sender emits some Message with the intent to cause the Receiver to perform some action.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Commanding task</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CommunicationAction">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Action"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasParticipant"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#LinguisticObject"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">An action in which an Agent uses some actuator for communication purposes.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Locutionary action</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CommunicationReport">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#CommunicationTask"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an Agent endeavors to describe truthfully some state of affairs.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Communication report</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CommunicationTask">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Task"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isTaskOf"/>
+                        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Channel"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isTaskOf"/>
+                        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Message"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isTaskOf"/>
+                        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Receiver"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isTaskOf"/>
+                        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Sender"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </subClassOf>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies"/>
+                <owl:allValuesFrom>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasParticipant"/>
+                        <owl:allValuesFrom>
+                            <owl:Class>
+                                <owl:unionOf rdf:parseType="Collection">
+                                    <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Agent"/>
+                                    <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#SocialObject"/>
+                                </owl:unionOf>
+                            </owl:Class>
+                        </owl:allValuesFrom>
+                    </owl:Restriction>
+                </owl:allValuesFrom>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A Task in which two or more Agents exchange information. A CommunicationTask classifies only Events that have only Agents and Social objects as participants.
+
+Of course, the means of exchange is Physical, however this concept is to classify events for which we are not interested in the physical substrate, but rather who communicated and what the information content was.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Communication task</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CommunicationTopic">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ResourceRole"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies"/>
+                <owl:allValuesFrom>
+                    <owl:Class>
+                        <owl:intersectionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#SocialObject"/>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isParticipantIn"/>
+                                <owl:someValuesFrom>
+                                    <owl:Restriction>
+                                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isClassifiedBy"/>
+                                        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#CommunicationTask"/>
+                                    </owl:Restriction>
+                                </owl:someValuesFrom>
+                            </owl:Restriction>
+                        </owl:intersectionOf>
+                    </owl:Class>
+                </owl:allValuesFrom>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A role that appears in communication tasks, and indicates what the communication is about.
+
+CommunicationTopic can only classify a Social object that participates in an Action that is classified as (the execution of) a CommunicationTask.
+
+Note that classifies here is used in the plays-role sense. This isn&apos;t to say that the social object, ie the information exchanged in the communication, is an instance of the topic. Rather, the topic role refers to what the information is about.
+
+For example, if the topic of a communication is flowers, this does not mean the words themselves are flowers, merely that, in some sense, they are about flowers.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Communication topic</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Conclusion">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#CreatedObject"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Knowledge"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">An object that is derived from some premise using some inference rules.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Conclusions</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Constructing">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#PhysicalTask"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ModifyingPhysicalObject"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A task in which an Agent creates a new physical object.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Cutting">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ModifyingPhysicalObject"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The goal of this task is to separate one or more pieces from some target object by means of cutting into its constituent material. Unlike a disassembly, a cut is usually not easily reversible.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Deciding">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DerivingInformation"/>
+        <isDefinedBy xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A mental task in where an agent makes some decision, that is, selecting some Information object; usually on the basis of others.</isDefinedBy>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Deciding</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#DeductiveReasoning">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Reasoning"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which the Agent, using general logical principles that it considers logically valid, applied to premises that it considers logically true, arrives at conclusions that it considers logically certain.
+
+Deduction is often explained as starting from the &quot;general&quot; (some property X is known about all members of a set S), applying it to the &quot;specific&quot; (some Entity Y is known to belong to set S), to arrive at a specialization of the general property (X applies to Y).</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Deductive reasoning</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Delivering">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Actuating"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isTaskAffordedBy"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Shifting"/>
+            </owl:Restriction>
+        </subClassOf>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Fetching"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Lifting"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Opening"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Pulling"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Pushing"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Squeezing"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an Agent brings an item that the Agent already carries to a specified target.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#DerivingInformation">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#InformationAcquisition"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isTaskOfInputRole"/>
+                        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Premise"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isTaskOfOutputRole"/>
+                        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Conclusion"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </subClassOf>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Deriving information</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Dicing">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Cutting"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A particular kind of cutting where the goal is to produce small pieces out of some object or material. Unlike slices, the pieces to be obtained do not have one or two dimensions being more prominent than others. &quot;Dice&quot;, the pieces dicing results in, are approximately cubic.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Discourse">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#CommunicationTask"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A mental task, in which two or more agents discuss some topic via multiple Illocutionary acts, which are part of this task.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Discourse</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Distancing">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Navigating"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an Agent increases its distance from some location.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Dreaming">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DerivingInformation"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Any form of re-processing episodic memories for long-term memory by natural or aritifical agents.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Dropping">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Actuating"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Placing"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The dropped object falls mainly under the influence of gravity. However, an agent may also drop something during navigation. The difference to &apos;Throwing&apos; is that there is no &apos;Limb motion&apos; which is a constitiuent of the action.
+
+&apos;Dropping&apos; is intentional. Dropping by accident may not has a phase to release the grasp. It could be that the grasp was not strong enough and the objects &quot;slips&quot; away.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#EndEffectorPositioning">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Manipulating"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an Agent places its end effectors at particular poses.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">End effector positioning</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ExecutionStateRegion">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Region"/>
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:oneOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ExecutionState_Active"/>
+                    <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ExecutionState_Cancelled"/>
+                    <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ExecutionState_Failed"/>
+                    <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ExecutionState_Paused"/>
+                    <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ExecutionState_Pending"/>
+                    <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ExecutionState_Succeeded"/>
+                </owl:oneOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A region containing labels that describe different states in the evolution/completion of a task execution.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Execution state region</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Fetching">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#PhysicalAcquiring"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Lifting"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Opening"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Pulling"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Pushing"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Squeezing"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an Agent retrieves an object from a particular location, which puts the object under the Agent&apos;s control, who can now e.g. transport the object somewhere else; this task may include repositioning the Agent to better reach the object. Note that while in normal linguistic use fetch can mean transport, we use it here to refer only to (a part of) the first stage of transport.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Flipping">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Actuating"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isTaskAffordedBy"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Shifting"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The task in which the agent turns an object over by using a tool or by manipulating</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Focusing">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#AttentionShift"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The mental task to center the attention to some subject.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Focusing</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ForgettingIncorrectInformation">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#InformationDismissal"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A mental task in which the executing agent aims to correct its present information by deleting an incorrect information.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Forgetting incorrect information</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ForgettingIrrelevantInformation">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#InformationDismissal"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A mental task in which the executing agent aims to clean up its present information by deleting an irrelevant information.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Forgetting irrelevant information</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#GetTaskParameter">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Planning"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an Agent computes some parameter relevant for another task.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Get task parameter</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#GraspTransfer">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Grasping"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an Agent switches which of its end effectors holds an object.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Grasp transfer</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Grasping">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Manipulating"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Releasing"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an Agent uses its end effectors to grasp an object, thus gaining kinematic control over it.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Holding">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Manipulating"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task by which an Agent keeps an object over which it has kinematic control, typically via grasping, at some specified pose.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#IllocutionaryTask">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CommunicationTask"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies"/>
+                        <owl:allValuesFrom>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasParticipant"/>
+                                <owl:allValuesFrom>
+                                    <owl:Class>
+                                        <owl:unionOf rdf:parseType="Collection">
+                                            <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Agent"/>
+                                            <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#SocialObject"/>
+                                        </owl:unionOf>
+                                    </owl:Class>
+                                </owl:allValuesFrom>
+                            </owl:Restriction>
+                        </owl:allValuesFrom>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A task which is executed by a Locution action: A Locution is what was said and meant, Illocution is what was done.
+
+When somebody says &quot;Is there any salt?&quot; at the dinner table, the illocutionary act is a request: &quot;please give me some salt&quot; even though the locutionary act (the literal sentence) was to ask a question about the presence of salt.
+
+Source: https://en.wikipedia.org/wiki/Illocutionary_act</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Illocutionary act</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Imagining">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#InformationAcquisition"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A Mental task in which the Agent constructs a mental representation of a possible world. An Agent performing an Imagining activity does not aim to construct a representation that aspires to be faithful to some past, present, or future state of affairs of the actual world it is embodied in.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#InductiveReasoning">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Reasoning"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which the Agent endeavors to accumulate confidence in some general statement about the world, by gathering instances in which this general statement appears to apply. Note that perfect confidence can never be guaranteed by induction.
+
+Induction is often described as a move from many &quot;specifics&quot; (swan A is white, swan B is white, swan C is white, ...) to the &quot;general&quot; (all swans are white).</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Inductive resoning</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#InferenceRules">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Knowledge"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The role of an object that is used to derive a conclusion from some premises.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Inference rules</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#InformationAcquisition">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#MentalTask"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isTaskOfOutputRole"/>
+                        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Knowledge"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A mental task in which the executing agent acquires some information that was not immediately available to it before.
+A synonym might be &quot;Thinking&quot;.
+
+Examples include recalling knowledge or inferring some information from other information.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Information acquisition</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#InformationDismissal">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#MentalTask"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isTaskOfInputRole"/>
+                <owl:someValuesFrom>
+                    <owl:Class>
+                        <owl:intersectionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ExcludedObject"/>
+                            <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Knowledge"/>
+                        </owl:intersectionOf>
+                    </owl:Class>
+                </owl:someValuesFrom>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A mental task in which the executing agent dismisses some information.
+
+An example is forgetting some knowledge.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Information dismissal</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#InformationRetrieval">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#InformationAcquisition"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isTaskOfOutputRole"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Knowledge"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A mental task in which an Agent recalls some knowledge that has been memorized previously.
+
+Examples include a human remembering some information or a computer retrieving knowledge from a database.
+
+The difference to Remembering is that for this Task, we are concerned with knowledge about a previous world state. Memory Retrieval is more general in the sense that it also includes the retrieval of learned facts and rules.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Information retrieval</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#InformationStorage">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#MentalTask"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isTaskOfInputRole"/>
+                <owl:someValuesFrom>
+                    <owl:Class>
+                        <owl:intersectionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Knowledge"/>
+                            <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#StoredObject"/>
+                        </owl:intersectionOf>
+                    </owl:Class>
+                </owl:someValuesFrom>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A mental task in which the executing agent persists some information for later recall, if necessary.
+
+An example is learning new knowledge.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Information storage</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Instructions">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Item"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The role of a plan to follow during an execution task.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Instructions</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Interpreting">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DerivingInformation"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A task in which an Agent interpretes some information, e.g., makes sense of some incoming message or its visible surroundings.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Interpreting</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Introspecting">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#InformationAcquisition"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A mentalk task in which an Agent gathers and processes information about its own mental tasks via, e.g., Meta Reasoning.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Introspecting</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Knowledge">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Item"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Labeling">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Interpreting"/>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an agent annotates some objects with names, e.g., labeling the feeling of a tip-of-the-tongue event as such.</label>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Labeling</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Learning">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#InformationStorage"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The mental task of storing information for later use.
+
+This is more general than memorizing, as the later only captures declarative knowledge.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Learning</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Lifting">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Actuating"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Opening"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Pulling"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Pushing"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Squeezing"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">todo: how to distinguish from e.g. &apos;pushing from the table&apos;</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#LinguisticObject">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#InformationObject"/>
+        <isDefinedBy xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/IOLite.owl"/>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Linguistic object</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#LookingAt">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#PhysicalTask"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">better: Gazing</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#LookingFor">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Perceiving"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task by which an Agent uses its perception apparatus to check for the presence of an object in some specified area.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Looking for</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Lowering">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Actuating"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an Agent reduces the elevation at which they hold an item.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Manipulating">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#PhysicalTask"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies"/>
+                <owl:allValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#PhysicalAction"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Tasks where the goal is to move the prehensile effectors, ie. hands, of an agent so as to achieve some spatial or functional relation with some manipulated object. 
+
+Spatial relations refer to positioning the hands in certain ways relative to the manipulated object, for example nearing or distancing them, or aligning them with some relevant axis.
+
+Functional relations here refer to interactions between the hands and manipulated object which constrain the possible behavior of the object. Examples of functional relations in manipulation are support and kinematic control.
+
+Note that manipulation tasks are usually performed with the intention of moving an object in some way, so there is a large conceptual overlap between Manipulating and Actuating.
+
+However these concepts are nonetheless distinguished in what they &quot;profile&quot;, ie. what they focus on as particularly important.
+
+Actuating profiles the movement of the object itself.
+
+Manipulating profiles the movement of the hands and the functional relations, such as kinematic control, they establish with the manipulated object.
+
+Note: we employ Manipulating here in its literal, original sense, of using hands for some purpose, and not in the metaphorical sense of exerting psychological pressure on someone.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Memorizing">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Learning"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">An atomic mental task in which an Agent saves some (declarative) information for later retrieval.
+
+Examples include a student learning vocabularies or a computer saving some information to a database.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Memorizing</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#MentalAction">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Action"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasParticipant"/>
+                <owl:allValuesFrom>
+                    <owl:Class>
+                        <owl:unionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Agent"/>
+                            <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#SocialObject"/>
+                        </owl:unionOf>
+                    </owl:Class>
+                </owl:allValuesFrom>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">An Event construed as the Agent participant affecting Entities that are representations of actual or potential Entities or Events in the physical world in which the Agent is embodied. These representations are maintained by the Agent participant in the &apos;Mental action&apos; event.
+
+One could argue Mental actions are all Physical actions, because anything the Agent may use to maintain such representations will be physical things, However, we make this distinction because for Mental actions it is less important to consider the physical support of the representation and how it changes, and more important to track how the information content of the representation changes.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Mental action</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#MentalTask">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Task"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies"/>
+                <owl:allValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#MentalAction"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A Task classifying some MentalAction, that is, an Action through which an Agent manipulates representations stored in its own cognition.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Mental task</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Message">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Item"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasTask"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#CommunicationTask"/>
+            </owl:Restriction>
+        </subClassOf>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies"/>
+                <owl:allValuesFrom rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#InformationRealization"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A message is a discrete unit of communication intended by the source for consumption by some recipient or group of recipients (Source: https://en.wikipedia.org/wiki/Message).
+
+Note that the Role Message classifies the Information Realization, not the content.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Message</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#MetaCognitionEvaluationTopic">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#MetaCognitionTopic"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A topic used while an Agent describes its own cognitive processes and acions to evaluate them according to some metric.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Meta cognition evaluation topic</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#MetaCognitionMemoryTopic">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#MetaCognitionTopic"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A topic used while an Agent describes its own cognitive processes and actions, and which covers descriptions of what memories are involved in them.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Meta cognition memory topic</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#MetaCognitionPlanningTopic">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#MetaCognitionTopic"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A topic used while an Agent describes the planning it does for its own cognitive processes and actions.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Meta cognition planning topic</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#MetaCognitionTopic">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ThinkAloudTopic"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A topic for a description that an Agent might make of its own cognitive processes and actions.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#MetacognitiveControlling">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#MentalTask"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The concious or subconcious task to control the own mental processes, e.g., evaluating them and instructing the own mind to shift attention.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Metacognitive controlling</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#MetacognitiveMonitoring">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Introspecting"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The task to label the processes and states of the own mind, e.g., to interprete the feeling of knowing an information but not being able to retrieve it at the moment as a tip-of-the-tongue event.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Metacognitive monitoring</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Mixing">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Constructing"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task by which an Agent combines several entities, such that the combination is difficult or in practice impossible to reverse.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ModifyingPhysicalObject">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#PhysicalTask"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Superconcept for tasks that involve affecting some state that an object is in (e.g. where it is located), without creating or destroying the object.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Modifying physical object</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#MonitoringJointState">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Proprioceiving"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which the Agent keeps track of the physical state of its joints, e.g. their positions, velocities, efforts.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Monitoring joint state</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#MovingTo">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Navigating"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an Agent moves towards a location.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Navigating">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#PhysicalTask"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an Agent moves through space so as to arrive at some location, follow some path, or increase its distance from some location or other entity. Often, navigation involves finding paths around obstacles and forbidden areas.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#NonmanifestedSituation">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Situation"/>
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Situation"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl/manifestsIn"/>
+                        <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">0</owl:qualifiedCardinality>
+                        <owl:onClass rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A Situation which does not manifest in any event.
+
+The main use case for this is to represent expectations that are not met, e.g. unfulfilled post-conditions of an action. An action with unmet postconditions is then a failure.
+
+Because of open world semantics of DL, the default assumption for a Situation individual with no &quot;manifests in&quot; relations is simply that we don&apos;t know yet whether that Situation is manifested and if so by what Event.
+
+As such, an explicit assertion is needed to make a Situation a nonmanifested one: either declare that individual&apos;s type NonmanifestedSituation, or assert that it has 0 manifestsIn relations.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Nonmanifested situation</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Opening">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Actuating"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Pulling"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Pushing"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Squeezing"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an Agent manipulates a container so as to expose its interior.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Orienting">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Positioning"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an Agent adjusts the orientation of an object.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ParkingArms">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#AssumingArmPose"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task by which an Agent arranges its arms in such a way so as to minimize opportunities for collision while moving through the environment.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Parking arms</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Perceiving">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#InformationAcquisition"/>
+                    <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PhysicalTask"/>
+                </owl:intersectionOf>
+            </owl:Class>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which the Agent gathers and interprets sensor information about its surroundings.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PhysicalAcquiring">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ModifyingPhysicalObject"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The goal of this task is to make some object usable for other tasks, by possibly changing its physical state. Usually, it overlaps some task that describes the manner in which an object is obtained.
+
+The prototypical example of PhysicalAcquiring is picking up an object.
+
+Note that buying an object is NOT PhysicalAcquiring. Buying, or ownership transfer in general, also involves an adjustment in social structures describing ownership.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Physical acquiring</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PhysicalAction">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Action"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">An action performed by an agent by using its body in some way to interact with the physical world, e.g., through manipulation of objects, or by changing the posture.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Physical action</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PhysicalTask">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Task"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies"/>
+                <owl:allValuesFrom>
+                    <owl:Class>
+                        <owl:intersectionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Action"/>
+                            <owl:Class>
+                                <owl:unionOf rdf:parseType="Collection">
+                                    <owl:Restriction>
+                                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasParticipant"/>
+                                        <owl:someValuesFrom rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalAgent"/>
+                                    </owl:Restriction>
+                                    <owl:Restriction>
+                                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasParticipant"/>
+                                        <owl:someValuesFrom rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject"/>
+                                    </owl:Restriction>
+                                </owl:unionOf>
+                            </owl:Class>
+                        </owl:intersectionOf>
+                    </owl:Class>
+                </owl:allValuesFrom>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which a PhysicalAgent affects some physical object.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Physical task</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PickingUp">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Manipulating"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which the Agent uses one or more of its grippers to grasp a usually stationary object.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Placing">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#PhysicalTask"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Distinguished from Positioning in that this task is more about placing an object at a functionally specified location (e.g., place the cup on the table) as opposed to positioning an object at a location defined by coordinates or a region of coordinates (position the cup at xyz).</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Planning">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Deciding"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isTaskOf"/>
+                <owl:someValuesFrom>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies"/>
+                        <owl:someValuesFrom rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Plan"/>
+                    </owl:Restriction>
+                </owl:someValuesFrom>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A Mental task in which the Agent endeavours to create a sequence of actions for itself which, if followed, will bring about a particular state of affairs in the world. This particular state of affairs is known to the agent and is often called the goal state of the planning action. Planning commits itself to feasibility: the Agent attempts to find a sequence of actions that it believes it will actually be able to perform.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Positioning">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Actuating"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an Agent places an object at a particular position.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Pouring">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Actuating"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isTaskAffordedBy"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Pourable"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an agent lets liquid substance to flow out of an object. The agent has a kinematic control over the object.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PouringInto">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Pouring"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The task in which the agent pours the substance into another object.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pouring into</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PouringOnto">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Pouring"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The task in which an agent pours the substance on top of an object</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pouring onto</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Prediction">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Prospecting"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A Mental task in which the Agent endeavours to construct a representation of a future state of the world. Prediction commits itself to some degree of accuracy: the Agent believes that eventually something similar to the predicted state will come to pass.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Predicting</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Premise">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Knowledge"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The role of an object that is used to infer some conclusion via some inference rules.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Premises</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Proprioceiving">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#PhysicalTask"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which the Agent gathers and interprets sensor information about itself.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Prospecting">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DerivingInformation"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A Mental task in which an Agent endeavours to construct a representation of a future state of affairs of the world it is embodied in.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Pulling">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Actuating"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Pushing"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Squeezing"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an Agent moves an object in a direction loosely from the object&apos;s center of mass towards the contact point between agent and object.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Pushing">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Actuating"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Squeezing"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an Agent moves an object in a direction loosely from the the contact point between agent and object towards object&apos;s center of mass. todo: define subclass &apos;PushingOver&apos;? Would we expect two distinct contacts with the same surface then?</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PushingAway">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Pushing"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#PushingDown"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an Agent pushes an object in front of themselves.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Pushing away</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PushingDown">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Pushing"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an Agent pushes an object downwards.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Pushing down</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PuttingDown">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Manipulating"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an Agent puts down an object they have kinematic control over, e.g. a grasped object.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Query">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Message"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A role played by some Information Realization that carries meaning, where this meaning is a query of some sort.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Query</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#QueryAnsweringTask">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#AnsweringTask"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies"/>
+                        <owl:allValuesFrom>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isReactionTo"/>
+                                <owl:allValuesFrom>
+                                    <owl:Restriction>
+                                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isClassifiedBy"/>
+                                        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#QueryingTask"/>
+                                    </owl:Restriction>
+                                </owl:allValuesFrom>
+                            </owl:Restriction>
+                        </owl:allValuesFrom>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">An Answering task that is the reaction to some Query answering task.
+
+In a lot of cases, such a task is also an Assertion task, e.g., in the following discourse:
+
+&quot;How will the weather be tomorrow?&quot;
+&quot;It is going to rain in the morning.&quot;
+
+However, sometimes this might be not the case, e.g., with counterquestions.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Query answering task</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#QueryingTask">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#IllocutionaryTask"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isTaskOf"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Query"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">An Illocutionary act where the Sender of the Message does so to trigger the Receiver to return some information that is specified within the content of the Message.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Querying task</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Reaching">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#EndEffectorPositioning"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Retracting"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an Agent moves one or more of its arms towards a location or object.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Reasoning">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DerivingInformation"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A Mental task in which an Agent endeavours to obtain new knowledge from knowledge it already possesses.</comment>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">todo: a taxonomy of reasoning is not trivial. Classical theory distinguishes Deductive, Inductive, and with a stretch Abductive reasoning. However, modern practice distinguishes other categories that overlap with these, e.g. Probabilistic and Non-monotonic.
+
+Both Abductive and Inductive inference may, and often do, use Probabilistic methods. Probabilistic inference is, by its nature, most opposed to Deductive inference which, classically, requires logical certainty.
+
+Any of the Abductive/Deductive/Inductive triad can be further affected by the Monotone/Non-monotone distinction. There are preferences (Inductive and Abductive reasoning is probably most often non-monotonic; most of Deductive reasoning is probably done in monotonic formalisms), but it is certainly the case that, e.g., non-monotone Deduction is possible.
+
+Note, this classification has nothing to do with reasoning domain (e.g. SpatialReasoning, TemporalReasoning, ...) and merely with techniques/logical-mathematical underpinnings.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Receiver">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ExperiencerRole"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasTask"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#CommunicationTask"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">The role played by an Agent in a Communication Task that perceives and interpretes some incoming Message.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Receiver</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Releasing">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Manipulating"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an agent relinquishes its kinematic control over an object, typically by releasing it from its grasp.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Remembering">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#InformationRetrieval"/>
+                    <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Retrospecting"/>
+                </owl:intersectionOf>
+            </owl:Class>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A Mental task in which the Agent recalls a record of a previous state of affairs in the world.
+
+The Agent must have witnessed and memorized this state of affairs in order to record it. Remembering commits itself to accuracy: the Agent attempts to reconstruct as accurate a record as it can. Note, this does not mean the Agent will communicate the recollection accurately.
+
+The difference to Memory retrieval is that for this Task, we are concerned with knowledge about a previous world state. Memory Retrieval is more general in the sense that it also includes the retrieval of learned facts and rules.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Replanning">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Planning"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A mental task, in which an agent reconfigures some plan that has been put together before.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Replanning</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Retracting">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#EndEffectorPositioning"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an Agent moves its arms away from a location.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Retrospecting">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#InformationAcquisition"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A Mental task in which an Agent endeavors to construct a representation of a past state of affairs of the world it is embodied in.</comment>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Done by analogy with Prospecting. Currently mono-subcategory, but perhaps we might find more.
+
+As an example, a kind of Abductive reasoning would fit here: reconstruction, in which the agent attempts to create a representation of a past state of affairs which the agent has not actually observed, based on traces and clues surviving to the present.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SelectingItem">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#GetTaskParameter"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isTaskOfOutputRole"/>
+                <owl:someValuesFrom>
+                    <owl:Class>
+                        <owl:intersectionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SelectedObject"/>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies"/>
+                                <owl:allValuesFrom rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject"/>
+                            </owl:Restriction>
+                        </owl:intersectionOf>
+                    </owl:Class>
+                </owl:someValuesFrom>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an Agent selects some object to use for a subsequent task.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Selecting item</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SelfReflection">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#MetacognitiveControlling"/>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Self-reflection</label>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The task of evaluating the personal cognitive processes.</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Sender">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#PerformerRole"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasTask"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#CommunicationTask"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">The Role played by an Agent in a Communication Task that emits some Information Realization with the purpose of percipience by some Receiver.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Sender</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Serving">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Delivering"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies"/>
+                <owl:allValuesFrom>
+                    <owl:Class>
+                        <owl:intersectionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Action"/>
+                            <owl:Class>
+                                <owl:unionOf rdf:parseType="Collection">
+                                    <owl:Restriction>
+                                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasParticipant"/>
+                                        <owl:someValuesFrom rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalAgent"/>
+                                    </owl:Restriction>
+                                    <owl:Restriction>
+                                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasParticipant"/>
+                                        <owl:someValuesFrom rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject"/>
+                                    </owl:Restriction>
+                                </owl:unionOf>
+                            </owl:Class>
+                        </owl:intersectionOf>
+                    </owl:Class>
+                </owl:allValuesFrom>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The task in which the agent delivers an object to a physical agent</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SettingGripper">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#AssumingPose"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task by which an Agent arranges one/some/all of its grippers in some configuration.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Setting gripper</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Simulating">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Prospecting"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A Mental task in which the Agent endeavours to create representations of a sequence of states of affairs in the world. Simulation commits itself to some degree of transition accuracy: supposing the actual state of the world was the initial state of the simulation, the world state and simulation state should evolve to some degree similarly.
+
+Simulation does not commit itself to state accuracy: the initial state of the simulation is not constrained to be faithful to the actual state of the world in which the Agent is embodied. Counterfactual simulation (&quot;what would happen if--?&quot;) is possible.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SituationTransition">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Transition"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A transition between two situations, usually brought about by the Action of some Agent.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Situation transition</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Slicing">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Cutting"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A particular kind of cutting where the goal is to produce slices from some solid object.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Squeezing">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Actuating"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an Agent applies pressure to an object they have in their grasp.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Stirring">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Mixing"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isTaskAffordedBy"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Composing"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an agent dissolves small particles like sugar or salt in fluid</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ThinkAloud">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#CommunicationReport"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an Agent, while in the course of performing some other task(s), reports on their own decision processes that guide this other task(s) for the benefit of an outside observer.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Think-aloud</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ThinkAloudActionTopic">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ThinkAloudTopic"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A topic used when an Agent states what they are doing.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Think aloud action topic</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ThinkAloudGeneralKnowledgeTopic">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ThinkAloudKnowledgeTopic"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A topic used when an Agent states general knowledge they have.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Think aloud general knowledge topic</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ThinkAloudKnowledgeTopic">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ThinkAloudTopic"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A topic used when an Agent states some item of knowledge. This knowledge can be general, or specific to the environment and task at hand.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Think aloud knowledge topic</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ThinkAloudObstructionTopic">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ThinkAloudTopic"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A topic used when an Agent describes some state of affairs that prevents them from performing an action.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Think aloud obstruction topic</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ThinkAloudOpinionTopic">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ThinkAloudTopic"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A topic used when an Agent expresses an opinion about the action they perform or the environment they are in.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Think aloud opinion topic</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ThinkAloudPerceptionTopic">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ThinkAloudTopic"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A topic used when an Agent describes what they currently perceive.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Think aloud perception topic</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ThinkAloudPlanTopic">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ThinkAloudTopic"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A topic used when an Agent describes what they intend to do. Note, this is not about describing the process through which this plan was constructed; that is covered by the MetaCognitionPlanningTopic.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Think aloud plan topic</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ThinkAloudSceneKnowledgeTopic">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ThinkAloudKnowledgeTopic"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A topic used when an Agent describes what they know about their environment, including knowledge of world states that they do not currently perceive.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Think aloud scene knowledge topic</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ThinkAloudTopic">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#CommunicationTopic"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A topic relevant for a think-aloud communication.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Think aloud topic</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Throwing">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Actuating"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Manipulating"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task in which an Agent imparts momentum to an object before releasing it so that it flies for some distance unsupported.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Transporting">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ModifyingPhysicalObject"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task by which an Agent carries an item from a source to a destination location.</comment>
+    </owl:Class>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#affects">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#precedes"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isAffectedBy"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Simple relationship between two actions to express that a variation in the course or outcome of the subject (the affector) would have resulted in a variation in the object (the affectee), e.g., a planning task that sets parameters such as goal position affects the subsequently executed pick-and-place task that uses that parameter.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">affects</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#answers">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#relatesToAnotherRole"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasAnswer"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Answer"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Message"/>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The relation between an answering message and the message it answers.</label>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">answers</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#causes">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#affects"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isReactionTo"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+        <UsageGuideline xmlns="http://www.ease-crc.org/ont/SOMA.owl#" xml:lang="en">Simple relationship between two actions to express that the object (the reaction) would not have occured if it were not for the subject (the cause), e.g., a Communication Action classified as an Querying Task causes another Communication Task classified as an Answering Task and the latter would not have occured without the former. An example without Agents involved is some domino stone that would not have toppled without the first one toppling.
+
+When Agents are involved, the relation might be seen as an abstraction of the execution of some plan that arises from changing the agents goal that is due to perceiving the cause. However, currently it is unclear how to model such a pattern and therefore not included in SOMA.
+
+This relation is seen as transitive.</UsageGuideline>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">causes</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#definesEventType">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#defines"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isEventTypeDefinedIn"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Description"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#EventType"/>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A relation between a description and an event type, e.g. an Affordance of an object to be cut with a knife describes that event.
+
+The distinction to defines task is necessary to let Dispositions and Affordances not only describe which tasks might be afforded by objects, but also whihc processes (where there is no agent). For example, the fall of a knife from a shelf slicing a loaf of bread on impact is , in the absence of an executing agent, not a task but merely a process, the possibility of which is nevertheless described by the dispositions of the knife and the loaf.</label>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">defines event type</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#directlyCauses">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#causes"/>
+        <owl:propertyChainAxiom rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#causesTransition"/>
+            <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasTerminalScene"/>
+            <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#includesEvent"/>
+        </owl:propertyChainAxiom>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isDirectReactionTo"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Non-transitive version of &quot;causes&quot;.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">directly causes</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasAction">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasConstituent"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Action"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Action"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation from an Action to a component Action.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">has action</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasAnswer">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#relatesToAnotherRole"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Message"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Answer"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The relation between a message and its answer.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">has answer</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasExecutionState">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegion"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Action"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ExecutionStateRegion"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation from an Action to its execution state.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">has execution state</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasInitialSituation">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasInitialState"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isInitialSituationOf"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#SituationTransition"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Situation"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation between SituationTransitions and Situations, which identifies the Situation the transition starts from.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">has initial situation</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasTerminalSituation">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasTerminalState"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isTerminalSituationOf"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#SituationTransition"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Situation"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation between SituationTransitions and Situations, which identifies the Situation the transition ends at.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">has terminal situation</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isAffectedBy">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#follows"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Simple relationship between two actions to express that a variation in the course or outcome of the object (the affector) would have resulted in a variation in the subject (the affectee), e.g., a planning task that sets parameters such as goal position affects the subsequently executed pick-and-place task that uses that parameter.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">is affected by</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isAskedBy">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#involvesAgent"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#QueryingTask"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Agent"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation from a Query to the Agent who asks it.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">is asked by</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isCreatedOutputOf">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isOutputRoleOf"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isTaskOfCreatedRole"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Task"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation between a created output role and its Task. The difference to isOutputRoleOf is that the latter is also applicable, e.g., for Deciding between objects, where the selected object is not created, but still an outcome of that task.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">is created output of</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isDirectReactionTo">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isReactionTo"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Non-transitive version of &quot;is reaction to&quot;.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">is direct reaction to</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isEventTypeDefinedIn">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isDefinedIn"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#EventType"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Description"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">A relation between an event type and a description, e.g. an event that is described by the Affordance of an object to be cut with a knife.
+
+The distinction to &apos;is task defined in&apos; is necessary to let Dispositions and Affordances not only describe which tasks might be afforded by objects, but also whihc processes (where there is no agent). For example, the fall of a knife from a shelf slicing a loaf of bread on impact is , in the absence of an executing agent, not a task but merely a process, the possibility of which is nevertheless described by the dispositions of the knife and the loaf.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">is event type defined in</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isInitialSituationOf">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isInitialStateOf"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Situation"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#SituationTransition"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation between SituationTransitions and Situations, which identifies the Situation the transition starts from.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">is initial situation of</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isPerformedBy">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#involvesAgent"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Action"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Agent"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation from an Action to the Agent who performs it.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">is performed by</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isReactionTo">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isAffectedBy"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Simple relationship between two actions to express that the subject (the reaction) would not have occured if it were not for the object (the cause), e.g., a Communication Action classified as an Answering Task is a reaction to another Communication Task classified as a Query Task and would not have occured without the other. An example without Agents involved would be some domino stone would not have toppled without the first one toppling.
+
+When Agents are involved, the relation might be seen as an abstraction of the execution of some plan that arises from changing the agents goal that is due to perceiving the cause. However, currently it is unclear how to model such a pattern and therefore not included in SOMA.
+
+This relation is seen as transitive.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">is reaction to</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isReplacedBy">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#before"/>
+        <owl:propertyChainAxiom rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isEventIncludedIn"/>
+            <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isInitialSituationOf"/>
+            <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasTerminalSituation"/>
+            <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#includesEvent"/>
+        </owl:propertyChainAxiom>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#replaces"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#State"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#State"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">The relation between a State that is replaced by another, e.g., the state of a bowl of fruits containing some objects is replaced by a new containment state when one object is taken away (in this example, we simplified the relation between the State and its type).</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">is replaced by</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isTaskOfCreatedRole">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isTaskOfOutputRole"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Task"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation between a Task and one of its output roles. The difference to IsTaskOfOutputRole is that the latter is also applicable, e.g., for Deciding between objects, where the selected object is not created, but still an outcome of that task.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">is task of created role</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isTerminalSituationOf">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isTerminalStateOf"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Situation"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#SituationTransition"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation between SituationTransitions and Situations, which identifies the Situation the transition ends at.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">is terminal situation of</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isTerminatedBy">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#associatedWith"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#terminates"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">The association between an Event that is terminated by another Event, e.g., the Action of picking an apple from a bowl of fruits terminates the State of containment between the apple and the bowl.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">is terminated by</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#relatesToAnotherRole">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#associatedWith"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#SymmetricProperty"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Simple top-level property for relations between two roles.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">relates to another role</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#replaces">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#after"/>
+        <owl:propertyChainAxiom rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isEventIncludedIn"/>
+            <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isTerminalSituationOf"/>
+            <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasInitialSituation"/>
+            <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#includesEvent"/>
+        </owl:propertyChainAxiom>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#State"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#State"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">The relation between a State that replaces another, e.g., the state of a bowl of fruits containing some objects is replaced by a new containment state when one object is taken away (in this example, we simplified the relation between the State and its type).</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">replaces</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#terminates">
+        <owl:propertyChainAxiom rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#causesTransition"/>
+            <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasInitialSituation"/>
+            <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#includesEvent"/>
+        </owl:propertyChainAxiom>
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#associatedWith"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">The association between an Event that terminates another Event, e.g., the Action of picking an apple from a bowl of fruits terminates the State of containment between the apple and the bowl.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">terminates</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl/hasExpectedTerminalSituation">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasTerminalSituation"/>
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasPostcondition"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#SituationTransition"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Situation"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation between a Transition and the Situation it is expected to, and does actually, end at. You can assert this relationship when the observed outcome of a transition matches expectations.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">has expected terminal situation</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl/hasRequiredInitialSituation">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasInitialSituation"/>
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasPrecondition"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#SituationTransition"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Situation"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relationship between a Situation x and another Situation y that precedes it, such that without y manifesting, it would be impossible for x to manifest.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">has required initial situation</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl/manifestsIn">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#includesEvent"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relationship indicating that a Situation is realized in an Event that actually happened.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">manifests in</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl/preventedBy">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasSetting"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl/prevents"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Situation"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Situation"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relationship indicating a Situation is prevented by another from manifesting.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">prevented by</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl/prevents">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isSettingFor"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Situation"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Situation"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relationship indicating that a situation does or would prevent another from manifesting. Useful for reasoning about planning (what to do to avoid some bad outcome) and failure recovery (what aspects of the world state prevent continuing the plan?).</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">prevents</label>
+    </owl:ObjectProperty>
+    <owl:NamedIndividual rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ExecutionState_Active">
+        <rdf:type rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ExecutionStateRegion"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The execution state of an ongoing activity.</comment>
+    </owl:NamedIndividual>
+    <owl:NamedIndividual rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ExecutionState_Cancelled">
+        <rdf:type rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ExecutionStateRegion"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The execution state of a cancelled activity.</comment>
+    </owl:NamedIndividual>
+    <owl:NamedIndividual rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ExecutionState_Failed">
+        <rdf:type rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ExecutionStateRegion"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The execution state of a failed activity.</comment>
+    </owl:NamedIndividual>
+    <owl:NamedIndividual rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ExecutionState_Paused">
+        <rdf:type rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ExecutionStateRegion"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The execution state of a paused activity.</comment>
+    </owl:NamedIndividual>
+    <owl:NamedIndividual rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ExecutionState_Pending">
+        <rdf:type rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ExecutionStateRegion"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The execution state of a pending activity.</comment>
+    </owl:NamedIndividual>
+    <owl:NamedIndividual rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ExecutionState_Succeeded">
+        <rdf:type rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ExecutionStateRegion"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The execution state of a succeeded activity.</comment>
+    </owl:NamedIndividual>
+    <owl:Axiom>
+        <owl:annotatedSource>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Situation"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl/manifestsIn"/>
+                        <owl:someValuesFrom rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl/prevents"/>
+                        <owl:someValuesFrom>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl/manifestsIn"/>
+                                <owl:someValuesFrom rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+                            </owl:Restriction>
+                        </owl:someValuesFrom>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+                <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.w3.org/2002/07/owl#Nothing"/>
+            </owl:Class>
+        </owl:annotatedSource>
+        <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#subClassOf"/>
+        <owl:annotatedTarget rdf:resource="http://www.w3.org/2002/07/owl#Nothing"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">By definition, there can be no prevention relation between Situations that manifest in Events. If Situation X prevents Y, then either X manifests and Y does not, or Y manifests and X does not (interpret as: X would have prevented Y from manifesting if X had manifested), or none of X and Y manifests in any Event.</comment>
+    </owl:Axiom>
+    <owl:Axiom>
+        <owl:annotatedSource>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl/manifestsIn"/>
+                        <owl:someValuesFrom rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasPrecondition"/>
+                        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#NonmanifestedSituation"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+                <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.w3.org/2002/07/owl#Nothing"/>
+            </owl:Class>
+        </owl:annotatedSource>
+        <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#subClassOf"/>
+        <owl:annotatedTarget rdf:resource="http://www.w3.org/2002/07/owl#Nothing"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">If a precondition is not met then a Situation cannot manifest.</comment>
+    </owl:Axiom>
+    <owl:Axiom>
+        <owl:annotatedSource>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasInitialSituation"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#NonmanifestedSituation"/>
+                <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.w3.org/2002/07/owl#Nothing"/>
+            </owl:Restriction>
+        </owl:annotatedSource>
+        <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#subClassOf"/>
+        <owl:annotatedTarget rdf:resource="http://www.w3.org/2002/07/owl#Nothing"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">If something is an initial situation of some transition, then it must manifest.</comment>
+    </owl:Axiom>
+    <owl:Axiom>
+        <owl:annotatedSource>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasTerminalSituation"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#NonmanifestedSituation"/>
+                <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.w3.org/2002/07/owl#Nothing"/>
+            </owl:Restriction>
+        </owl:annotatedSource>
+        <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#subClassOf"/>
+        <owl:annotatedTarget rdf:resource="http://www.w3.org/2002/07/owl#Nothing"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">If something is a terminal situation then it must be a manifested situation (regardless of whether it was expected or not).</comment>
+    </owl:Axiom>
+    <owl:Class rdf:nodeID="bn37">
+        <owl:intersectionOf rdf:parseType="Collection">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasInitialSituation"/>
+                <owl:someValuesFrom rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Situation"/>
+            </owl:Restriction>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasTerminalSituation"/>
+                <owl:someValuesFrom rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Situation"/>
+            </owl:Restriction>
+        </owl:intersectionOf>
+    </owl:Class>
+    <owl:Axiom>
+        <owl:annotatedSource>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SituationTransition"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl/manifestsIn"/>
+                        <owl:someValuesFrom rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+                <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:nodeID="bn37"/>
+            </owl:Class>
+        </owl:annotatedSource>
+        <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#subClassOf"/>
+        <owl:annotatedTarget rdf:nodeID="bn37"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">If a SituationTransition manifests in some Event, then it also has an initial Situation and a terminal one.</comment>
+    </owl:Axiom>
+    <owl:Restriction rdf:nodeID="bn77">
+        <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl/manifestsIn"/>
+        <owl:someValuesFrom rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+    </owl:Restriction>
+    <owl:Axiom>
+        <owl:annotatedSource>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasInitialSituation"/>
+                <owl:someValuesFrom rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Situation"/>
+                <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:nodeID="bn77"/>
+            </owl:Restriction>
+        </owl:annotatedSource>
+        <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#subClassOf"/>
+        <owl:annotatedTarget rdf:nodeID="bn77"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">If a transition has an initial situation then it also has a manifestation.</comment>
+    </owl:Axiom>
+    <owl:Restriction rdf:nodeID="bn80">
+        <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl/manifestsIn"/>
+        <owl:someValuesFrom rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+    </owl:Restriction>
+    <owl:Axiom>
+        <owl:annotatedSource>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasTerminalSituation"/>
+                <owl:someValuesFrom rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Situation"/>
+                <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:nodeID="bn80"/>
+            </owl:Restriction>
+        </owl:annotatedSource>
+        <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#subClassOf"/>
+        <owl:annotatedTarget rdf:nodeID="bn80"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">If a transition has a terminal situation then it also has a manifestation.</comment>
+    </owl:Axiom>
+    <owl:Restriction rdf:nodeID="bn91">
+        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#includesEvent"/>
+        <owl:someValuesFrom rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Action"/>
+    </owl:Restriction>
+    <owl:Axiom>
+        <owl:annotatedSource>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SituationTransition"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl/manifestsIn"/>
+                        <owl:someValuesFrom rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+                <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:nodeID="bn91"/>
+            </owl:Class>
+        </owl:annotatedSource>
+        <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#subClassOf"/>
+        <owl:annotatedTarget rdf:nodeID="bn91"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A SituationTransition that manifests in some Event also includes an Action. (NOTE (MP): Typically, the Event manifesting it would be that included Action actually so perhaps we can just require that manifestations of SituationTransitions be Actions?)</comment>
+    </owl:Axiom>
+    <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#definesTask">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#definesEventType"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isDirectSourceFor">
+        <owl:propertyChainAxiom rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isRealizedBy"/>
+            <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRole"/>
+            <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isInputRoleOf"/>
+            <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isTaskOfCreatedRole"/>
+            <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isRoleOf"/>
+            <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#realizes"/>
+        </owl:propertyChainAxiom>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isTaskDefinedIn">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isEventTypeDefinedIn"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasPostcondition">
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">This should be taken to mean that the postcondition is the situation expected to follow the current situation. Whether the expectation is met is another issue.</comment>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasPrecondition">
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">This should be taken to mean: a precondition is a situation without which the current situation would not be possible.</comment>
+    </rdf:Description>
+</rdf:RDF>

@@ -1,0 +1,157 @@
+@prefix :      <https://aicor.knowledge/cotton-candy#> .
+@prefix cc:    <https://aicor.knowledge/cotton-candy#> .
+@prefix ccram: <https://aicor.knowledge/ccram#> .
+@prefix sdt:   <https://aicor.knowledge/sdt#> .
+@prefix dul:   <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#> .
+@prefix soma:  <http://www.ease-crc.org/ont/SOMA.owl#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+
+# =====================================================================================================================
+# booth -- the cotton candy booth domain (CottonCandyTwin) as an extension of SOMA, plus the SDT world classes (sdt:)
+# the booth tree uses. Restates cram/cotton_candy/semantic_annotations.py and process.py; no new domain knowledge.
+#   1. objects and parts (aligned to SOMA artefact classes, with dispositions)
+#   2. substances, food, customers (a customer is a person classified by a role)
+#   3. type keywords for designator nouns (graspable, container, ...) as defined classes
+#   4. the floss machine microtheory: modes as device-state regions, the closing event as an axiom
+#   5. SDT world classes (sdt:) used in the trees
+# Status: PROPOSAL (2026-10-21).
+# =====================================================================================================================
+
+<https://aicor.knowledge/cotton-candy> a owl:Ontology ;
+    rdfs:label "cotton candy booth" ;
+    owl:imports <https://aicor.knowledge/ccram-actions> .
+
+# ---------------------------------------------------------------------------------------------------- 1. objects
+:CottonCandyBooth   a owl:Class ; rdfs:subClassOf dul:PhysicalPlace .
+:CottonCandyMachine a owl:Class ; rdfs:subClassOf soma:Appliance ;
+    rdfs:comment "Gold Medal Econo Floss type machine (GM_MAN_EXP)." .
+:RockerSwitch  a owl:Class ; rdfs:subClassOf soma:DesignedComponent .
+:ControlKnob   a owl:Class ; rdfs:subClassOf soma:DesignedComponent .
+:SpinnerHead   a owl:Class ; rdfs:subClassOf soma:DesignedComponent ,
+    [ a owl:Restriction ; owl:onProperty soma:hasDisposition ; owl:someValuesFrom soma:Containment ] ;
+    rdfs:comment "Heated rotating head that melts and spins the sugar; holds up to the head capacity of sugar." .
+:FlossPan      a owl:Class ; rdfs:subClassOf soma:DesignedComponent ,
+    [ a owl:Restriction ; owl:onProperty soma:hasDisposition ; owl:someValuesFrom soma:Containment ] .
+:LockHandle    a owl:Class ; rdfs:subClassOf soma:DesignedComponent .
+:SalesFlap     a owl:Class ; rdfs:subClassOf soma:DesignedComponent .
+:HandoverZone  a owl:Class ; rdfs:subClassOf dul:PhysicalPlace .
+:HandoverLocation a owl:Class ; rdfs:subClassOf dul:PhysicalPlace ; rdfs:comment "A pose in the handover zone reachable for robot and customer." .
+:StickQuiver   a owl:Class ; rdfs:subClassOf soma:DesignedContainer .
+:CandyStick    a owl:Class ; rdfs:subClassOf soma:DesignedTool ,
+    [ a owl:Restriction ; owl:onProperty soma:hasDisposition ; owl:someValuesFrom soma:Graspability ] .
+:SugarCarton   a owl:Class ; rdfs:subClassOf soma:DesignedContainer ,
+    [ a owl:Restriction ; owl:onProperty soma:hasDisposition ; owl:someValuesFrom soma:Containment ] ,
+    [ a owl:Restriction ; owl:onProperty soma:hasDisposition ; owl:someValuesFrom soma:Graspability ] .
+:SugarTray     a owl:Class ; rdfs:subClassOf soma:DesignedContainer ,
+    [ a owl:Restriction ; owl:onProperty soma:hasDisposition ; owl:someValuesFrom soma:Containment ] .
+:Sponge        a owl:Class ; rdfs:subClassOf soma:DesignedTool ,
+    [ a owl:Restriction ; owl:onProperty soma:hasDisposition ; owl:someValuesFrom soma:Graspability ] .
+:HandwashStation  a owl:Class ; rdfs:subClassOf soma:Appliance .
+:FireExtinguisher a owl:Class ; rdfs:subClassOf dul:DesignedArtifact .
+:InformationBoard a owl:Class ; rdfs:subClassOf dul:DesignedArtifact .
+:RobotStations a owl:Class ; rdfs:subClassOf dul:PhysicalPlace .
+:RobotStation  a owl:Class ; rdfs:subClassOf dul:PhysicalPlace ; ccram:typeKeyword "station" .
+
+# ---------------------------------------------------------------------------------------------------- 2. substances, food, people
+:Flossugar a owl:Class ; rdfs:subClassOf soma:DesignedSubstance ; ccram:typeKeyword "sugar" ;
+    rdfs:comment "Coloured, flavoured sugar for floss machines." .
+:RaspberryFlossugar a owl:Class ; rdfs:subClassOf :Flossugar .
+:Floss a owl:Class ; rdfs:subClassOf dul:Substance ; rdfs:comment "Spun sugar threads collecting in the floss pan." .
+:CottonCandy a owl:Class ; rdfs:subClassOf dul:DesignedArtifact ;
+    rdfs:comment "Floss wrapped around a candy stick (CandyStage gathered -> wrapped)." .
+:CustomerRole a owl:Class ; rdfs:subClassOf soma:RecipientRole ; rdfs:comment "Classifies a person who ordered at the booth." .
+:Customer a owl:Class ; owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( dul:Person
+        [ a owl:Restriction ; owl:onProperty dul:isClassifiedBy ; owl:someValuesFrom :CustomerRole ] ) ] ;
+    rdfs:comment "Defined: a person classified by the customer role (a role reading, not a kind of person)." .
+:Portion a owl:Class ; rdfs:subClassOf dul:Substance ; rdfs:comment "An amount of a substance (mass reading of 'some')." .
+
+# ---------------------------------------------------------------------------------------------------- 3. designator nouns
+ccram:Graspable a owl:Class ; ccram:typeKeyword "graspable" ;
+    owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( dul:PhysicalObject
+        [ a owl:Restriction ; owl:onProperty soma:hasDisposition ; owl:someValuesFrom soma:Graspability ] ) ] .
+ccram:ContainerObject a owl:Class ; ccram:typeKeyword "container" ;
+    owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( dul:PhysicalObject
+        [ a owl:Restriction ; owl:onProperty soma:hasDisposition ; owl:someValuesFrom soma:Containment ] ) ] ;
+    rdfs:comment "An object that can contain others (the role soma:Container is its role reading)." .
+ccram:SwitchState a owl:Class ; rdfs:subClassOf soma:DeviceStateRange ; ccram:typeKeyword "switch-state" .
+ccram:TravelFraction a owl:Class ; rdfs:subClassOf dul:Region ; ccram:typeKeyword "travel-fraction" .
+ccram:Condition a owl:Class ; rdfs:subClassOf dul:Description ; ccram:typeKeyword "condition" .
+ccram:Duration a owl:Class ; rdfs:subClassOf dul:TimeInterval ; ccram:typeKeyword "duration" .
+ccram:ApproachDirectionValue a owl:Class ; rdfs:subClassOf dul:Region ; ccram:typeKeyword "approach-direction" .
+
+# ---------------------------------------------------------------------------------------------------- 4. floss machine
+# modes = regions of the machine's device state (SOMA: DeviceState quality, DeviceStateRange regions)
+:FlossMachineMode a owl:Class ; rdfs:subClassOf soma:DeviceStateRange .
+:Off          a owl:Class ; rdfs:subClassOf :FlossMachineMode , soma:DeviceTurnedOff , ccram:SafeMode .
+:Spinning     a owl:Class ; rdfs:subClassOf :FlossMachineMode , soma:DeviceTurnedOn , ccram:SafeMode .
+:WarmingUp    a owl:Class ; rdfs:subClassOf :FlossMachineMode , soma:DeviceTurnedOn , ccram:SafeMode .
+:Producing    a owl:Class ; rdfs:subClassOf :FlossMachineMode , soma:DeviceTurnedOn , ccram:SafeMode .
+:RunningEmpty a owl:Class ; rdfs:subClassOf :FlossMachineMode , soma:DeviceTurnedOn , ccram:RecoverableMode ;
+    rdfs:comment "Burn-out: the intended end-of-day mode." .
+soma:DeviceTurnedOn owl:disjointWith soma:DeviceTurnedOff .
+
+# a running machine: its device state lies in a turned-on region
+:RunningMachine a owl:Class ; owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( :CottonCandyMachine
+        [ a owl:Restriction ; owl:onProperty dul:hasQuality ; owl:someValuesFrom [ a owl:Class ; owl:intersectionOf (
+            soma:DeviceState [ a owl:Restriction ; owl:onProperty dul:hasRegion ; owl:someValuesFrom soma:DeviceTurnedOn ] ) ] ] ) ] .
+
+# closing event pour-into-moving-head (microtheory floss-machine): an action of the pouring-into task whose destination
+# is the spinner head of a running machine is prohibited. A reasoner classifies a candidate action from its designator.
+:PourIntoMovingHead a owl:Class ;
+    owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( dul:Action
+        [ a owl:Restriction ; owl:onProperty dul:executesTask ; owl:someValuesFrom soma:PouringInto ]
+        [ a owl:Restriction ; owl:onProperty dul:hasParticipant ; owl:someValuesFrom [ a owl:Class ; owl:intersectionOf (
+            :SpinnerHead
+            [ a owl:Restriction ; owl:onProperty dul:isClassifiedBy ; owl:someValuesFrom soma:Destination ]
+            [ a owl:Restriction ; owl:onProperty dul:isPartOf ; owl:someValuesFrom :RunningMachine ] ) ] ] ) ] ;
+    rdfs:subClassOf ccram:ProhibitedAction ;
+    rdfs:comment "Closing event of the floss machine microtheory (SugarPouredIntoSpinningHead)." .
+
+# ---------------------------------------------------------------------------------------------------- 5. SDT world classes
+sdt:Handle     a owl:Class ; rdfs:subClassOf soma:DesignedComponent .
+sdt:ToolFrame  a owl:Class ; rdfs:subClassOf soma:FunctionalPart ; rdfs:comment "A named frame on a tool (tip, spout)." .
+sdt:Table      a owl:Class ; owl:equivalentClass soma:Table .
+sdt:Robot      a owl:Class ; rdfs:subClassOf dul:PhysicalAgent .
+sdt:PR2        a owl:Class ; rdfs:subClassOf sdt:Robot ; ccram:typeKeyword "pr2" .
+sdt:Arm        a owl:Class ; owl:equivalentClass soma:Arm .
+sdt:EndEffector a owl:Class ; owl:equivalentClass soma:PrehensileEffector .
+sdt:Torso      a owl:Class ; rdfs:subClassOf soma:FunctionalPart .
+sdt:Neck       a owl:Class ; rdfs:subClassOf soma:FunctionalPart .
+sdt:Camera     a owl:Class ; rdfs:subClassOf dul:DesignedArtifact .
+sdt:MobileBase a owl:Class ; rdfs:subClassOf soma:FunctionalPart .
+
+# ---------------------------------------------------------------------------------------------------- 6. booth failures (process.py)
+:HeadRunningEmpty a owl:Class ; rdfs:subClassOf ccram:ProcessFailure ; ccram:recoverable true ;
+    ccram:signalledBy "microtheory floss-machine: entry into mode running-empty" ;
+    ccram:suggestsRepair "stop-machine, fill-spinner-head, start-machine" ;
+    rdfs:comment "The spinner head ran out of sugar while heated. A fault during service, the intended burn-out at closing: the handler in scope decides." .
+:PhaseNotReached a owl:Class ; rdfs:subClassOf ccram:ProcessFailure ; ccram:recoverable true ;
+    ccram:executableClass "cotton_candy.process.PhaseNotReached" .
+:NotEnoughFloss a owl:Class ; rdfs:subClassOf ccram:ProcessFailure ; ccram:recoverable true ;
+    ccram:executableClass "cotton_candy.process.NotEnoughFloss" ;
+    ccram:suggestsRepair "let the machine produce longer, or refill the spinner head if it ran empty" .
+:SugarPouredIntoSpinningHead a owl:Class ; rdfs:subClassOf ccram:ClosingEventViolation ;
+    ccram:executableClass "cotton_candy.process.SugarPouredIntoSpinningHead" ;
+    rdfs:comment "Closing event pour-into-moving-head (see PourIntoMovingHead): prevented by the gate." .
+
+# ---------------------------------------------------------------------------------------------------- 7. booth states (D9)
+# the booth's state vocabulary (fluents, ccram-states.ttl scheme): relations, unary state classes
+:hasMode a owl:ObjectProperty ; ccram:relationKeyword "mode" ; rdfs:subPropertyOf dul:hasRegion ; ccram:fluent true ;
+    rdfs:range :FlossMachineMode ; rdfs:comment "(mode floss-machine M): the machine's device state lies in mode region M." .
+:hasPhase a owl:ObjectProperty ; ccram:relationKeyword "phase" ; rdfs:subPropertyOf :hasMode ; ccram:fluent true ;
+    rdfs:comment "Qualifier form of the mode in closing events: (phase (not off))." .
+:sugarInHead a owl:DatatypeProperty ; ccram:relationKeyword "sugar-in-head" ; rdfs:range xsd:double ; ccram:fluent true ;
+    rdfs:comment "Quantity of the floss machine microtheory: sugar in the spinner head [kg]." .
+:OpenOrder a owl:Class ; ccram:typeKeyword "open-order" ; rdfs:subClassOf :CottonCandy , ccram:ObjectStateClass ;
+    rdfs:comment "An ordered candy not delivered yet (rule open-order)." .
+:BurntOutMachine a owl:Class ; ccram:typeKeyword "burnt-out" ; rdfs:subClassOf :CottonCandyMachine , ccram:ObjectStateClass ;
+    rdfs:comment "The head has run empty long enough (burn_out_s): the intended end-of-day state." .
+:PortionSpun a owl:Class ; ccram:typeKeyword "portion-spun" ; rdfs:subClassOf :CottonCandyMachine , ccram:ObjectStateClass ;
+    rdfs:comment "A portion of floss is in the pan (process model portion_ready)." .
+:EnoughSugar a owl:Class ; ccram:typeKeyword "enough-sugar" ; rdfs:subClassOf :CottonCandyMachine , ccram:ObjectStateClass ;
+    rdfs:comment "The head holds at least one portion's sugar." .
+:readyToHandOverWith a owl:ObjectProperty ; ccram:relationKeyword "ready-to-hand-over" ; rdfs:subPropertyOf dul:associatedWith ;
+    ccram:fluent true ; rdfs:comment "A wrapped candy on a stick the arm holds (rule ready-to-hand-over)." .

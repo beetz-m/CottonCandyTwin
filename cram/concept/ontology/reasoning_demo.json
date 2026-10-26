@@ -1,0 +1,70 @@
+{
+ "producing": {
+  "mode": "cc:Producing",
+  "hermit_s": 13.5,
+  "designator_dl": "dul:Action and (dul:executesTask some soma:PouringInto) and (dul:hasParticipant some (the-one(cc:SugarCarton) and (dul:isClassifiedBy some soma:Patient))) and (dul:hasParticipant some ({machine/spinner-head} and (dul:isClassifiedBy some soma:Destination)))",
+  "candidate_classified_as": [
+   "Action",
+   "Entity",
+   "Event",
+   "PhysicalAction",
+   "PourIntoMovingHead",
+   "ProhibitedAction",
+   "Thing"
+  ],
+  "prohibited": true,
+  "running_machine": [
+   "machine"
+  ],
+  "graspable": [
+   "sponge",
+   "stick-quiver/stick-1",
+   "stick-quiver/stick-2",
+   "sugar-carton-raspberry"
+  ],
+  "container": [
+   "machine/floss-pan",
+   "machine/spinner-head",
+   "stick-quiver",
+   "sugar-carton-raspberry",
+   "sugar-tray"
+  ],
+  "customer_defined": "https://aicor.knowledge/cotton-candy#Customer"
+ },
+ "off": {
+  "mode": "cc:Off",
+  "hermit_s": 12.4,
+  "designator_dl": "dul:Action and (dul:executesTask some soma:PouringInto) and (dul:hasParticipant some (the-one(cc:SugarCarton) and (dul:isClassifiedBy some soma:Patient))) and (dul:hasParticipant some ({machine/spinner-head} and (dul:isClassifiedBy some soma:Destination)))",
+  "candidate_classified_as": [
+   "Action",
+   "Entity",
+   "Event",
+   "PhysicalAction",
+   "Thing"
+  ],
+  "prohibited": false,
+  "running_machine": [],
+  "graspable": [
+   "sponge",
+   "stick-quiver/stick-1",
+   "stick-quiver/stick-2",
+   "sugar-carton-raspberry"
+  ],
+  "container": [
+   "machine/floss-pan",
+   "machine/spinner-head",
+   "stick-quiver",
+   "sugar-carton-raspberry",
+   "sugar-tray"
+  ],
+  "customer_defined": "https://aicor.knowledge/cotton-candy#Customer"
+ },
+ "designator": "(an action (type pouring-into) (object (the sugar-carton)) (destination (tagged spinner-head machine)))",
+ "designator_dl": "dul:Action and (dul:executesTask some soma:PouringInto) and (dul:hasParticipant some (the-one(cc:SugarCarton) and (dul:isClassifiedBy some soma:Patient))) and (dul:hasParticipant some ({machine/spinner-head} and (dul:isClassifiedBy some soma:Destination)))",
+ "dropped_for_dl": [
+  "soma:contains AsymmetricProperty",
+  "soma:contains IrreflexiveProperty"
+ ],
+ "module_triples": 2390,
+ "note": "HermiT over the upward module of the booth + ccram terms in DUL + SOMA (no USD) + booth ABox; open world: 'not prohibited' = not provably prohibited"
+}

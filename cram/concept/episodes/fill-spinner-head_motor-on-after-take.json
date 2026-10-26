@@ -1,0 +1,180 @@
+[
+ {
+  "path": "fill-spinner-head/take",
+  "designator": "(an action (type transporting) (object ?sugar) (arm ?arm))",
+  "schema": "transporting",
+  "t0": 0.0,
+  "bindings": {
+   "object": {
+    "symbol": "sugar-carton-raspberry",
+    "servant": "eql-annotations",
+    "status": "recorded",
+    "candidates": 1
+   },
+   "arm": {
+    "symbol": "right-arm",
+    "servant": "robot-model",
+    "status": "recorded"
+   }
+  },
+  "goal": [
+   "(achieve (held-by sugar-carton-raspberry right-arm) :at (end ?i))",
+   "(prevent (dropped sugar-carton-raspberry) :during ?i)"
+  ],
+  "gate": "admitted",
+  "t1": 0.0,
+  "wall_s": 3.1,
+  "model_only": [
+   "(prevent (dropped sugar-carton-raspberry) :during ?i)"
+  ],
+  "verdict": "goal achieved",
+  "violations": [],
+  "state_after": [
+   "(mode floss-machine off)",
+   "(held-by sugar-carton-raspberry right-arm)",
+   "(gripper-free left-arm)",
+   "(at (the robot) at-machine)"
+  ]
+ },
+ {
+  "path": "fill-spinner-head",
+  "note": "DISTURBANCE: motor switched on",
+  "t": 0.0
+ },
+ {
+  "path": "fill-spinner-head/go-close",
+  "designator": "(an action (type navigating) (destination (the station (tag machine-close))))",
+  "schema": "navigating",
+  "t0": 0.0,
+  "bindings": {
+   "destination": {
+    "symbol": "machine-close",
+    "servant": "layout-stations",
+    "status": "recorded"
+   }
+  },
+  "goal": [
+   "(achieve (at (the robot) machine-close) :at (end ?i))",
+   "(prevent (contact (the robot) (a person)) :during ?i)"
+  ],
+  "gate": "admitted",
+  "t1": 0.0,
+  "wall_s": 0.1,
+  "model_only": [
+   "(prevent (contact (the robot) (a person)) :during ?i)"
+  ],
+  "verdict": "goal achieved",
+  "violations": [],
+  "state_after": [
+   "(mode floss-machine spinning)",
+   "(held-by sugar-carton-raspberry right-arm)",
+   "(gripper-free left-arm)",
+   "(at (the robot) machine-close)"
+  ]
+ },
+ {
+  "path": "fill-spinner-head/pour",
+  "designator": "(an action (type pouring-into) (object ?sugar) (destination (tagged spinner-head ?machine)) (amount (some substance (mass portion-batch))))",
+  "schema": "pouring-into",
+  "t0": 0.0,
+  "wall0": 1792599787.7224467,
+  "bindings": {
+   "object": {
+    "symbol": "sugar-carton-raspberry",
+    "servant": "eql-annotations",
+    "status": "recorded",
+    "candidates": 1
+   },
+   "destination": {
+    "symbol": "spinner-head",
+    "servant": "sdt-part-tree",
+    "status": "recorded",
+    "grounding": "CottonCandyMachine.spinner_head"
+   },
+   "amount": {
+    "symbol": "sugar",
+    "servant": "recipe",
+    "status": "commonsense",
+    "value_kg": 0.054
+   }
+  },
+  "goal": [
+   "(achieve (contains spinner-head sugar) :at (end ?i))",
+   "(maintain (held-by sugar-carton-raspberry ?arm) :during ?i)",
+   "(prevent (spilled sugar) :during ?i)",
+   "(prevent (poured-into sugar spinner-head) :while (not (mode floss-machine off)))"
+  ],
+  "verdict": "refused by the gate: (prevent (poured-into sugar spinner-head) :while (not (mode floss-machine off)))"
+ },
+ {
+  "path": "fill-spinner-head/go-back",
+  "designator": "(an action (type navigating) (destination (the station (tag at-machine))))",
+  "schema": "navigating",
+  "t0": 0.0,
+  "bindings": {
+   "destination": {
+    "symbol": "at-machine",
+    "servant": "layout-stations",
+    "status": "recorded"
+   }
+  },
+  "goal": [
+   "(achieve (at (the robot) at-machine) :at (end ?i))",
+   "(prevent (contact (the robot) (a person)) :during ?i)"
+  ],
+  "gate": "admitted",
+  "t1": 0.0,
+  "wall_s": 0.1,
+  "model_only": [
+   "(prevent (contact (the robot) (a person)) :during ?i)"
+  ],
+  "verdict": "goal achieved",
+  "violations": [],
+  "state_after": [
+   "(mode floss-machine spinning)",
+   "(held-by sugar-carton-raspberry right-arm)",
+   "(gripper-free left-arm)",
+   "(at (the robot) at-machine)"
+  ]
+ },
+ {
+  "path": "fill-spinner-head/put-back",
+  "designator": "(an action (type putting-down) (object ?sugar) (destination (its destination)))",
+  "schema": "putting-down",
+  "t0": 0.0,
+  "bindings": {
+   "object": {
+    "symbol": "sugar-carton-raspberry",
+    "servant": "eql-annotations",
+    "status": "recorded",
+    "candidates": 1
+   },
+   "destination": {
+    "symbol": "home-of-sugar-carton-raspberry",
+    "servant": "class-home",
+    "status": "commonsense",
+    "note": "where it was taken from (no belonging norm for this context)"
+   }
+  },
+  "goal": [
+   "(achieve (on sugar-carton-raspberry home-of-sugar-carton-raspberry) :at (end ?i))",
+   "(achieve (gripper-free ?arm) :at (end ?i))",
+   "(prevent (dropped sugar-carton-raspberry) :during ?i)"
+  ],
+  "gate": "admitted",
+  "t1": 0.0,
+  "wall_s": 2.5,
+  "model_only": [
+   "(prevent (dropped sugar-carton-raspberry) :during ?i)"
+  ],
+  "verdict": "goal achieved",
+  "violations": [],
+  "state_after": [
+   "(mode floss-machine spinning)",
+   "(gripper-free right-arm)",
+   "(gripper-free left-arm)",
+   "(at (the robot) at-machine)",
+   "(on sugar-carton-raspberry home-of-sugar-carton-raspberry)"
+  ]
+ }
+]

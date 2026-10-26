@@ -1,0 +1,851 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:swrl="http://www.w3.org/2003/11/swrl#">
+    <owl:Ontology rdf:about="http://www.ease-crc.org/ont/SOMA.owl">
+        <owl:imports rdf:resource="http://www.ease-crc.org/ont/DUL.owl"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SOMA main OWL file.
+
+Useful for defining a common set of imports for all other SOMA modules; currently, this set only includes DUL.
+
+While there are some axioms defined in SOMA.owl, these will be moved to the relevant specialized modules.</comment>
+    </owl:Ontology>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Accident">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <owl:disjointWith rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Action"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">An Event for which causes are unknown and/or considered irrelevant. This is true also for &quot;final causes&quot; (that is, intentions) of Agents participating in the Accident: it is not the intentions of these Agents to bring about the Accident.
+
+Note a distinction between this definition and some informal, everyday uses of &quot;accident&quot; which require a causal structure and responsibility to be ascertained. An accident, in the informal sense, may require an explanation as to who made a mistake in bringing about the event; a &quot;traffic accident&quot;, where we want to know who&apos;s responsible, is an example of this.
+
+Such an event does NOT fall under the definition of Accident here. An example of Accident would be a fair coin landing Heads: the causal chain for why this exact face landed is not important, all that matters is the brute fact that the coin landed Heads.</comment>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">also think about &quot;mistakes&quot;: (Mihai:) yes, but consider whether those might qualify as Situations. Likewise for Accidents, actually.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ActionExecutionPlan">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Plan"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#definesTask"/>
+                <owl:allValuesFrom>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasParameter"/>
+                        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Status"/>
+                    </owl:Restriction>
+                </owl:allValuesFrom>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">idea: steps in workflows assert that they are defined by action execution plans.</comment>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">links role and parameter fillers to e.g. slots in a data structure</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Action execution plan</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Amateurish">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DexterityDiagnosis"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Masterful"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A description of amateurish behavior.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#BehavioralDiagnosis">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Diagnosis"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasConstituent"/>
+                <owl:someValuesFrom rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Goal"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A diagnosis of how a system interacts with its world.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Behavioral diagnosis</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Clumsiness">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Amateurish"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A description of clumsy behavior.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#DexterityDiagnosis">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#BehavioralDiagnosis"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A description of the dexterity of a system, possibly in comparison to another system.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Dexterity diagnosis</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Episode">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Situation"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#FailedAttempt">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Unsuccessfulness"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A description of a failed attempt to achieve some goal.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">Failed attempt</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Fluid">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Substance"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A substance with a consistency such that it can flow or diffuse.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Foolishness">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Amateurish"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A description of foolish behavior.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#FunctionalDiagnosis">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Diagnosis"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">An internal diagnosis of a system.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Functional diagnosis</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#HardwareDiagnosis">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#TechnicalDiagnosis"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A diagnosis of the hardware of a system.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Hardware diagnosis</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#HumanActivityRecording">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#RecordedEpisode"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">An episode in which one or more human beings perform an activity and are recorded doing so.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Inability">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Unsuccessfulness"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A description of a situation with a goal that some system is unable to achieve.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Infeasibility">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Unsuccessfulness"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A description of a situation with a goal that is impossible to achieve in some situational context.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Masterful">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DexterityDiagnosis"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A description of masterful behavior.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#MedicalDiagnosis">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#FunctionalDiagnosis"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasConstituent"/>
+                <owl:someValuesFrom rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Organism"/>
+            </owl:Restriction>
+        </subClassOf>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#TechnicalDiagnosis"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A functional diagnosis of an organism.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Medical diagnosis</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#RecordedEpisode">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Episode"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#includesRecord"/>
+                <owl:someValuesFrom rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#InformationObject"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">An episode which has been recorded.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Reification">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Description"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isReificationOf"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#anyURI"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A description that *describes* a formal entity.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Scene"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Sluggishness">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Amateurish"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A description of sluggish behavior.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SoftwareDiagnosis">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#TechnicalDiagnosis"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A diagnosis of the software of a system.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Software diagnosis</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#State">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">States are stative and homeomeric events.
+
+For stative events, the mereological sum of two instances has the same type as both instances. This is, for example, the state of sitting on a chair, or the process of a pendulum swinging around.
+
+The difference between states and processes is that states are, in addition, homeomeric, and processes are not.  This means that, when considering time slices  of an event, for states, these time slices always have the same type as the state, but for processes this is not the case.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#StateTransition">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasInitialScene"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Scene"/>
+            </owl:Restriction>
+        </subClassOf>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasTerminalScene"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Scene"/>
+            </owl:Restriction>
+        </subClassOf>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Status">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Parameter"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A role that can be played by some parameter which indicates the state of affairs of some entity, e.g. a flag describing the outcome of an action in terms of success or failure, or an indicator of whether a device is turned on or off.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SuccessDiagnosis">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#BehavioralDiagnosis"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A diagnosis of the fullfilment of a goal that motivates the behavior of a system.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Success diagnosis</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Successfulness">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#SuccessDiagnosis"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Unsuccessfulness"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A description of a situation with a goal that was achieved by some system.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#TechnicalDiagnosis">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#FunctionalDiagnosis"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasConstituent"/>
+                <owl:someValuesFrom rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#DesignedArtifact"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A functional diagnosis of a technical system.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Technical diagnosis</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Threshold">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Parameter"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A role played by a parameter which indicates some value that, when crossed, triggers some condition.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Unsuccessfulness">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#SuccessDiagnosis"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A description of a situation with a goal that was not or not fully achieved by some system.</comment>
+    </owl:Class>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#after">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#follows"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#before"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+        <symbol xmlns="http://www.ease-crc.org/ont/SOMA.owl#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">&gt;</symbol>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation between entities, expressing a &apos;sequence&apos; schema where one of the entities strictly ends before the other one.</comment>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#before">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#precedes"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+        <symbol xmlns="http://www.ease-crc.org/ont/SOMA.owl#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">&lt;</symbol>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation between entities, expressing a &apos;sequence&apos; schema where one of the entities strictly ends before the other one.</comment>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#causesTransition">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isEventIncludedIn"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isCausedByEvent"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Transition"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A Transition between two Situations is always the result of some Event, and the causesTransition relation should be used to record the causal relation from the Event to the Transition.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">causes transition</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#coOccurs">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#overlaps"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#SymmetricProperty"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A schematic relation between any events that also implies that one event is temporally contained in the other.
+
+Sub-properties are used to distinct between different cases of event endpoint relations that hold for different types of co-occurance.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">co occurs</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#contains">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#overlaps"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isContainedIn"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A schematic relation asserting containment, understood in a very broad sense, by one Entity of another. The relation is defined with domain and range of maximum generality, as it is possible to construe containment to apply between Events, between Objects, between Qualities and so on. Care should be taken when using it that the construal of containment makes sense and is useful. If a clearer relation expresses the connection between two Entities, use that relation instead. For example, rather than saying an Event contains an Object, it is probably better to say the Event has that Object as a participant. More specific versions of this relation exist, e.g. containsEvent, so it is likely that there will be few situations where it should be used itself. However, by acting as a superproperty to several relations, it captures a core similarity between these and enables taxonomy-based similarity metrics.</comment>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#containsEvent">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#coOccurs"/>
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#contains"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#during"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+        <symbol xmlns="http://www.ease-crc.org/ont/SOMA.owl#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">di</symbol>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">`A contains event B` means that A strictly starts before, and ends after B, i.e. B is wholly contained in A.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">contains event</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#derivedFrom">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#associatedWith"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isSourceFor"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#InformationObject"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#InformationObject"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The (transitive) relation between an information object and another which it has been derived from.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">derived from</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#directlyDerivedFrom">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#derivedFrom"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isDirectSourceFor"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The relation between an information object and another which it has been derived from.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">directly derived from</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#during">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#coOccurs"/>
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isContainedIn"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+        <symbol xmlns="http://www.ease-crc.org/ont/SOMA.owl#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">d</symbol>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">`A during B` means that B strictly starts before, and ends after A, i.e. A is wholly contained in B.</comment>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#finishedBy">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#coOccurs"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#finishes"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+        <symbol xmlns="http://www.ease-crc.org/ont/SOMA.owl#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">fi</symbol>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">`A finishes B` means that A ends exactly where B ends, and that B strictly starts before A.  As in &quot;I finish my day by taking a shower&quot;.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">finished by</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#finishes">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#coOccurs"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+        <symbol xmlns="http://www.ease-crc.org/ont/SOMA.owl#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">f</symbol>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">`A finishes B` means that A ends exactly where B ends, and that B strictly starts before A.  As in &quot;I finish my day by taking a shower&quot;.</comment>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#firstMember">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasMember"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Collection"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation between a collection and a member of it that is least according to some ordering. This ordering can be arbitrary, i.e. the order in which Entities are recorded in the Collection.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">first member</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasGoal">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isDescribedBy"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Goal"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation from an Entity to a Goal it pursues. Agents can pursue Goals, and Tasks are also construed as pursuing Goals.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">has goal</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasInitialScene">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasInitialState"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isInitialSceneOf"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#StateTransition"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Scene"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation between StateTransitions and Scenes, which identifies the scene the transition starts from.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">has initial scene</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasInitialState">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#includesSituation"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isInitialStateOf"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Transition"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Situation"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation which connects a Transition to the Situation it starts from.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">has initial state</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasInputParameter">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasParameter"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isInputParameterFor"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#EventType"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Parameter"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation between a Task and one of its input parameters.</comment>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation from an EventType (typically, a Task) and a parameter describing some state of affairs before the event classified by the EventType takes place, and which contributes towards that event happening.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">has input parameter</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasOutputParameter">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasParameter"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isOutputParameterFor"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#EventType"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Parameter"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation between a Task and one of its output parameters.</comment>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation from an EventType (typically a Task) to a Parameter describing an outcome of the event classified by the EventType.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">has output parameter</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasPhase">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasConstituent"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Action"/>
+                    <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Process"/>
+                </owl:unionOf>
+            </owl:Class>
+        </domain>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#State"/>
+                    <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Process"/>
+                </owl:unionOf>
+            </owl:Class>
+        </range>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation used to describe the structure of an Action or Process in terms of phases, i.e. subprocesses and states that occur during its unfolding.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">has phase</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasPhysicalComponent">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasComponent"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation used to describe the structure of a PhysicalObject in terms of physical components, i.e. what other PhysicalObjects are components of it.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">has physical component</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasSoftwareAgent">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#involvesAgent"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation from an Event and the SoftwareAgent responsible for making that Event happen.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">has software agent</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasStatus">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasQuality"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation from an Entity to a Quality that is indicative of the Entity&apos;s state, e.g. if it is a device, its state of operation.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">has status</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasTerminalScene">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasTerminalState"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isTerminalSceneOf"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#StateTransition"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Scene"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation between StateTransitions and Scenes, which identifies the scene the transition is expected to end at.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">has terminal scene</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasTerminalState">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#includesSituation"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isTerminalStateOf"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Transition"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Situation"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation from a Transition to the Situation it ends in.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">has terminal state</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#includesConcept">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#includesObject"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isConceptIncludedIn"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Situation"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Concept"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation recording that a Situation has a Concept as participant in some sort of role.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">includes concept</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#includesRecord">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isReferenceOf"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isRecordIncludedBy"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#InformationObject"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relationship indicating that an Event has been recorded by an InformationObject</comment>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#includesSituation">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isSettingFor"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isSituationIncludedIn"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Situation"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Situation"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation recording that a Situation has a (sub) Situation as participant in some role.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">includes situation</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#involvesArtifact">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasParticipant"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isArtifactInvolvedIn"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalArtifact"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Artifact participation.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">involves artifact</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#involvesPlace">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasParticipant"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isPlaceInvolvedIn"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalPlace"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation recording that an Event makes some use of a PhysicalPlace. Typically this place is where the Event is located.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">involves place</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isArtifactInvolvedIn">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isParticipantIn"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalArtifact"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Artifact participation.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">is artifact involved in</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isCausedByEvent">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#includesEvent"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Transition"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation recording that a Transition is the result of some Event.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">is caused by event</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isConceptIncludedIn">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isObjectIncludedIn"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Concept"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Situation"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation recording that a Concept participates in a Situation in some way.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">is concept included in</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isContainedIn">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#overlaps"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The inverse of the contains relation. See the contains relation for details.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">is contained in</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isDirectSourceFor">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isSourceFor"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The (transitive) relation between an information object and another which was derived from the former.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">is direct source for</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isInitialSceneOf">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isInitialStateOf"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Scene"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#StateTransition"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation between StateTransitions and Scenes, which identifies the scene the transition starts from.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">is initial scene of</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isInitialStateOf">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isSituationIncludedIn"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Situation"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Transition"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation recording that a Situation was where a Transition began.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">is initial state of</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isInputParameterFor">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isParameterFor"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Parameter"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#EventType"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation between a Task and one of its input parameters.</comment>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation from a Parameter to an EventType (typically, a Task). The parameter describes some state of affairs that precedes and will contribute to the event classified by the EventType.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">is input parameter for</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isInputRoleOf">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasTask"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isTaskOfInputRole"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Task"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation between an input roles and its Task.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">is input role of</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isOccurrenceOf">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isClassifiedBy"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isOccurringIn"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#EventType"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation between an event and an event type, e.g. &apos;taking the cup from the table&apos; is an occurence of the motion &apos;approaching&apos;.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">is occurence of</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isOccurringIn">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#EventType"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation between an event and an event type, e.g. &apos;taking the cup from the table&apos; is an occurence of the motion &apos;approaching&apos;.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">is occurring in</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isOutputParameterFor">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isParameterFor"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Parameter"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#EventType"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation between a Task and one of its output parameters.</comment>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation from a Parameter to an EventType (typically, a Task). The parameter describes an outcome of the event classified by the EventType.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">is output parameter for</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isOutputRoleOf">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasTask"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isTaskOfOutputRole"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Task"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation between an output roles and its Task.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">is output role of</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isPlaceInvolvedIn">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isParticipantIn"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalPlace"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation recording that a PhysicalPlace is involved in some Event; typically, this is where the Event is located.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">is place involved in</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isPlanFor">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#describes"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Plan"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Task"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A special relation between a Plan and a Task, to indicate that the Plan describes a way to achieve the Task.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">is plan for</label>
+        <seeAlso xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Note that DUL already says Plans can define Tasks, but that relation is used differently: a Plan defines a Task because it contains it as a step.</seeAlso>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isRecordIncludedBy">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isAbout"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#InformationObject"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relationship indicating that an InformationObject is a recording of an Event.</comment>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isSituationIncludedIn">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasSetting"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Situation"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Situation"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation recording that a Situation participates in another in some role, or can be considered as a subsituation of the other.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">is situation included in</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isSourceFor">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#associatedWith"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#InformationObject"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#InformationObject"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The (transitive) relation between an information object and another which was derived from the former.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">is source for</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isTaskOfInputRole">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isTaskOf"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Task"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation between a Task and one of its input roles.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">is task of input role</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isTaskOfOutputRole">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isTaskOf"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Task"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation between a Task and one of its output roles.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">is task of output role</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isTerminalSceneOf">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isTerminalStateOf"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Scene"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#StateTransition"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation between StateTransitions and Scenes, which identifies the scene the transition is expected to end at.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">is terminal scene of</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isTerminalStateOf">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isSituationIncludedIn"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Situation"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Transition"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation recording that a Situation was where a Transition ended.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">is terminal state of</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#meets">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#directlyPrecedes"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#metBy"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+        <symbol xmlns="http://www.ease-crc.org/ont/SOMA.owl#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">m</symbol>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation between entities, expressing a &apos;sequence&apos; schema where one of the entities exactly ends where the other entity starts.</comment>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#metBy">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#directlyFollows"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+        <symbol xmlns="http://www.ease-crc.org/ont/SOMA.owl#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">mi</symbol>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation between entities, expressing a &apos;sequence&apos; schema where one of the entities exactly ends where the other entity starts.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">met by</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#overlappedBy">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#overlaps"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#overlappedOn"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+        <symbol xmlns="http://www.ease-crc.org/ont/SOMA.owl#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">oi</symbol>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A schematic relation between any entities that also implies ordering, e.g. &quot;she has worked into the night&quot;.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">overlapped by</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#overlappedOn">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#overlaps"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+        <symbol xmlns="http://www.ease-crc.org/ont/SOMA.owl#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">o</symbol>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A schematic relation between any entities that also implies ordering, e.g. &quot;she has worked into the night&quot;.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">overlapped on</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#simultaneous">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#coOccurs"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#SymmetricProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+        <symbol xmlns="http://www.ease-crc.org/ont/SOMA.owl#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">=</symbol>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">`A simultaneous B` means that A strictly starts and ends at the same time instant as B, i.e. their temporal extend is equal.</comment>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#startedBy">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#coOccurs"/>
+        <owl:inverseOf rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#starts"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+        <symbol xmlns="http://www.ease-crc.org/ont/SOMA.owl#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">si</symbol>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">`A starts B` means that A starts exactly where B starts, and that A strictly ends before B. As in &quot;I start my day with a coffee&quot;.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">started by</label>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#starts">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#coOccurs"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+        <symbol xmlns="http://www.ease-crc.org/ont/SOMA.owl#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">s</symbol>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">`A starts B` means that A starts exactly where B starts, and that A strictly ends before B. As in &quot;I start my day with a coffee&quot;.</comment>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#associatedWith"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasComponent"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasConstituent"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasPart"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasParticipant"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasQuality"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegion"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#involvesAgent"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isParticipantIn"/>
+    <owl:AnnotationProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#UsageGuideline">
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Provides a definition, or usage guideline, aimed at a particular community of the ontology&apos;s users. The community is identified by the subproperty of UsageGuideline.
+
+A style recommendation for usage guidelines is that they should be brief. In contrast to usual concept annotations that can, and should be detailed about the reasons behind modelling decisions, usage guidelines are simply meant to answer questions about when it is appropriate to use a concept, and they must be a practical, easy to query and understand resource.</comment>
+    </owl:AnnotationProperty>
+    <owl:AnnotationProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#nickname">
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Similar to rdfs:label, but without GUI or reasoner impact in Protege; avoiding Protege problems is why this is not a label subproperty. Nicknames are used by particular software working with the ontology as a way to give community-specific names to concepts. Communities are identified by the subproperty of nickname.</comment>
+    </owl:AnnotationProperty>
+    <owl:AnnotationProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#symbol">
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">An annotation property which should be used to record by what symbols or abbreviations, if any, some relation or entity is known in scientific literature.</comment>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:AnnotationProperty>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasDataFormat">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasDataValue"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#InformationRealization"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A property linking an InformationRealization to a string specifying a format name, e.g. URDF or STL.</comment>
+    </owl:DatatypeProperty>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasEventBegin">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasEventTime"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.w3.org/2001/XMLSchema#double"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation recording when an Event started. In this case, we think of the Event as something unfolding over some span of time.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">has event begin</label>
+    </owl:DatatypeProperty>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasEventEnd">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasEventTime"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.w3.org/2001/XMLSchema#double"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation recording when an Event ended. In this case, we think of the Event as something unfolding over some span of time.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">has event end</label>
+    </owl:DatatypeProperty>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasEventTime">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasDataValue"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.w3.org/2001/XMLSchema#double"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Superproperty of hasEventBegin and hasEventEnd, records that an Event happened, or was happening, at a particular time. Using the subproperties captures the richer semantics of that time relative to the event. Using only this superproperty may be appropriate when the Event is construed to take place at a single instant of time.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">has event time</label>
+    </owl:DatatypeProperty>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasIntervalBegin">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasIntervalTime"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#TimeInterval"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation recording when some TimeInterval started.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">has interval begin</label>
+    </owl:DatatypeProperty>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasIntervalEnd">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasIntervalTime"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#TimeInterval"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation recording when a TimeInterval ended.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">has interval end</label>
+    </owl:DatatypeProperty>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasIntervalTime">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegionDataValue"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#TimeInterval"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Superproperty of relations used to connect moments in time to a TimeInterval.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">has interval time</label>
+    </owl:DatatypeProperty>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasNameString">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasDataValue"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A relation recording some identifier associated to an Entity.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">has name string</label>
+    </owl:DatatypeProperty>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasPersistentIdentifier">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasDataValue"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#InformationRealization"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A property linking an InformationRealization to a persistent identifier such as a DOI, which can then be used to obtain an address at which the realization (i.e. digital file) can be retrieved.</comment>
+    </owl:DatatypeProperty>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isReificationOf">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasDataValue"/>
+        <domain xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Description"/>
+        <range xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.w3.org/2001/XMLSchema#anyURI"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">An auxiliary property that is used to generate object individuals, called reifications, from any other Entity, e.g. from relations, classes, data types. These reifications can then be used in DL axioms as any other named individual.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">is reification of</label>
+    </owl:DatatypeProperty>
+    <owl:DatatypeProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasDataValue"/>
+    <owl:DatatypeProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegionDataValue"/>
+    <owl:NamedIndividual rdf:about="http://www.ease-crc.org/ont/SOMA.owl#RDFType">
+        <rdf:type rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Reification"/>
+        <isReificationOf xmlns="http://www.ease-crc.org/ont/SOMA.owl#" rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">http://www.w3.org/2001/XMLSchema#type</isReificationOf>
+    </owl:NamedIndividual>
+    <Datatype xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:about="http://www.ease-crc.org/ont/SOMA.owl#array_boolean">
+        <owl:equivalentClass rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </Datatype>
+    <Datatype xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:about="http://www.ease-crc.org/ont/SOMA.owl#array_double">
+        <owl:equivalentClass rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </Datatype>
+    <Datatype xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:about="http://www.ease-crc.org/ont/SOMA.owl#array_float">
+        <owl:equivalentClass rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </Datatype>
+    <Datatype xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:about="http://www.ease-crc.org/ont/SOMA.owl#array_int">
+        <owl:equivalentClass rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </Datatype>
+    <Datatype xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:about="http://www.ease-crc.org/ont/SOMA.owl#array_string">
+        <owl:equivalentClass rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </Datatype>
+    <Datatype xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:about="http://www.ease-crc.org/ont/SOMA.owl#array_uint">
+        <owl:equivalentClass rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </Datatype>
+    <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Plan">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isPlanFor"/>
+                <owl:someValuesFrom rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Task"/>
+            </owl:Restriction>
+        </subClassOf>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Action">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#executesTask"/>
+                <owl:allValuesFrom rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Task"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The EASE view: an Action is an Event in which an Agent executes some Task, typically defined by a Workflow, towards the achievement of some Goal.</comment>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#InformationRealization">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasPersistentIdentifier"/>
+                <owl:someValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </subClassOf>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasDataFormat"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">In SOMA-compliant systems, the way to use InformationObjects to specify extra data about an individual entity is to employ the &apos;is about&apos; and &apos;expresses&apos; properties (or their inverses &apos;is reference of&apos; and &apos;is expressed by&apos;) and to supply a persistent identifier for a realization of the InformationObject.
+
+As a prototypical example, consider an individual called Action_XYZ, about which we have some data for which the meaning is described by Description_ABC. The data would be an individual InformationObject_DEF, and the following property assertions would hold:
+
+InformationObject_DEF &apos;is about&apos; Action_XYZ
+InformationObject_DEF expresses Description_ABC
+
+
+Usually, an individual InformationObject would be connected to (at least) an InformationRealization individual. For example, suppose there is such an InformationRealization individual, InformationRealization_123. Then, this individual will have data properties describing its format and persistent identifier
+
+InformationRealization_123 hasPersistentIdentifier &apos;doi&apos;
+InformationRealization_123 hasDataFormat &apos;urdf&apos;</comment>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#executesTask">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isOccurrenceOf"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isExecutedIn">
+        <subPropertyOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#isOccurringIn"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#InformationObject">
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">In SOMA-compliant systems, the way to use InformationObjects to specify extra data about an individual entity is to employ the &apos;is about&apos; and &apos;expresses&apos; properties (or their inverses &apos;is reference of&apos; and &apos;is expressed by&apos;) and to supply a persistent identifier for a realization of the InformationObject.
+
+As a prototypical example, consider an individual called Action_XYZ, about which we have some data for which the meaning is described by Description_ABC. The data would be an individual InformationObject_DEF, and the following property assertions would hold:
+
+InformationObject_DEF &apos;is about&apos; Action_XYZ
+InformationObject_DEF expresses Description_ABC
+
+
+Usually, an individual InformationObject would be connected to (at least) an InformationRealization individual. For example, suppose there is such an InformationRealization individual, InformationRealization_123. Then, this individual will have data properties describing its format and persistent identifier
+
+InformationRealization_123 hasPersistentIdentifier &apos;doi&apos;
+InformationRealization_123 hasDataFormat &apos;urdf&apos;</comment>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#realizesSelfInformation">
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" xml:lang="en">realizes self information</label>
+    </rdf:Description>
+</rdf:RDF>

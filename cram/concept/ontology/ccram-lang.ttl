@@ -1,0 +1,207 @@
+@prefix :      <https://aicor.knowledge/ccram#> .
+@prefix ccram: <https://aicor.knowledge/ccram#> .
+@prefix dul:   <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#> .
+@prefix soma:  <http://www.ease-crc.org/ont/SOMA.owl#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+
+# =====================================================================================================================
+# ccram-lang -- the conceptual CRAM language described in the ontology (D9: the language is derived from the ontology).
+#
+#  * The vocabulary of designators and SDT trees is not defined here: every type, role and relation keyword denotes an
+#    ontology term (DUL, SOMA, USD, ccram-actions, domain modules). The keyword of a term is derived from its IRI
+#    (CamelCase -> kebab-case) unless the term carries an explicit keyword annotation below.
+#  * What this module defines is the language's own structure -- designator kinds, determiners, plan-language
+#    constructs, definition forms, schema facets -- as individuals and classes, so that the system can reason about its
+#    language (meta level): which constructs exist, what they mean, which facet of a KR3 designator a schema clause
+#    fills, which keyword denotes which term.
+#  * The grammar of a designator (which roles a task takes) is stated as axioms on the task classes:
+#        Task  SubClassOf  dul:isTaskOf some R            R is a required role
+#        Task  SubClassOf  dul:isTaskOf only (R1 or ...)  the admissible roles (closure)
+#    (ccram-actions.ttl). Semantics of a designator: concept expression (attributive: a/an/some), nominal
+#    (referential: the, tagged), belonging place (its) -- see tools/ccram_lang.py to_dl().
+# =====================================================================================================================
+
+<https://aicor.knowledge/ccram> a owl:Ontology ;
+    rdfs:label "ccram-lang" ;
+    rdfs:comment "The conceptual CRAM language as ontology terms (meta level). Decision D9, 2026-10-21." ;
+    owl:imports <http://www.ease-crc.org/ont/SOMA-ALL.owl> , <http://www.ease-crc.org/ont/SOMA-HOME.owl> .
+
+# ---------------------------------------------------------------------------------------------------- lexicon
+:keyword a owl:AnnotationProperty ;
+    rdfs:comment "A surface symbol of the term in the conceptual CRAM language. Overrides the keyword derived from the IRI. Position decides the reading: type position (a K), (type K); role position (K filler); relation position (K arg...)." .
+:typeKeyword a owl:AnnotationProperty ; rdfs:subPropertyOf :keyword ;
+    rdfs:comment "Keyword of a class when used as a type: (a K), (the K), (type K), (is-a K)." .
+:roleKeyword a owl:AnnotationProperty ; rdfs:subPropertyOf :keyword ;
+    rdfs:comment "Keyword of a Role class when used as a role key in a designator: (K filler)." .
+:relationKeyword a owl:AnnotationProperty ; rdfs:subPropertyOf :keyword ;
+    rdfs:comment "Keyword of a property when used as an attribute or relation: (K value) inside a designator, (K a b) in a condition." .
+:headKeyword a owl:AnnotationProperty ; rdfs:subPropertyOf :keyword ;
+    rdfs:comment "Keyword of a designator kind in head position: (an action ...), (an object ...)." .
+:derivedKeyword a owl:AnnotationProperty ;
+    rdfs:comment "Replacement for the keyword derived from the IRI when it would collide with an explicit keyword of another term (e.g. soma:Turning, a body motion, vs. ccram:TurningControl, the task)." .
+:kr3Facet a owl:AnnotationProperty ;
+    rdfs:comment "Which facet of the KR3 designator <kappa R I C Phi beta pi> a schema clause fills (D1)." .
+:decision a owl:AnnotationProperty ;
+    rdfs:comment "The concept-document decision (D1..D9) that fixes this construct." .
+
+# ---------------------------------------------------------------------------------------------------- designators
+:Designator a owl:Class ;
+    rdfs:subClassOf dul:InformationObject ;
+    rdfs:comment "A partial description in the plan language that refers to (or is satisfied by) entities of the world; resolved by the climb (D3 bind) and equated by co-reference (D3 equate)." .
+:ActionDesignator a owl:Class ; rdfs:subClassOf :Designator ; :headKeyword "action" ;
+    rdfs:comment "Describes dul:Action instances: (an action (type T) (R filler) ...) means Action and executesTask some T and, per role R, hasParticipant some (filler and isClassifiedBy some R)." .
+:ObjectDesignator a owl:Class ; rdfs:subClassOf :Designator ; :headKeyword "object" ;
+    rdfs:comment "Describes dul:PhysicalObject instances: (an object (type K) (rel v) ...) or (a K (rel v) ...)." .
+:LocationDesignator a owl:Class ; rdfs:subClassOf :Designator ; :headKeyword "location" ;
+    rdfs:comment "Describes places (dul:PhysicalPlace) or poses relative to objects." .
+:MotionDesignator a owl:Class ; rdfs:subClassOf :Designator ; :headKeyword "motion" ;
+    rdfs:comment "Describes soma:Motion instances (the realisation level below actions)." .
+:refersToKind a owl:ObjectProperty ; rdfs:domain :Designator ;
+    rdfs:comment "Meta: the ontology class whose instances a designator kind describes." .
+:ActionDesignator :refersToKind dul:Action .
+:ObjectDesignator :refersToKind dul:PhysicalObject .
+:LocationDesignator :refersToKind dul:PhysicalPlace .
+:MotionDesignator :refersToKind soma:Motion .
+
+# ---------------------------------------------------------------------------------------------------- determiners (D2)
+:Determiner a owl:Class ; rdfs:subClassOf dul:InformationObject ; :decision "D2" .
+:AttributiveDeterminer a owl:Class ; rdfs:subClassOf :Determiner ;
+    rdfs:comment "a/an/some: the designator is a concept; any satisfier will do (instance retrieval)." .
+:ReferentialDeterminer a owl:Class ; rdfs:subClassOf :Determiner ;
+    rdfs:comment "the/tagged: the designator denotes one individual (a nominal); resolution checks that individual." .
+:BelongingDeterminer a owl:Class ; rdfs:subClassOf :Determiner ;
+    rdfs:comment "its: the place where the object belongs in the current context (D7: norm > class home > storage zone > abstain)." .
+:UniversalDeterminer a owl:Class ; rdfs:subClassOf :Determiner ;
+    rdfs:comment "each/every: a goal over all satisfiers (achieve (delivered (each ...)))." .
+:a     a :AttributiveDeterminer ; :keyword "a" , "an" .
+:some  a :AttributiveDeterminer ; :keyword "some" ;
+    rdfs:comment "Mass / partitive reading for substances: (some sugar)." .
+:the   a :ReferentialDeterminer ; :keyword "the" .
+:its   a :BelongingDeterminer ; :keyword "its" .
+:each  a :UniversalDeterminer ; :keyword "each" , "every" .
+
+# ---------------------------------------------------------------------------------------------------- plan language (RPL/CPL)
+:PlanLanguageConstruct a owl:Class ; rdfs:subClassOf dul:InformationObject ;
+    rdfs:comment "A construct of the plan language. The plan language is part of the ontology so that plans can be inspected, compared and transformed by reasoning (meta level)." .
+:SequencingConstruct a owl:Class ; rdfs:subClassOf :PlanLanguageConstruct .
+:GoalConstruct a owl:Class ; rdfs:subClassOf :PlanLanguageConstruct .
+:ProtectionConstruct a owl:Class ; rdfs:subClassOf :PlanLanguageConstruct .
+:ReferenceConstruct a owl:Class ; rdfs:subClassOf :PlanLanguageConstruct .
+:WaitingConstruct a owl:Class ; rdfs:subClassOf :PlanLanguageConstruct .
+:LogicalConstruct a owl:Class ; rdfs:subClassOf :PlanLanguageConstruct .
+
+:seq          a :SequencingConstruct ; :keyword "seq" ; rdfs:comment "Run the steps in order; fails with the first failing step." .
+:par          a :SequencingConstruct ; :keyword "par" ; rdfs:comment "Run the steps concurrently; succeeds when all succeed." .
+:perform      a :GoalConstruct ; :keyword "perform" ; rdfs:comment "Execute an action designator (resolve, gate, realise, monitor)." .
+:achieve      a :GoalConstruct ; :keyword "achieve" ; rdfs:comment "Make a state hold (choose a plan for it)." .
+:maintain     a :GoalConstruct ; :keyword "maintain" ; rdfs:comment "Keep a state holding over the episode." .
+:prevent      a :GoalConstruct ; :keyword "prevent" ; rdfs:comment "Keep a state from ever holding; safety rules have chance bound 0." .
+:protect      a :ProtectionConstruct ; :keyword "protect" ; rdfs:comment "Keep a protected state until a condition; a violation interrupts the plan." .
+:evap-protect a :ProtectionConstruct ; :keyword "evap-protect" ; rdfs:comment "Run the body; when its purpose evaporates, run the protection's tail (e.g. put the carton back)." .
+:tag          a :ReferenceConstruct ; :keyword ":tag" , "tag" ; :decision "4b" ; rdfs:comment "Name a node of a tree; the tag table keeps the reference when the tree is restructured; paths are implicit." .
+:tagged       a :ReferenceConstruct ; :keyword "tagged" ; rdfs:comment "Refer to a tagged node, scoped where ambiguous: (tagged spinner-head machine)." .
+:bind         a :ReferenceConstruct ; :keyword "bind" ; :decision "D3" ; rdfs:comment "Climb: monotone refinement of a designator by servants." .
+:equate       a :ReferenceConstruct ; :keyword "equate" ; :decision "D3" ; rdfs:comment "Co-reference: two designators denote the same entity." .
+:wait-for     a :WaitingConstruct ; :keyword "wait-for" .
+:and          a :LogicalConstruct ; :keyword "and" .
+:or           a :LogicalConstruct ; :keyword "or" .
+:not          a :LogicalConstruct ; :keyword "not" .
+
+# ---------------------------------------------------------------------------------------------------- definition forms
+:DefinitionForm a owl:Class ; rdfs:subClassOf dul:InformationObject ;
+    rdfs:comment "A top-level form of a conceptual CRAM library: what kind of knowledge it introduces." .
+:def-action-schema   a :DefinitionForm ; :keyword "def-action-schema" ; :decision "D1" ;
+    rdfs:comment "The invariant part of a designator family (owns kappa R I C Phi)." .
+:def-plan-schema     a :DefinitionForm ; :keyword "def-plan-schema" ; rdfs:comment "Generalized plan schema (pre / body / eff / succ / monitor / repair)." .
+:def-microtheory     a :DefinitionForm ; :keyword "def-microtheory" ; :decision "D8" ; rdfs:comment "A causal regime with modes, timings, closing events and an executable model." .
+:def-category-lattice a :DefinitionForm ; :keyword "def-category-lattice" ; rdfs:comment "Action categories; with D9 the categories are task classes of the ontology (ccram-actions.ttl)." .
+:def-servant-table   a :DefinitionForm ; :keyword "def-servant-table" ; :decision "D3" ; rdfs:comment "Who fills which role kind in the climb, cheapest sufficient first." .
+:def-admissibility   a :DefinitionForm ; :keyword "def-admissibility" ; :decision "D6" ; rdfs:comment "How the 8 AICOR admissibility conditions are computed." .
+:assessed-against    a :DefinitionForm ; :keyword "assessed-against" ; :decision "D5" ; rdfs:comment "A problem the system is assessed against (outside the system)." .
+:rwms                a :DefinitionForm ; :keyword "rwms" ; :decision "D5" ; rdfs:comment "RWMS_beta = ME <-> BWS_beta with its boundary." .
+:in-package          a :DefinitionForm ; :keyword "in-package" .
+:node                a :DefinitionForm ; :keyword "node" ; rdfs:comment "An SDT node: is-a, grounding, state, attributes, parts." .
+:problem             a :DefinitionForm ; :keyword "problem" .
+
+# ---------------------------------------------------------------------------------------------------- schema facets (KR3, D1)
+:SchemaFacet a owl:Class ; rdfs:subClassOf dul:InformationObject ; :decision "D1" .
+:roles       a :SchemaFacet ; :keyword ":roles" ; :kr3Facet "R" .
+:telos       a :SchemaFacet ; :keyword ":telos" ; :kr3Facet "kappa" .
+:pre         a :SchemaFacet ; :keyword ":pre" ; :kr3Facet "C" .
+:causal      a :SchemaFacet ; :keyword ":causal" ; :kr3Facet "Phi" .
+:phases      a :SchemaFacet ; :keyword ":phases" ; :kr3Facet "I" .
+:specializes a :SchemaFacet ; :keyword ":specializes" ; :kr3Facet "kappa" ; rdfs:comment "With D9: the task class's superclasses; the clause is redundant once the schema names an ontology task." .
+:admissible-refinement a :SchemaFacet ; :keyword ":admissible-refinement" ; :kr3Facet "C" .
+:failures    a :SchemaFacet ; :keyword ":failures" ; :kr3Facet "pi" .
+
+# ---------------------------------------------------------------------------------------------------- KR3 mode classes
+:ModeClass a owl:Class ; rdfs:subClassOf dul:Concept ;
+    rdfs:comment "KR3 classification of a microtheory mode: safe, recoverable, prohibited (closing events lead into prohibited)." .
+:SafeMode a owl:Class ; rdfs:subClassOf soma:DeviceStateRange ; :typeKeyword "safe" .
+:RecoverableMode a owl:Class ; rdfs:subClassOf soma:DeviceStateRange ; :typeKeyword "recoverable" .
+:ProhibitedAction a owl:Class ; rdfs:subClassOf dul:Action ; :typeKeyword "prohibited" ;
+    rdfs:comment "An action that enters a closing event of a microtheory. Domain modules define it by axioms; a reasoner then classifies candidate actions (pre-act check derived from axioms, not code)." .
+
+# ---------------------------------------------------------------------------------------------------- failures (Q2, 2026-10-21)
+# A failure is a typed description that a part of the system signals and an enclosing part of the control program
+# catches and handles. Whether a deviation is a fault or the intended outcome is decided by the handler in scope,
+# not by the physical model (the microtheory stays physical). Prohibited transitions (closing events) are not
+# handled after the fact: the gate prevents them before acting.
+:FailureHandlingConstruct a owl:Class ; rdfs:subClassOf :PlanLanguageConstruct .
+:with-failure-handling a :FailureHandlingConstruct ; :keyword "with-failure-handling" ;
+    rdfs:comment "Run the body; a failure signalled inside is caught by the first clause whose failure class subsumes it (ontology subsumption, not name equality)." .
+:fail     a :FailureHandlingConstruct ; :keyword "fail" ; rdfs:comment "Signal a failure description." .
+:retry    a :FailureHandlingConstruct ; :keyword "retry" ; rdfs:comment "Handler outcome: run the protected body again (bounded)." .
+:continue a :FailureHandlingConstruct ; :keyword "continue" ; rdfs:comment "Handler outcome: the failure was the expected event; carry on." .
+:escapes  a :SchemaFacet ; :keyword ":escapes" ; :kr3Facet "pi" ;
+    rdfs:comment "Failures a plan schema deliberately lets propagate to its caller." .
+:def-failure a :DefinitionForm ; :keyword "def-failure" ; :decision "Q2" ;
+    rdfs:comment "Declares a failure description: its class (ontology), who signals it, what it describes, which repair it suggests." .
+:signalledBy a owl:AnnotationProperty ; rdfs:comment "What signals the failure (a microtheory, a realisation, the gate)." .
+:suggestsRepair a owl:AnnotationProperty ; rdfs:comment "Plan schema(s) the failure suggests as repair (failure description's suggest_correction)." .
+:executableClass a owl:AnnotationProperty ; rdfs:comment "The exception class that realises this failure in the executable twin (grounding of the failure term)." .
+:recoverable a owl:AnnotationProperty ; rdfs:comment "true: to be handled; false: must be prevented (closing event), a handler is a design error." .
+:perform-plan a :GoalConstruct ; :keyword "perform-plan" ; rdfs:comment "Run a plan schema with arguments (its escaping failures propagate to the caller)." .
+
+# ---------------------------------------------------------------------------------------------------- goals (D10, 2026-10-21)
+# A goal is a TEMPLATE OF STATE EVOLUTIONS: the set of admissible world-state trajectories over a time interval, in an
+# interval logic over world states. A plan / an action succeeds iff its realised trajectory lies in the set -- the
+# successful state trajectories of the AICOR framework. perform and achieve are complementary: perform an action
+# designator -> its schema's telos template, instantiated with the roles, is the goal (success check, skip-if-holds,
+# runtime monitors, what the episode was for); a goal statement -> refined into action designators (achieve), a
+# protection + repair (maintain), a gate constraint + monitor (prevent), a monitoring action + handlers (monitor).
+:GoalTemplate a owl:Class ; rdfs:subClassOf dul:Goal ; :decision "D10" ;
+    rdfs:comment "A set of admissible state trajectories over an interval i; conjunction of former parts." .
+:AchieveGoal a owl:Class ; rdfs:subClassOf :GoalTemplate ;
+    rdfs:comment "(achieve phi [:at (end i)] [:within d]): phi holds at the end of i (within d of its start)." .
+:MaintainGoal a owl:Class ; rdfs:subClassOf :GoalTemplate ;
+    rdfs:comment "(maintain phi [:during i] [:until psi]): phi holds at every state of i (until psi holds)." .
+:PreventGoal a owl:Class ; rdfs:subClassOf :GoalTemplate ;
+    rdfs:comment "(prevent phi [:during i] [:while chi]): phi holds at no state of i (at no state where chi holds). Safety rules: chance bound 0." .
+:MonitorGoal a owl:Class ; rdfs:subClassOf :GoalTemplate ;
+    rdfs:comment "(monitor phi :until psi): phi is observed at every state until psi; a deviation signals a failure description (Q2)." .
+:ProtectGoal a owl:Class ; rdfs:subClassOf :MaintainGoal ;
+    rdfs:comment "(protect phi :until psi): maintain phi from now until psi; violation interrupts the plan." .
+:EachGoal a owl:Class ; rdfs:subClassOf :GoalTemplate ;
+    rdfs:comment "(each x G): one sub-trajectory satisfying G per satisfier of x." .
+:formerOf a owl:AnnotationProperty ; rdfs:comment "The goal template class a goal construct keyword denotes." .
+:achieve :formerOf :AchieveGoal .
+:maintain :formerOf :MaintainGoal .
+:prevent :formerOf :PreventGoal .
+:protect :formerOf :ProtectGoal .
+:monitor a :GoalConstruct ; :keyword "monitor" ; :formerOf :MonitorGoal ;
+    rdfs:comment "As a goal former: (monitor phi :until psi). In a schema phase: the phase monitor." .
+:TemporalQualifier a owl:Class ; rdfs:subClassOf dul:InformationObject ; :decision "D10" ;
+    rdfs:comment "Places a goal part in the interval; aligned to the Allen relations of SOMA-Allen." .
+:alignedTo a owl:AnnotationProperty .
+:over   a :TemporalQualifier ; :keyword ":over" ; rdfs:comment "Binds the interval of the template (the action's / plan's interval)." .
+:at     a :TemporalQualifier ; :keyword ":at" ; rdfs:comment "At a time point of the interval: (end i), (start i)." .
+:during a :TemporalQualifier ; :keyword ":during" ; :alignedTo soma:during ; rdfs:comment "Throughout the interval." .
+:while  a :TemporalQualifier ; :keyword ":while" ; rdfs:comment "Restricted to the states where a condition holds." .
+:until  a :TemporalQualifier ; :keyword ":until" ; :alignedTo soma:meets ; rdfs:comment "From the start until the first state where a condition holds." .
+:within a :TemporalQualifier ; :keyword ":within" ; :alignedTo soma:before ; rdfs:comment "Bounded: by a duration after the start." .
+:end    a :TemporalQualifier ; :keyword "end" ; :alignedTo soma:finishes ; rdfs:comment "Last time point of an interval." .
+:start  a :TemporalQualifier ; :keyword "start" ; :alignedTo soma:starts ; rdfs:comment "First time point of an interval." .

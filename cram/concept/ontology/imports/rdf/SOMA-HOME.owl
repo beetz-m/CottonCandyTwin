@@ -1,0 +1,1589 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:swrl="http://www.w3.org/2003/11/swrl#">
+    <owl:Ontology rdf:about="http://www.ease-crc.org/ont/SOMA-HOME.owl">
+        <owl:imports rdf:resource="http://www.ease-crc.org/ont/SOMA-ALL.owl"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SOMA-HOME defines the concepts that are specific to home, e.g. kitchen environment, household items.</comment>
+    </owl:Ontology>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#3DPosition"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#6DPose"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#API_Specification"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#AbductiveReasoning"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Accessor"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Accident"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ActionExecutionPlan"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Actuating"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#AestheticDesign"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Affordance"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#AffordsBeingSitOn">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Affordance"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#describes"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#CanBeSatOn"/>
+            </owl:Restriction>
+        </subClassOf>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#definesBearer"/>
+                <owl:allValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#SittingDestination"/>
+            </owl:Restriction>
+        </subClassOf>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#definesTrigger"/>
+                <owl:allValuesFrom>
+                    <owl:Class>
+                        <owl:intersectionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#AgentRole"/>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies"/>
+                                <owl:allValuesFrom>
+                                    <owl:Restriction>
+                                        <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasDisposition"/>
+                                        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#CanSit"/>
+                                    </owl:Restriction>
+                                </owl:allValuesFrom>
+                            </owl:Restriction>
+                        </owl:intersectionOf>
+                    </owl:Class>
+                </owl:allValuesFrom>
+            </owl:Restriction>
+        </subClassOf>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#definesTask"/>
+                <owl:allValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Sitting"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A reified relation between a furniture-like object (the bearer), the sitting task it affords, and an agent that can assume a sitting pose (trigger).</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#AgentRole"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Agonist"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Algorithm"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Alteration"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#AlterativeInteraction"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#AlteredObject"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Amateurish"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Answer"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#AnsweringTask"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Antagonist"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Appliance">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#DesignedArtifact"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Approaching"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ArchiveFile"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ArchiveFormat"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ArchiveText"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#AreaSurveying"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Arm"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Armchair">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedChair"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A more comfortable chair that includes sides to support arms.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Arranging"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ArtificialAgent"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Assembling"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#AssertionTask"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#AssumingArmPose"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#AssumingPose"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#AttentionShift"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#AvoidedObject"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Avoiding"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#BakedGood">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Dish"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Barrier"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#BedsideTable">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Table"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A small table typically located next to a bed.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#BehavioralDiagnosis"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#BeneficiaryRole"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Binding"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Blade">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedComponent"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A flat cutting edge of an object used to cut through other objects, such as the blade of a ventilator cutting through the air.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Blockage"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#BlockedObject"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#BodyMovement"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Boiling"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Bottle">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedContainer"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A container with a narrow neck used to store fluids.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Bowl">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Crockery"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A round, deep object used to contain food or liquid.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Box">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedContainer"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasShapeRegion"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#BoxShape"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A cuboid-shaped container.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#BoxShape"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Bread">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#BakedGood"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#BreadKnife">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#KitchenKnife"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A knife to cut bread.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#BreakfastPlate">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Plate"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A smaller plate used for serving bread at the dining table with the main meal or to serve breakfast.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Building">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedContainer"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A structure with a roof and walls.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CanBeSatOn">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Deposition"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isDescribedBy"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#AffordsBeingSitOn"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The disposition to support an agent being in a sitting pose. Typically provided by chairs, stools, etc.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CanCut"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CanSit">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Capability"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The capability of an agent to assume a sitting pose.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Capability"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Capacity"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Carafe">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedContainer"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A container used to hold and pour some beverage.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Catching"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CausalEventRole"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CausativeRole"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CausedMotionTheory"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Ceiling">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#RoomSurface"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Floor"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Wall"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The upper interior surface of a room.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CeramicCooktop">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ElectricCooktop"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A cooktop that uses heated ceramic elements.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CerealBox">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Box"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A box which holds, or at least is intended to usually hold, cereal flakes.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Channel"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CheckingObjectPresence"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ChemicalProcess"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CircularCylinder"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Classifier"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ClausalObject"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Clean"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Cleaning"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Cleanliness"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CleanlinessRegion"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Client-Server_Specification"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ClientRole"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Closing"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ClosingDisposition">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Linkage"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The disposition of an object to connect with some other, so that a region of space becomes fully enclosed by the object and separate from the exterior. 
+
+Often this connection is between parts of the same object.
+
+Because of the existence of a separation between some interior and exterior space regions, objects that can close are also objects that can contain.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Clumsiness"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CoffeeCarafe">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Carafe"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A carafe which holds, or at least is intended to usually hold, coffee.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CoffeeTable">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Table"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A small and low table which is typically used as a shelf for small items such as cups, and located in front of a sofa.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CognitiveAgent"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CoilCooktop">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ElectricCooktop"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A cooktop that uses heated metal coils.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Collision"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Color"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ColorRegion"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CommandingTask"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CommitedObject"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CommunicationAction"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CommunicationReport"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CommunicationTask"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CommunicationTopic"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Compartment">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedComponent"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Composing"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Computer_Language"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Computer_Program"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Conclusion"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ConditionalSuccedence"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Configuration"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ConnectedObject"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Connectivity"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Constructing"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ContactState"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Container"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Containment"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ContainmentState"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ContainmentTheory"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ContinuousJoint"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ControlTheory"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Cooktop">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedComponent"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A typically circular surface where food is cooked.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CounterfactualBinding"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Countertop">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedComponent"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A flat surface for working on.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Cover"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Coverage"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CoverageTheory"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CoveredObject"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CoveringTheory"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CrackingTheory"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CreatedObject"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Creation"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Crockery">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedContainer"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Tableware"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasDisposition"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Insertion"/>
+            </owl:Restriction>
+        </subClassOf>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasDisposition"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass>
+                    <owl:Class>
+                        <owl:intersectionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Insertion"/>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#affordsTrigger"/>
+                                <owl:allValuesFrom>
+                                    <owl:Restriction>
+                                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies"/>
+                                        <owl:allValuesFrom rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Substance"/>
+                                    </owl:Restriction>
+                                </owl:allValuesFrom>
+                            </owl:Restriction>
+                        </owl:intersectionOf>
+                    </owl:Class>
+                </owl:onClass>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">An object designed to contain food to store, cook, eat, or serve it.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Cup">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Crockery"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasPhysicalComponent"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedHandle"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A round shaped container used for storing liquid and drinking out of it, typically has  a handle for grasping.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Cupboard">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedContainer"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedFurniture"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasPhysicalComponent"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Rack"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A piece of furniture for storing things.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CutObject"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Cutlery">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Tableware"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Cuttability"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Cutter"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Cutting"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CuttingTool">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedTool"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasDisposition"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Shaping"/>
+            </owl:Restriction>
+        </subClassOf>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#CylinderShape"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Database"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Deciding"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#DeclarativeClause"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#DeductiveReasoning"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Deformation"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Delivering"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#DependentPlace"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Deposit"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#DepositedObject"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Deposition"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#DerivingInformation"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#DesignedChair">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedFurniture"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasDisposition"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#CanBeSatOn"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A piece of furniture designed for one person to sit on.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#DesignedComponent">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#DesignedArtifact"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#DesignedContainer">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#DesignedArtifact"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#DesignedFurniture">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#DesignedArtifact"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#DesignedHandle">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedComponent"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasDisposition"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Graspability"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">An item designed to fit well within a grasping hand, often attached to another item to enhance its manipulability.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Designed handle</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#DesignedSpade">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedComponent"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A sharp-edged metal blade used for digging or cutting.</comment>
+        <label xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Designed spade</label>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#DesignedTool">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#DesignedArtifact"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#DessertFork">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Fork"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A smallar fork for eating desserts e.g. cake.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Destination"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#DestroyedObject"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Destruction"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#DetectedObject"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#DeviceState"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#DeviceStateRange"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#DeviceTurnedOff"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#DeviceTurnedOn"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#DexterityDiagnosis"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Dicing"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Digital_File"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#DinnerPlate">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Plate"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A regular size plate for eating a main meals.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#DirectedMotion"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Dirty"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Discourse"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Dish">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#DesignedArtifact"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Dishwasher">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Appliance"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedContainer"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">An appliance for washing dishes and cutlery automatically.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#DishwasherTab">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#DesignedSubstance"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A solid detergent inserted into dishwashers.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Dispenser">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedContainer"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A small container used to store and serve some flavoring substance for a dish or beverage.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Disposition"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Distancing"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Door">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedComponent"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A hinged, sliding, or revolving barrier at the entrance to a building, room, or vehicle, or in the frame of a cupboard.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Drawer">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedComponent"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedContainer"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A storage compartment without a lid, made to slide horizontally in and out of a piece of furniture.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Dreaming"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Driving"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Dropping"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ESTSchemaTheory"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Effort"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ElectricCooktop">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Cooktop"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A cooktop that uses electricity for heating.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#EnclosedObject"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Enclosing"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#EndEffectorPositioning"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Episode"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#EventAdjacentRole"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ExcludedObject"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ExecutableFile"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ExecutableFormat"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ExecutableSchematicTheory"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ExecutableSoftware"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Executable_Code"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ExecutionStateRegion"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ExistingObjectRole"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ExperiencerRole"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ExtractedObject"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Extrinsic"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#FactualBinding"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#FailedAttempt"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#FaultySoftware"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Feature"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Fetching"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#FileConfiguration"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#File_format"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Finger"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#FixedJoint"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Flipping"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#FloatingJoint"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Floor">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#RoomSurface"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Wall"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The lower interior surface of a room.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Fluid"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#FluidFlow"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Flying"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Focusing"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Foolishness"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ForceAttribute"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ForceInteraction"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ForgettingIncorrectInformation"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ForgettingIrrelevantInformation"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Fork">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Cutlery"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasPhysicalComponent"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedHandle"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cutlery with two or more prongs used for lifting food to the mouth or holding it when cutting.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#FormalLanguage"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#FreezerCompartment">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Compartment"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A freezer compartment used to regulate the temperature of contained objects to a value below zero degree Celsius.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#FrictionAttribute"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#FunctionalControl"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#FunctionalDesign"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#FunctionalDiagnosis"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#FunctionalPart"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#FunctionalSpatialSchemaTheory"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#GasCooktop">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Cooktop"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A cooktop that uses burning gas for heating.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#GetTaskParameter"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Glass">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Crockery"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A container made usually from glass or transparent plastic which is used to hold, typically cold, beverages.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#GoalRole"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#GraphDatabase"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#GraphQueryLanguage"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#GraspTransfer"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Graspability"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Grasping"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#GraspingMotion"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#GreenColor"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Gripper"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Hand"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#HardwareDiagnosis"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#HasQualityRegion"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Head"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#HeadMovement"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#HeadTurning"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#HingeJoint"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Holding"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#HostRole"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Hotplate">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedComponent"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A flat heated surface used for cooking food or keeping it hot.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Human-readable_Programming_Language"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#HumanActivityRecording"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#IllocutionaryTask"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ImageSchemaTheory"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Imagining"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Impediment"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ImperativeClause"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Inability"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#IncludedObject"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#IncompatibleSoftware"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#InductionCooktop">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#ElectricCooktop"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A type of cooktop where heat is induced in the cookware. Only special induction cookware can be used with this type of cooktop.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#InductiveReasoning"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Infeasibility"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#InferenceRules"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#InformationAcquisition"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#InformationDismissal"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#InformationRetrieval"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#InformationStorage"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#InsertedObject"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Insertion"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Instructions"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Instrument"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#InterfaceComponentRole"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#InterfaceSpecification"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#IntermediateGrasp"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Interpreting"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#InterrogativeClause"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Intrinsic"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Introspecting"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Item"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#JamJar">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Jar"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A jar which holds, or at least is intended to usually hold, jam.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Jar">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedContainer"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A container used for long-term storage of some liquid or viscous dish.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Joint"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#JointLimit"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#JointState"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#KineticFrictionAttribute"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#KinoDynamicData"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Kitchen">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Room"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasDisposition"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Containment"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A designated room to perform the task of cooking.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#KitchenCabinet">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Cupboard"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A cupboard designed to be used in kitchen environments.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#KitchenKnife">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Knife"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A tool designed to be used for kitchen related common tasks. Such as smearing a bread or cutting a cucumber.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#KitchenUnit">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedFurniture"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A piece of a fitted furniture typically containing cupboards, a sink, and an oven.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Knife">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#CuttingTool"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasPhysicalComponent"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Blade"/>
+            </owl:Restriction>
+        </subClassOf>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasPhysicalComponent"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedHandle"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">An instrument composed of a blade fixed into a handle, used for cutting or as a weapon.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Knowledge"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#KnowledgeRepresentationLanguage"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Labeling"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Language"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Leaning"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Learning"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Leg"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Lid">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedComponent"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A removable or hinged cover for the top of a container.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Lifting"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Limb"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#LimbMotion"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#LinguisticObject"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Linkage"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#LinkageState"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#LinkedObject"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Localization"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Location"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#LocatumRole"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Locomotion"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#LocutionaryAction"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#LookingAt"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#LookingFor"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Lowering"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Manipulating"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Markup_Language"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#MassAttribute"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Masterful"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Material"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#MedicalDiagnosis"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Memorizing"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#MentalAction"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#MentalTask"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#MeshShape"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#MeshShapeData"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Message"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#MetaCognitionEvaluationTopic"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#MetaCognitionMemoryTopic"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#MetaCognitionPlanningTopic"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#MetaCognitionTopic"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#MetacognitiveControlling"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#MetacognitiveMonitoring"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#MilkBottle">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Bottle"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A bottle which holds, or at least is intended to usually hold, milk.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#MilkPack">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Pack"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A pack which holds, or at least is intended to usually hold, milk.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Mixing"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#MixingTheory"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ModifyingPhysicalObject"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#MonitoringJointState"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Motion"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#MovableJoint"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#MovedObject"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#MovingAway"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#MovingTo"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Natural_Language"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Natural_Language_Text"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Navigating"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#NetForce"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#NutellaJar">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Jar"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A jar which holds, or at least is intended to usually hold, Nutella.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Obstacle"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Ontology"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Ontology_Language"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Opening"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Orienting"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Origin"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Oven">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Appliance"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedContainer"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasDisposition"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#TemperingByHeating"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">An appliance with an enclosed compartment that exposes food to heat</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Pack">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedContainer"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A small cardboard or paper container.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Pan">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Crockery"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A container used for cooking food.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Pancake">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#BakedGood"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PancakeMix">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#DesignedSubstance"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ParkingArms"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PastaBowl">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Bowl"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A bowl which holds, or at least is intended to usually hold, pasta.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PathRole"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Patient"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PepperShaker">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Shaker"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A shaker which holds, or at least is intended to usually hold, pepper.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Perceiving"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PerformerRole"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PhaseTransition"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Phrase"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PhysicalAccessibility"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PhysicalAcquiring"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PhysicalAction"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PhysicalBlockage"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PhysicalEffector"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PhysicalExistence"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PhysicalQuality"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PhysicalState"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PhysicalTask"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PhysicsProcess"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PickingUp"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Placing"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PlacingTheory"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PlanarJoint"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Planning"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Plate">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Crockery"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A flat and usually circular object from which food is eaten or served.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PluginRole"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PluginSpecification"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Positioning"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PosturalMoving"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Pot">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Crockery"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A container used for cooking food.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Pourable"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PouredObject"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Pouring"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PouringInto"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PouringOnto"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PowerGrasp"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PrecisionGrasp"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Prediction"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PrehensileEffector"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PrehensileMotion"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Premise"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PreservativeInteraction"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PrismaticJoint"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ProcessFlow"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ProcessType"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Programming_Language"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Progression"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Proprioceiving"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Prospecting"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Protector"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ProximalTheory"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Pulling"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Purification"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Pushing"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PushingAway"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PushingDown"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#PuttingDown"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#QualityTransition"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Query"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#QueryAnsweringTask"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#QueryEngine"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#QueryLanguage"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#QueryingTask"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Rack">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedComponent"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A frame for holding or storing things.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#RaspberryJamJar">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#JamJar"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A jar which holds, or at least is intended to usually hold, raspberry jam.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Reaching"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Reasoner"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Reasoning"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Receiver"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#RecipientRole"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#RecordedEpisode"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#RedColor"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Refrigerator">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Appliance"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedContainer"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasPhysicalComponent"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Door"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">An appliance which is artificially kept cool and used to store food and drink.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Reification"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#RelationAdjacentRole"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#RelationalDatabase"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#RelationalQueryLanguage"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#RelatumRole"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Releasing"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ReleasingMotion"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#RelevantPart"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Remembering"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#RemovedObject"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Replanning"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ResourceRole"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#RestrictedObject"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Restrictor"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ResultRole"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Retracting"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Retrospecting"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#RevoluteJoint"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#RoleFillerBinding"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#RoleRoleBinding"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Room"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#RoomSurface">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Surface"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Rubbing"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SaladBowl">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Bowl"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A bowl which holds, or at least is intended to usually hold, salad.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SaltShaker">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Shaker"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A shaker which holds, or at least is intended to usually hold, salt.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Scene"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SchematicTheory"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SelectedObject"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SelectingItem"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SelfReflection"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Sender"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ServerRole"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Serving"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Setpoint"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SettingGripper"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Shaker">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedContainer"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A container used for storing fine grained substances such as salt or paper.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Shape"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ShapeRegion"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ShapedObject"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Shaping"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Sharpness"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Shifting"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Simulating"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Simulation_Reasoner"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Sink">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedComponent"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A large bowl used to direct the flow of liquid into a drain, typically has a tap used to fill the sink with water, and a plug used to block the drain.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Sitting">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#AssumingPose"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A task where an agents assumes a sitting pose.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SittingDestination">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Destination"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies"/>
+                <owl:allValuesFrom>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasDisposition"/>
+                        <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#CanBeSatOn"/>
+                    </owl:Restriction>
+                </owl:allValuesFrom>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The destination of an agent assuming a sitting pose. Typically a chair or stool would fill this role.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SituationTransition"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Size"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Slicing"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Sluggishness"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SocialQuality"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SocialState"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Sofa">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedFurniture"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasDisposition"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#CanBeSatOn"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A comfortable seat for two or more people to sit on.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Software"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SoftwareDiagnosis"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SoftwareInstance"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SoftwareLibrary"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SoftwareRole"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Software_Configuration"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SoupPot">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Pot"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A pot which holds, or at least is intended to usually hold, soup.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SourceMaterialRole"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SourcePathGoalTheory"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Source_Code"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SpatialRelationRole"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SpatioTemporalRole"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Spatula">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Cutlery"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasPhysicalComponent"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedHandle"/>
+            </owl:Restriction>
+        </subClassOf>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasPhysicalComponent"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedSpade"/>
+            </owl:Restriction>
+        </subClassOf>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SphereShape"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Spoon">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Cutlery"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasDisposition"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Containment"/>
+            </owl:Restriction>
+        </subClassOf>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasPhysicalComponent"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Bowl"/>
+            </owl:Restriction>
+        </subClassOf>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasPhysicalComponent"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedHandle"/>
+            </owl:Restriction>
+        </subClassOf>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasDisposition"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Insertion"/>
+            </owl:Restriction>
+        </subClassOf>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasDisposition"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass>
+                    <owl:Class>
+                        <owl:intersectionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Insertion"/>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#affordsTrigger"/>
+                                <owl:allValuesFrom>
+                                    <owl:Restriction>
+                                        <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies"/>
+                                        <owl:allValuesFrom rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Substance"/>
+                                    </owl:Restriction>
+                                </owl:allValuesFrom>
+                            </owl:Restriction>
+                        </owl:intersectionOf>
+                    </owl:Class>
+                </owl:onClass>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">An eating or cooking implement consisting of a small shallow bowl with a relatively long handle.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Squeezing"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Standing"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#State"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#StateTransition"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#StateType"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#StaticFrictionAttribute"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#StatisticalReasoner"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Status"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#StatusFailure"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#StimulusRole"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Stirring"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Storage"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#StoredObject"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Stove">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Appliance"/>
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#">
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#hasPhysicalComponent"/>
+                <owl:someValuesFrom rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Hotplate"/>
+            </owl:Restriction>
+        </subClassOf>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">An appliance for cooking or heating.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#StructuralDesign"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Structured_Text"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SubCognitiveAgent"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Succedence"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SuccessDiagnosis"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Successfulness"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SugarDispenser">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Dispenser"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A dispenser used to hold, or at least is intended to usually hold and serve, sugar.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SupportState"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SupportTheory"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SupportedObject"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Supporter"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Surface"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Swimming"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#SymbolicReasoner"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#System"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Table">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedFurniture"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A piece of furniture with a flat top and one or more legs.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#TableFork">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Fork"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A regular size fork used for eating meals, e.g. for Spaghetti.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#TableKnife">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#KitchenKnife"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A knife used for eating or speading butter on bread.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#TableSpoon">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Spoon"/>
+        <owl:disjointWith rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#TeaSpoon"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A spoon usually refered as larger spoon used for serving. However in some regions it is the largest spoon used for eating.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Tableware">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedTool"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Tap">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedComponent"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A component designed to control the flow of water from a pipe.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Tapping"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#TaskInvocation"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Taxis"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#TeaSpoon">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Spoon"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A spoon relatively smaller in size used for string a cup of tea or measuring a volume. Specifically for cooking or medicine purposes, the volume is defined as 5ml.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#TechnicalDiagnosis"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Temperature"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#TemperatureRegion"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Tempering"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#TemperingByCooling">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Tempering"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A disposition of an object to change others by removing heat energy from them.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#TemperingByHeating">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Tempering"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A disposition of an object to change others by applying heat energy to them.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Text"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ThinkAloud"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ThinkAloudActionTopic"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ThinkAloudGeneralKnowledgeTopic"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ThinkAloudKnowledgeTopic"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ThinkAloudObstructionTopic"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ThinkAloudOpinionTopic"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ThinkAloudPerceptionTopic"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ThinkAloudPlanTopic"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ThinkAloudSceneKnowledgeTopic"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ThinkAloudTopic"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Threshold"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Throwing"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#TimeRole"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Tool"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Transient"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Transporting"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#TrashContainer">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#DesignedContainer"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">An item designed to hold trash. Typically equipped with a mechanism to close or open it, to prevent smells from the trash from propagating out and insects and other pests to get in.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Triplestore"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Turning"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#UnavailableSoftware"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#UndirectedMotion"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Unsuccessfulness"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Vaporizing"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Variability"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#VideoData"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Walking"/>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Wall">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#RoomSurface"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">An upright surface of a building or room.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#Wardrobe">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Cupboard"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A cupboard which is typically used for hanging clothes.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#WaterBottle">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Bottle"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A bottle which holds, or at least is intended to usually hold, water.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#WaterGlass">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Glass"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A glass which holds, or at least is intended to usually hold, water. Also affords drinking from it.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#WineBottle">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Bottle"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A bottle which holds, or at least is intended to usually hold, wine.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl#WineGlass">
+        <subClassOf xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.ease-crc.org/ont/SOMA.owl#Glass"/>
+        <comment xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A glass which holds, or at least is intended to usually hold, wine. Also affords drinking from it.</comment>
+    </owl:Class>
+    <owl:Class rdf:about="http://www.ease-crc.org/ont/SOMA.owl/NonmanifestedSituation"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Abstract"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Action"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Agent"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Amount"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#BiologicalObject"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#ChemicalObject"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Classification"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Collection"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Collective"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#CollectiveAgent"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Community"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Concept"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Configuration"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Contract"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Description"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Design"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#DesignedArtifact"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#DesignedSubstance"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Diagnosis"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Event"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#EventType"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#FormalEntity"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#FunctionalSubstance"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Goal"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Group"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#InformationEntity"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#InformationObject"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#InformationRealization"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#LocalConcept"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Method"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Narrative"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#NaturalPerson"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Norm"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Object"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#ObjectAggregate"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Organism"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Organization"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Parameter"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Parthood"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Pattern"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Person"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Personification"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalAgent"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalArtifact"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalAttribute"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalBody"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalPlace"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Place"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Plan"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PlanExecution"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Process"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Project"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Region"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Relation"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Right"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Role"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Set"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Situation"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#SocialAgent"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#SocialObject"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#SocialObjectAttribute"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#SocialPerson"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#SocialRelation"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#SpaceRegion"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#SpatioTemporalRegion"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Substance"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Task"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Theory"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#TimeIndexedRelation"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#TimeInterval"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Transition"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#TypeCollection"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#UnitOfMeasure"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Workflow"/>
+    <owl:Class rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#WorkflowExecution"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#affects"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#affordanceDefines"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#affordanceDefinesTask"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#affordsBearer"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#affordsConcept"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#affordsPerformer"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#affordsSetpoint"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#affordsTask"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#affordsTrigger"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#after"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#answers"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#before"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#causes"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#causesTransition"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#coOccurs"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#contains"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#containsEvent"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#containsObject"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#coversObject"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#definesBearer"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#definesEventType"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#definesInput"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#definesOutput"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#definesParameter"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#definesParticipant"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#definesPerformer"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#definesProcess"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#definesSetpoint"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#definesTrigger"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#derivedFrom"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#describesQuality"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#directlyCauses"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#directlyDerivedFrom"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#during"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#encodes"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#finishedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#finishes"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#firstMember"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#givesMeaningTo"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasAction"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasAlterationResult"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasAnswer"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasBinding"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasBindingFiller"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasBindingRole"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasChildLink"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasColor"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasDisposition"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasEndLink"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasExecutionState"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasFeature"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasFirstStep"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasFrictionAttribute"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasGoal"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasInitialScene"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasInitialSituation"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasInitialState"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasInputParameter"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasJointLimit"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasJointState"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasLink"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasLocalization"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasMassAttribute"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasNetForce"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasNextStep"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasOutputParameter"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasParentLink"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasPhase"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasPhysicalComponent"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasPredecessor"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasPreviousStep"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasProcessType"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasQuale"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasRootLink"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasShape"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasShapeRegion"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasSoftwareAgent"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasSpaceRegion"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasStateType"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasStatus"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasStep"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasSuccedence"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasSuccessor"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasTask"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasTerminalScene"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasTerminalSituation"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasTerminalState"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#includesConcept"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#includesRecord"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#includesSituation"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#interactsWith"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#involvesArtifact"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#involvesEffector"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#involvesPlace"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isAffectedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isAlterationResultOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isAnsweredBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isArtifactInvolvedIn"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isAskedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isBearerAffordedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isBearerDefinedIn"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isCausedByEvent"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isChildLinkOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isColorOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isConceptAffordedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isConceptIncludedIn"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isContainedIn"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isCoveredByObject"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isCreatedOutputOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isDefinedInAffordance"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isDepositOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isDesignFor"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isDesignedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isDirectReactionTo"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isDirectSourceFor"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isDispositionOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isEffectorInvolvedIn"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isEndLinkOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isEventTypeDefinedIn"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isExecutorDefinedIn"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isFeatureOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isFirstStepOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isGivenMeaningBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isInitialSceneOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isInitialSituationOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isInitialStateOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isInputParameterFor"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isInputRoleOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isInsideOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isJointLimitOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isJointStateOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isLinkOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isLinkedTo"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isLocalizationOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isMassAttributeOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isMovedByAgent"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isNetForceOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isOccurrenceOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isOccurringIn"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isOntopOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isOutputParameterFor"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isOutputRoleOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isParameterDefinedIn"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isParentLinkOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isPerformedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isPerformerAffordedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isPerformerDefinedIn"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isPhysicallyContainedIn"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isPlaceInvolvedIn"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isPlanFor"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isProcessDefinedIn"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isProcessTypeOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isQualeOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isQualityDescribedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isReactionTo"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isRecordIncludedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isReplacedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isRootLinkOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isSetpointAffordedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isSetpointDefinedIn"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isShapeOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isShapeRegionOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isSituationIncludedIn"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isSourceFor"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isSpaceRegionFor"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isStateTypeOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isStepOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isSupportedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isTaskAffordedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isTaskDefinedInAffordance"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isTaskOfCreatedRole"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isTaskOfInputRole"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isTaskOfOutputRole"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isTerminalSceneOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isTerminalSituationOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isTerminalStateOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isTerminatedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isTriggerAffordedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isTriggerDefinedIn"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#meets"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#metBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#movesObject"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#overlappedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#overlappedOn"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#relatesToAnotherRole"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#replaces"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#simultaneous"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#startedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#starts"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#supports"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#terminates"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#transitionsBack"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#transitionsFrom"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#transitionsTo"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl/hasExpectedTerminalSituation"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl/hasRequiredInitialSituation"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl/manifestsIn"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl/preventedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl/prevents"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#actsFor"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#actsThrough"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#associatedWith"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#characterizes"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#classifies"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#conceptualizes"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#concretelyExpresses"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#coparticipatesWith"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#covers"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#defines"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#definesRole"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#definesTask"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#describes"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#directlyFollows"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#directlyPrecedes"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#executesTask"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#expands"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#expresses"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#expressesConcept"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#farFrom"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#follows"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasCommonBoundary"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasComponent"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasConstituent"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasConstraint"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasLocation"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasMember"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasParameter"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasPart"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasParticipant"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasPostcondition"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasPrecondition"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasProperPart"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasQuality"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegion"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRole"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasSetting"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasTask"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasTimeInterval"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#includesAction"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#includesAgent"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#includesEvent"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#includesObject"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#includesPart"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#includesTime"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#includesWhole"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#introduces"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#involvesAgent"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isAbout"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isActionIncludedIn"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isAgentIncludedIn"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isAgentInvolvedIn"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isCharacterizedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isClassifiedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isComponentOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isConceptExpressedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isConceptUsedIn"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isConceptualizedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isConcretelyExpressedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isConstituentOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isConstraintFor"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isCoveredBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isDefinedIn"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isDescribedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isEventIncludedIn"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isExecutedIn"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isExpandedIn"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isExpressedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isIntroducedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isLocationOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isMemberOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isObjectIncludedIn"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isObservableAt"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isParameterFor"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isParametrizedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isPartOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isParticipantIn"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isPostconditionOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isPreconditionOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isPropertPartOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isQualityOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isRealizedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isReferenceOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isReferenceOfInformationRealizedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isRegionFor"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isRelatedToConcept"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isRelatedToDescription"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isRoleDefinedIn"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isRoleOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isSatisfiedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isSettingFor"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isSpecializedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isSubordinatedTo"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isSuperordinatedTo"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isTaskDefinedIn"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isTaskOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isTimeIncludedIn"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isTimeIntervalOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isTimeOfObservationOf"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isUnifiedBy"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#nearTo"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#overlaps"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#parametrizes"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#precedes"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#realizes"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#realizesInformationAbout"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#realizesSelfInformation"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#sameSettingAs"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#satisfies"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#specializes"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#unifies"/>
+    <owl:ObjectProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#usesConcept"/>
+    <owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/creator"/>
+    <owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/date"/>
+    <owl:AnnotationProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#UsageGuideline"/>
+    <owl:AnnotationProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#nickname"/>
+    <owl:AnnotationProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#symbol"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasColorValue"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasDataFormat"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasDepth"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasEventBegin"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasEventEnd"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasEventTime"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasFilePath"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasForceValue"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasFrictionValue"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasHSVValue"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasHeight"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasIntervalBegin"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasIntervalEnd"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasIntervalTime"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasJointEffort"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasJointEffortLimit"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasJointParameter"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasJointPosition"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasJointPositionMax"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasJointPositionMin"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasJointVelocity"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasJointVelocityLimit"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasLength"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasMassValue"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasNameString"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasPersistentIdentifier"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasPositionData"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasPriority"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasRGBValue"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasRadius"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasReferenceFrame"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasShapeParameter"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasShapeScale"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasSpaceParameter"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#hasWidth"/>
+    <owl:DatatypeProperty rdf:about="http://www.ease-crc.org/ont/SOMA.owl#isReificationOf"/>
+    <owl:DatatypeProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasDataValue"/>
+    <owl:DatatypeProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasEventDate"/>
+    <owl:DatatypeProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasIntervalDate"/>
+    <owl:DatatypeProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasParameterDataValue"/>
+    <owl:DatatypeProperty rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasRegionDataValue"/>
+    <owl:NamedIndividual rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ExecutionState_Active"/>
+    <owl:NamedIndividual rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ExecutionState_Cancelled"/>
+    <owl:NamedIndividual rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ExecutionState_Failed"/>
+    <owl:NamedIndividual rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ExecutionState_Paused"/>
+    <owl:NamedIndividual rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ExecutionState_Pending"/>
+    <owl:NamedIndividual rdf:about="http://www.ease-crc.org/ont/SOMA.owl#ExecutionState_Succeeded"/>
+    <owl:NamedIndividual rdf:about="http://www.ease-crc.org/ont/SOMA.owl#FailWFNoContinuation"/>
+    <owl:NamedIndividual rdf:about="http://www.ease-crc.org/ont/SOMA.owl#FailWFNondeterministicContinuation"/>
+    <owl:NamedIndividual rdf:about="http://www.ease-crc.org/ont/SOMA.owl#FailWFUninterpretableTask"/>
+    <owl:NamedIndividual rdf:about="http://www.ease-crc.org/ont/SOMA.owl#RDFType"/>
+    <Datatype xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:about="http://www.ease-crc.org/ont/SOMA.owl#array_boolean"/>
+    <Datatype xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:about="http://www.ease-crc.org/ont/SOMA.owl#array_double"/>
+    <Datatype xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:about="http://www.ease-crc.org/ont/SOMA.owl#array_float"/>
+    <Datatype xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:about="http://www.ease-crc.org/ont/SOMA.owl#array_int"/>
+    <Datatype xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:about="http://www.ease-crc.org/ont/SOMA.owl#array_string"/>
+    <Datatype xmlns="http://www.w3.org/2000/01/rdf-schema#" rdf:about="http://www.ease-crc.org/ont/SOMA.owl#array_uint"/>
+</rdf:RDF>

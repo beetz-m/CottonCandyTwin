@@ -1,0 +1,202 @@
+@prefix :      <https://aicor.knowledge/ccram#> .
+@prefix ccram: <https://aicor.knowledge/ccram#> .
+@prefix dul:   <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#> .
+@prefix soma:  <http://www.ease-crc.org/ont/SOMA.owl#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+
+# =====================================================================================================================
+# ccram-actions -- the action vocabulary of the conceptual CRAM layer, as extensions of SOMA (reusable for the booth,
+# the kitchen and the fruit work). Contents:
+#   1. the category lattice (action-category-dl) as task classes aligned to SOMA
+#   2. tasks the booth needs that SOMA lacks (6 of 11), and their sub-tasks
+#   3. role classes for the designator role keys that SOMA lacks, and keyword aliases for SOMA roles
+#   4. the designator grammar as axioms: per task the required roles (some) and the admissible roles (only)
+#   5. relations used as designator attributes
+# Status: PROPOSAL (2026-10-21). Alignment choices are ours; each is commented so they can be reviewed.
+# =====================================================================================================================
+
+<https://aicor.knowledge/ccram-actions> a owl:Ontology ;
+    rdfs:label "ccram-actions" ;
+    owl:imports <https://aicor.knowledge/ccram> .
+
+# ---------------------------------------------------------------------------------------------------- 1. categories
+:ObjectDisplacement    a owl:Class ; rdfs:subClassOf soma:Manipulating ;
+    rdfs:comment "Moving an object from one place to another under kinematic control (action-category-dl)." .
+:ConfigurationChange   a owl:Class ; rdfs:subClassOf soma:Actuating ;
+    rdfs:comment "Changing the configuration of an articulated object (switch, knob, door)." .
+:Transferring          a owl:Class ; rdfs:subClassOf soma:Manipulating ;
+    rdfs:comment "Moving material (substance, floss) from a source into or onto a target." .
+:SubstanceManipulation a owl:Class ; rdfs:subClassOf soma:ModifyingPhysicalObject ;
+    rdfs:comment "Changing the shape or arrangement of a substance." .
+:InteractionAction     a owl:Class ; rdfs:subClassOf soma:PhysicalTask ;
+    rdfs:comment "A physical task whose effect requires another agent's participation." .
+:SurfaceTreatment      a owl:Class ; rdfs:subClassOf soma:ModifyingPhysicalObject ;
+    rdfs:comment "Changing the state of a surface (clean, coated)." .
+:PerceptionAction      a owl:Class ; rdfs:subClassOf soma:PhysicalTask ;
+    rdfs:comment "A task whose goal is information about the world, not a change of it." .
+
+# SOMA tasks placed in the lattice (our alignment)
+soma:Transporting rdfs:subClassOf :ObjectDisplacement .
+soma:PuttingDown  rdfs:subClassOf :ObjectDisplacement .
+soma:PouringInto  rdfs:subClassOf :Transferring .
+
+# ---------------------------------------------------------------------------------------------------- 2. new tasks
+:PressingButton a owl:Class ; rdfs:subClassOf soma:Pushing , :ConfigurationChange ;
+    rdfs:comment "Pushing a button or rocker switch past its detent so that it changes its switch state." .
+:TurningControl a owl:Class ; rdfs:subClassOf :ConfigurationChange ; :typeKeyword "turning" ;
+    rdfs:comment "Rotating a control knob to a travel fraction. Not soma:Turning (a postural motion of the body)." .
+soma:Turning :derivedKeyword "turning-motion" .
+:Gathering a owl:Class ; rdfs:subClassOf :Transferring ;
+    rdfs:comment "Collecting dispersed material onto a tool by stroking through it (floss onto a stick)." .
+:Scooping a owl:Class ; rdfs:subClassOf :Transferring ;
+    rdfs:comment "Taking a portion of loose material with a hollow tool." .
+:Wrapping a owl:Class ; rdfs:subClassOf :SubstanceManipulation ;
+    rdfs:comment "Winding material around a tool to shape it (cotton candy around the stick)." .
+:HandingOver a owl:Class ; rdfs:subClassOf soma:Serving , :InteractionAction ;
+    rdfs:comment "Delivering a held object into the hand of a person; release only on take-over." .
+:Wiping a owl:Class ; rdfs:subClassOf soma:Cleaning , :SurfaceTreatment ;
+    rdfs:comment "Cleaning a surface by stroking a tool (sponge) over it." .
+:MonitoringProcess a owl:Class ; rdfs:subClassOf :PerceptionAction ;
+    rdfs:comment "Observing a process until a condition holds (or a timeout); waits on the process microtheory." .
+:Rotating a owl:Class ; rdfs:subClassOf soma:Actuating .
+:Stroking a owl:Class ; rdfs:subClassOf soma:Actuating .
+:Tilting  a owl:Class ; rdfs:subClassOf soma:Actuating .
+
+# phases / sub-tasks (meta information read by the generator; the realisation is the schema's :phases)
+:hasSubTask a owl:AnnotationProperty ;
+    rdfs:comment "Typical sub-task of a task (category lattice :sub). Annotation, not an axiom: ordering and optionality live in the schema." .
+:telosState a owl:AnnotationProperty ; rdfs:comment "The state term the task's telos establishes (category lattice :telos-state)." .
+soma:Transporting :hasSubTask soma:Reaching , soma:Grasping , soma:Lifting ; :telosState "placed" .
+soma:PuttingDown  :hasSubTask soma:Reaching , soma:Releasing ; :telosState "placed" .
+:PressingButton   :hasSubTask soma:Reaching , soma:Pushing ; :telosState "switched" .
+:TurningControl   :hasSubTask soma:Reaching , soma:Grasping , :Rotating ; :telosState "set" .
+:Scooping         :hasSubTask soma:Reaching , :Stroking , soma:Lifting ; :telosState "contained" .
+soma:PouringInto  :hasSubTask soma:Grasping , :Tilting ; :telosState "accumulated" .
+:Gathering        :hasSubTask soma:Reaching , :Stroking , soma:Lifting ; :telosState "accumulated" .
+:Wrapping         :hasSubTask :Stroking ; :telosState "shaped" .
+:HandingOver      :hasSubTask soma:Reaching , soma:Releasing ; :telosState "received" .
+:Wiping           :hasSubTask soma:Grasping , :Stroking ; :telosState "clean" .
+:MonitoringProcess :telosState "observed" .
+
+# ---------------------------------------------------------------------------------------------------- 3. roles
+soma:Patient      :roleKeyword "object" ;
+    rdfs:comment "ccram: the general 'object' role key of CRAM designators (the non-agentive object operated on)." .
+soma:Destination  :roleKeyword "destination" .
+soma:Origin       :roleKeyword "source" .
+soma:Tool         :roleKeyword "tool" .
+soma:Container    :roleKeyword "container" .
+soma:RecipientRole :roleKeyword "recipient" .
+:Effector a owl:Class ; rdfs:subClassOf soma:Instrument ; :roleKeyword "arm" ;
+    rdfs:comment "The robot's limb / effector used for the action." .
+:ApproachDirection a owl:Class ; rdfs:subClassOf soma:PathRole ; :roleKeyword "approach" .
+:TargetState a owl:Class ; rdfs:subClassOf soma:GoalRole ; :roleKeyword "state" ;
+    rdfs:comment "The state an articulated object is to be brought into (switch on/off)." .
+:TargetSetting a owl:Class ; rdfs:subClassOf soma:GoalRole ; :roleKeyword "setting" ;
+    rdfs:comment "The setting a control is to be brought to (travel fraction)." .
+:PouredAmount a owl:Class ; rdfs:subClassOf soma:PouredObject ; :roleKeyword "amount" ;
+    rdfs:comment "The portion of substance transferred." .
+:GatheredMaterial a owl:Class ; rdfs:subClassOf soma:Item ; :roleKeyword "substance" .
+:AboveLocation a owl:Class ; rdfs:subClassOf soma:Location ; :roleKeyword "above" .
+:TreatedSurface a owl:Class ; rdfs:subClassOf soma:AlteredObject ; :roleKeyword "surface" .
+:MonitoredProcess a owl:Class ; rdfs:subClassOf soma:EventAdjacentRole ; :roleKeyword "process" .
+:StopCondition a owl:Class ; rdfs:subClassOf soma:GoalRole ; :roleKeyword "until" .
+:Timeout a owl:Class ; rdfs:subClassOf soma:TimeRole ; :roleKeyword "timeout" .
+
+# ---------------------------------------------------------------------------------------------------- 4. grammar axioms
+# required roles:  T SubClassOf isTaskOf some R ;  admissible roles:  T SubClassOf isTaskOf only (R1 or ...)
+soma:Navigating rdfs:subClassOf
+    [ a owl:Restriction ; owl:onProperty dul:isTaskOf ; owl:someValuesFrom soma:Destination ] ,
+    [ a owl:Restriction ; owl:onProperty dul:isTaskOf ; owl:allValuesFrom soma:Destination ] .
+soma:Transporting rdfs:subClassOf
+    [ a owl:Restriction ; owl:onProperty dul:isTaskOf ; owl:someValuesFrom soma:Patient ] ,
+    [ a owl:Restriction ; owl:onProperty dul:isTaskOf ; owl:allValuesFrom
+      [ a owl:Class ; owl:unionOf ( soma:Patient :Effector :ApproachDirection soma:Destination soma:Origin ) ] ] .
+soma:PuttingDown rdfs:subClassOf
+    [ a owl:Restriction ; owl:onProperty dul:isTaskOf ; owl:someValuesFrom soma:Patient ] ,
+    [ a owl:Restriction ; owl:onProperty dul:isTaskOf ; owl:someValuesFrom soma:Destination ] ,
+    [ a owl:Restriction ; owl:onProperty dul:isTaskOf ; owl:allValuesFrom
+      [ a owl:Class ; owl:unionOf ( soma:Patient :Effector soma:Destination ) ] ] .
+:PressingButton rdfs:subClassOf
+    [ a owl:Restriction ; owl:onProperty dul:isTaskOf ; owl:someValuesFrom soma:Patient ] ,
+    [ a owl:Restriction ; owl:onProperty dul:isTaskOf ; owl:someValuesFrom :TargetState ] ,
+    [ a owl:Restriction ; owl:onProperty dul:isTaskOf ; owl:allValuesFrom
+      [ a owl:Class ; owl:unionOf ( soma:Patient :Effector :TargetState ) ] ] .
+:TurningControl rdfs:subClassOf
+    [ a owl:Restriction ; owl:onProperty dul:isTaskOf ; owl:someValuesFrom soma:Patient ] ,
+    [ a owl:Restriction ; owl:onProperty dul:isTaskOf ; owl:someValuesFrom :TargetSetting ] ,
+    [ a owl:Restriction ; owl:onProperty dul:isTaskOf ; owl:allValuesFrom
+      [ a owl:Class ; owl:unionOf ( soma:Patient :Effector :TargetSetting ) ] ] .
+soma:PouringInto rdfs:subClassOf
+    [ a owl:Restriction ; owl:onProperty dul:isTaskOf ; owl:someValuesFrom soma:Patient ] ,
+    [ a owl:Restriction ; owl:onProperty dul:isTaskOf ; owl:someValuesFrom soma:Destination ] ,
+    [ a owl:Restriction ; owl:onProperty dul:isTaskOf ; owl:allValuesFrom
+      [ a owl:Class ; owl:unionOf ( soma:Patient soma:Destination :PouredAmount :Effector ) ] ] .
+:Gathering rdfs:subClassOf
+    [ a owl:Restriction ; owl:onProperty dul:isTaskOf ; owl:someValuesFrom soma:Tool ] ,
+    [ a owl:Restriction ; owl:onProperty dul:isTaskOf ; owl:someValuesFrom soma:Container ] ,
+    [ a owl:Restriction ; owl:onProperty dul:isTaskOf ; owl:allValuesFrom
+      [ a owl:Class ; owl:unionOf ( soma:Tool soma:Container :GatheredMaterial :Effector ) ] ] .
+:Wrapping rdfs:subClassOf
+    [ a owl:Restriction ; owl:onProperty dul:isTaskOf ; owl:someValuesFrom soma:Tool ] ,
+    [ a owl:Restriction ; owl:onProperty dul:isTaskOf ; owl:allValuesFrom
+      [ a owl:Class ; owl:unionOf ( soma:Tool :AboveLocation :Effector ) ] ] .
+:HandingOver rdfs:subClassOf
+    [ a owl:Restriction ; owl:onProperty dul:isTaskOf ; owl:someValuesFrom soma:Patient ] ,
+    [ a owl:Restriction ; owl:onProperty dul:isTaskOf ; owl:someValuesFrom soma:RecipientRole ] ,
+    [ a owl:Restriction ; owl:onProperty dul:isTaskOf ; owl:allValuesFrom
+      [ a owl:Class ; owl:unionOf ( soma:Patient soma:RecipientRole soma:Destination :Effector ) ] ] .
+:Wiping rdfs:subClassOf
+    [ a owl:Restriction ; owl:onProperty dul:isTaskOf ; owl:someValuesFrom soma:Tool ] ,
+    [ a owl:Restriction ; owl:onProperty dul:isTaskOf ; owl:someValuesFrom :TreatedSurface ] ,
+    [ a owl:Restriction ; owl:onProperty dul:isTaskOf ; owl:allValuesFrom
+      [ a owl:Class ; owl:unionOf ( soma:Tool :TreatedSurface :Effector ) ] ] .
+:MonitoringProcess rdfs:subClassOf
+    [ a owl:Restriction ; owl:onProperty dul:isTaskOf ; owl:someValuesFrom :MonitoredProcess ] ,
+    [ a owl:Restriction ; owl:onProperty dul:isTaskOf ; owl:someValuesFrom :StopCondition ] ,
+    [ a owl:Restriction ; owl:onProperty dul:isTaskOf ; owl:allValuesFrom
+      [ a owl:Class ; owl:unionOf ( :MonitoredProcess :StopCondition :Timeout ) ] ] .
+:Scooping rdfs:subClassOf
+    [ a owl:Restriction ; owl:onProperty dul:isTaskOf ; owl:someValuesFrom soma:Tool ] ,
+    [ a owl:Restriction ; owl:onProperty dul:isTaskOf ; owl:allValuesFrom
+      [ a owl:Class ; owl:unionOf ( soma:Tool soma:Origin soma:Patient :Effector ) ] ] .
+
+# ---------------------------------------------------------------------------------------------------- 5. relations
+:isHeldBy a owl:ObjectProperty ; rdfs:subPropertyOf dul:isParticipantIn ;
+    rdfs:domain dul:PhysicalObject ; :relationKeyword "held-by" ;
+    rdfs:comment "Kinematic control: the object is in the grasp of an effector or agent. (Sub-property choice provisional.)" .
+:isFree a owl:DatatypeProperty ; rdfs:range xsd:boolean ; :relationKeyword "free" ;
+    rdfs:comment "An effector is free: nothing in its grasp." .
+:hasTag a owl:DatatypeProperty ; rdfs:range xsd:string ; :relationKeyword "tag" ;
+    rdfs:comment "The RPL tag of a node (section 4b): the stable name the tag table resolves." .
+:isReachableFor a owl:ObjectProperty ; :relationKeyword "reachable-for" .
+:wasOrderedBy a owl:ObjectProperty ; :relationKeyword "ordered-by" ; rdfs:comment "The person who ordered the item (not soma:isOrderedBy, an ordering of steps)." .
+soma:hasMassValue :relationKeyword "mass" .
+soma:isOntopOf :relationKeyword "on" .
+soma:containsObject :relationKeyword "contains" .
+:hasSwitchState a owl:ObjectProperty ; :relationKeyword "switch-state" .
+:hasTravelFraction a owl:DatatypeProperty ; rdfs:range xsd:double ; :relationKeyword "travel-fraction" .
+
+# ---------------------------------------------------------------------------------------------------- 6. failure taxonomy
+:FailureDescription a owl:Class ; rdfs:subClassOf dul:Diagnosis ; :typeKeyword "failure" ;
+    rdfs:comment "A diagnosis of a situation in which an action, plan or process deviates from what was intended or expected." .
+:PlanFailure a owl:Class ; rdfs:subClassOf :FailureDescription ; :typeKeyword "plan-failure" .
+:GoalUnachievable a owl:Class ; rdfs:subClassOf :PlanFailure ; :executableClass "universal_plan.GoalUnachievable" .
+:ProtectionViolation a owl:Class ; rdfs:subClassOf :PlanFailure .
+:DesignatorFailure a owl:Class ; rdfs:subClassOf :PlanFailure ; rdfs:comment "Resolution failed: no or several referents." .
+:MultipleSolutionsFound a owl:Class ; rdfs:subClassOf :DesignatorFailure .
+:NoReferent a owl:Class ; rdfs:subClassOf :DesignatorFailure ; :executableClass "designators.LookupError" .
+:ManipulationFailure a owl:Class ; rdfs:subClassOf :FailureDescription .
+:GraspFailure a owl:Class ; rdfs:subClassOf :ManipulationFailure .
+:PerceptionFailure a owl:Class ; rdfs:subClassOf :FailureDescription .
+:ProcessFailure a owl:Class ; rdfs:subClassOf :FailureDescription ;
+    rdfs:comment "A process (microtheory) left the expected course: a phase not reached, a mode entered." .
+:ClosingEventViolation a owl:Class ; rdfs:subClassOf :FailureDescription ; :recoverable false ;
+    rdfs:comment "A closing event of a microtheory happened. Must be prevented by the gate; a handler is a design error." .
+:NavigationFailure a owl:Class ; rdfs:subClassOf :FailureDescription .
+:NavigationBlocked a owl:Class ; rdfs:subClassOf :NavigationFailure ; :recoverable true ;
+    rdfs:comment "The path to the destination is blocked (a person, an object); re-plan, wait or ask." .
+dul:hasLocation :relationKeyword "at" ;
+    rdfs:comment "ccram: (at x place). Entailed by on (soma:isOntopOf) and inside (soma:isInsideOf): achieving (on x d) achieves (at x d) -- D10 refinement by property subsumption." .

@@ -1,0 +1,160 @@
+/home/mbeetz/.virtualenvs/cram-env/lib/python3.12/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+INFO:cramera.live.runner:running demo: /home/mbeetz/Documents/CottonCandyTwin/cram/concept/kernel/run_concept.py
+Unknown attribute "type" in /robot[@name='pr2']/link[@name='base_laser_link']
+Unknown attribute "type" in /robot[@name='pr2']/link[@name='wide_stereo_optical_frame']
+Unknown attribute "type" in /robot[@name='pr2']/link[@name='narrow_stereo_optical_frame']
+Unknown attribute "type" in /robot[@name='pr2']/link[@name='laser_tilt_link']
+Unknown tag "material" in /robot[@name='pr2']/link[@name='l_force_torque_link']/collision[1]
+INFO:cramera.live.bridge:attached to world (robot=PR2, 52 joints)
+INFO:cramera.live.ros_markers:watching markers on /semworld/viz_marker, /coraplex/viz_marker
+INFO:cramera.live.bridge:live queries answered by 'Zuckerwatte-Produktion'
+INFO:cramera.live.bridge:live queries answered by 'Conceptual CRAM episode (Cotton candy booth)'
+[workbench] Cotton candy booth: http://127.0.0.1:8780/
+[workbench] cramera: http://localhost:8711/?live=127.0.0.1:8768
+== fill-spinner-head (cotton-candy-booth)
+    fill-spinner-head/take transporting goal achieved [] [justified; act-now]
+    fill-spinner-head/go-close navigating goal achieved [] [justified; act-now]
+    fill-spinner-head/pour pouring-into goal achieved [] [plausible; act-now]
+    fill-spinner-head/go-back navigating goal achieved [] [justified; act-now]
+    fill-spinner-head/put-back putting-down goal achieved [] [plausible; act-now]
+     fill-spinner-head :succ (gripper-free right-arm) holds
+== fill-spinner-head: done
+episode: /home/mbeetz/Documents/CottonCandyTwin/cram/concept/episodes/fill-spinner-head.json
+[workbench] plan: fill-spinner-head: done
+[workbench] restarting: /home/mbeetz/.virtualenvs/cram-env/bin/python /home/mbeetz/.virtualenvs/cram-env/bin/cramera-live cram/concept/kernel/run_concept.py
+/home/mbeetz/.virtualenvs/cram-env/lib/python3.12/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+INFO:cramera.live.runner:running demo: /home/mbeetz/Documents/CottonCandyTwin/cram/concept/kernel/run_concept.py
+Unknown attribute "type" in /robot[@name='pr2']/link[@name='base_laser_link']
+Unknown attribute "type" in /robot[@name='pr2']/link[@name='wide_stereo_optical_frame']
+Unknown attribute "type" in /robot[@name='pr2']/link[@name='narrow_stereo_optical_frame']
+Unknown attribute "type" in /robot[@name='pr2']/link[@name='laser_tilt_link']
+Unknown tag "material" in /robot[@name='pr2']/link[@name='l_force_torque_link']/collision[1]
+INFO:cramera.live.bridge:attached to world (robot=PR2, 52 joints)
+INFO:cramera.live.ros_markers:watching markers on /semworld/viz_marker, /coraplex/viz_marker
+INFO:cramera.live.bridge:live queries answered by 'Zuckerwatte-Produktion'
+INFO:cramera.live.bridge:live queries answered by 'Conceptual CRAM episode (Cotton candy booth)'
+[workbench] Cotton candy booth: http://127.0.0.1:8780/
+[workbench] cramera: http://localhost:8711/?live=127.0.0.1:8768
+== fill-spinner-head (cotton-candy-booth)
+    fill-spinner-head/take transporting goal achieved [] [justified; act-now]
+    fill-spinner-head/go-close navigating goal achieved [] [justified; act-now]
+    fill-spinner-head/pour pouring-into goal achieved [] [plausible; act-now]
+    fill-spinner-head/go-back navigating goal achieved [] [justified; act-now]
+    fill-spinner-head/put-back putting-down goal achieved [] [plausible; act-now]
+     fill-spinner-head :succ (gripper-free right-arm) holds
+== fill-spinner-head: done
+episode: /home/mbeetz/Documents/CottonCandyTwin/cram/concept/episodes/fill-spinner-head.json
+[workbench] plan: fill-spinner-head: done
+[workbench] restarting: /home/mbeetz/.virtualenvs/cram-env/bin/python /home/mbeetz/.virtualenvs/cram-env/bin/cramera-live cram/concept/kernel/run_concept.py
+/home/mbeetz/.virtualenvs/cram-env/lib/python3.12/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+INFO:cramera.live.runner:running demo: /home/mbeetz/Documents/CottonCandyTwin/cram/concept/kernel/run_concept.py
+[37;1m2026-10-21 20:04:03.546 [31;1m[[37;1mRTPS_TRANSPORT_SHM[31;1m Error] [37mFailed init_port fastrtps_port7002: open_and_lock_file failed[34;1m -> Function [36mopen_port_internal[m
+Unknown attribute "type" in /robot[@name='pr2']/link[@name='base_laser_link']
+Unknown attribute "type" in /robot[@name='pr2']/link[@name='wide_stereo_optical_frame']
+Unknown attribute "type" in /robot[@name='pr2']/link[@name='narrow_stereo_optical_frame']
+Unknown attribute "type" in /robot[@name='pr2']/link[@name='laser_tilt_link']
+Unknown tag "material" in /robot[@name='pr2']/link[@name='l_force_torque_link']/collision[1]
+INFO:cramera.live.bridge:attached to world (robot=PR2, 52 joints)
+INFO:cramera.live.ros_markers:watching markers on /semworld/viz_marker, /coraplex/viz_marker
+INFO:cramera.live.bridge:live queries answered by 'Zuckerwatte-Produktion'
+INFO:cramera.live.bridge:live queries answered by 'Conceptual CRAM episode (Cotton candy booth)'
+[workbench] Cotton candy booth: http://127.0.0.1:8780/
+[workbench] cramera: http://localhost:8711/?live=127.0.0.1:8768
+[workbench] scenario: scenario two-orders-underfilled applied (hooks fire in the next plan run)
+== booth-two-orders (cotton-candy-booth)
+    booth-two-orders/fill/fill-spinner-head/take transporting goal achieved [] [justified; act-now]
+    booth-two-orders/fill/fill-spinner-head/go-close navigating goal achieved [] [justified; act-now]
+    booth-two-orders/fill/fill-spinner-head/pour pouring-into goal achieved [] [plausible; probe-first recommended (amount assumed) -- no probe available: act]
+    booth-two-orders/fill/fill-spinner-head/go-back navigating goal achieved [] [justified; act-now]
+    booth-two-orders/fill/fill-spinner-head/put-back putting-down goal achieved [] [plausible; act-now]
+    booth-two-orders/fill fill-spinner-head :succ (gripper-free right-arm) holds
+    booth-two-orders/start/start-machine pressing-button goal achieved [] [justified; act-now]
+    booth-two-orders/start/start-machine pressing-button goal achieved [] [justified; act-now]
+    booth-two-orders/start/start-machine turning goal achieved [] [justified; act-now]
+    booth-two-orders/start/start-machine monitoring-process goal achieved [] [rational; act-now]
+    booth-two-orders/start/start-machine turning goal achieved [] [justified; act-now]
+    booth-two-orders/start start-machine :succ (mode floss-machine producing) holds
+    booth-two-orders/order-1/serve-one-order/make/make-cotton-candy/take-stick transporting goal achieved [] [justified; act-now]
+    booth-two-orders/order-1/serve-one-order/make/make-cotton-candy monitoring-process goal achieved [] [rational; act-now]
+    booth-two-orders/order-1/serve-one-order/make/make-cotton-candy/gather gathering goal achieved [] [justified; act-now]
+    booth-two-orders/order-1/serve-one-order/make/make-cotton-candy/wrap wrapping goal achieved [] [justified; act-now]
+    booth-two-orders/order-1/serve-one-order/make make-cotton-candy :succ (stage candy-1 wrapped) holds
+    booth-two-orders/order-1/serve-one-order/serve/serve-cotton-candy navigating goal achieved [] [justified; act-now]
+    booth-two-orders/order-1/serve-one-order/serve/serve-cotton-candy/hand-over handing-over goal achieved [] [justified; act-now]
+    booth-two-orders/order-1/serve-one-order/serve serve-cotton-candy :succ (delivered candy-1 customer) holds
+    booth-two-orders/order-1 serve-one-order :succ (delivered candy-1 customer) holds
+    booth-two-orders a second customer orders
+    booth-two-orders/order-2/serve-one-order/make make-cotton-candy: precondition (at (the robot) (the station (tag at-machine))) -> achieve by (an action (type navigating) (destination (the station (tag at-machine))))
+    booth-two-orders/order-2/serve-one-order/make/pre-make-cotton-candy navigating goal achieved [] [justified; act-now]
+    booth-two-orders/order-2/serve-one-order/make/make-cotton-candy/take-stick transporting goal achieved [] [justified; act-now]
+    booth-two-orders/order-2/serve-one-order/make/make-cotton-candy monitoring-process pre-empted: head-running-empty predicted [justified; repair-first: predicted head-running-empty, signalled before acting]
+    booth-two-orders/order-2/serve-one-order/make/make-cotton-candy handled head-running-empty (head-running-empty)
+    booth-two-orders/order-2/serve-one-order/make/make-cotton-candy putting-down goal achieved [] [plausible; act-now]
+    booth-two-orders/order-2/serve-one-order/make/make-cotton-candy/stop-machine pressing-button goal achieved [] [justified; act-now]
+    booth-two-orders/order-2/serve-one-order/make/make-cotton-candy/stop-machine monitoring-process skipped (goal holds)
+    booth-two-orders/order-2/serve-one-order/make/make-cotton-candy/stop-machine pressing-button goal achieved [] [justified; act-now]
+    booth-two-orders/order-2/serve-one-order/make/make-cotton-candy/stop-machine monitoring-process skipped (goal holds)
+    booth-two-orders/order-2/serve-one-order/make/make-cotton-candy stop-machine :succ (mode floss-machine off) holds
+    booth-two-orders/order-2/serve-one-order/make/make-cotton-candy/fill-spinner-head/take transporting goal achieved [] [justified; act-now]
+    booth-two-orders/order-2/serve-one-order/make/make-cotton-candy/fill-spinner-head/go-close navigating goal achieved [] [justified; act-now]
+    booth-two-orders/order-2/serve-one-order/make/make-cotton-candy/fill-spinner-head/pour pouring-into goal achieved [] [plausible; act-now]
+    booth-two-orders/order-2/serve-one-order/make/make-cotton-candy/fill-spinner-head/go-back navigating goal achieved [] [justified; act-now]
+    booth-two-orders/order-2/serve-one-order/make/make-cotton-candy/fill-spinner-head/put-back putting-down goal achieved [] [plausible; act-now]
+    booth-two-orders/order-2/serve-one-order/make/make-cotton-candy fill-spinner-head :succ (gripper-free right-arm) holds
+    booth-two-orders/order-2/serve-one-order/make/make-cotton-candy/start-machine pressing-button goal achieved [] [justified; act-now]
+    booth-two-orders/order-2/serve-one-order/make/make-cotton-candy/start-machine pressing-button goal achieved [] [justified; act-now]
+    booth-two-orders/order-2/serve-one-order/make/make-cotton-candy/start-machine turning goal achieved [] [justified; act-now]
+    booth-two-orders/order-2/serve-one-order/make/make-cotton-candy/start-machine monitoring-process goal achieved [] [rational; act-now]
+    booth-two-orders/order-2/serve-one-order/make/make-cotton-candy/start-machine turning goal achieved [] [justified; act-now]
+    booth-two-orders/order-2/serve-one-order/make/make-cotton-candy start-machine :succ (mode floss-machine producing) holds
+    booth-two-orders/order-2/serve-one-order/make/make-cotton-candy/take-stick transporting goal achieved [] [justified; act-now]
+    booth-two-orders/order-2/serve-one-order/make/make-cotton-candy monitoring-process goal achieved [] [rational; act-now]
+    booth-two-orders/order-2/serve-one-order/make/make-cotton-candy/gather gathering goal achieved [] [justified; act-now]
+    booth-two-orders/order-2/serve-one-order/make/make-cotton-candy/wrap wrapping goal achieved [] [justified; act-now]
+    booth-two-orders/order-2/serve-one-order/make make-cotton-candy :succ (stage candy-2 wrapped) holds
+    booth-two-orders/order-2/serve-one-order/serve/serve-cotton-candy navigating goal achieved [] [justified; act-now]
+    booth-two-orders/order-2/serve-one-order/serve/serve-cotton-candy/hand-over handing-over goal achieved [] [justified; act-now]
+    booth-two-orders/order-2/serve-one-order/serve serve-cotton-candy :succ (delivered candy-2 customer) holds
+    booth-two-orders/order-2 serve-one-order :succ (delivered candy-2 customer) holds
+    booth-two-orders/close/close-for-the-day turning: precondition (at (the robot) (the station (tag at-machine))) -> achieve by (an action (type navigating) (destination (the station (tag at-machine))))
+    booth-two-orders/close/close-for-the-day/pre-turning navigating goal achieved [] [justified; act-now]
+    booth-two-orders/close/close-for-the-day turning goal achieved [] [justified; act-now]
+    booth-two-orders/close/close-for-the-day signal head-running-empty: expected here (head-running-empty -> continue)
+    booth-two-orders/close/close-for-the-day monitoring-process goal achieved [] [justified; act-now: predicted head-running-empty is expected here (continue)]
+    booth-two-orders/close/close-for-the-day/stop-machine pressing-button goal achieved [] [justified; act-now]
+    booth-two-orders/close/close-for-the-day/stop-machine monitoring-process skipped (goal holds)
+    booth-two-orders/close/close-for-the-day/stop-machine pressing-button goal achieved [] [justified; act-now]
+    booth-two-orders/close/close-for-the-day/stop-machine monitoring-process skipped (goal holds)
+    booth-two-orders/close/close-for-the-day stop-machine :succ (mode floss-machine off) holds
+    booth-two-orders/close/close-for-the-day/clean-floss-machine transporting goal achieved [] [justified; act-now]
+    booth-two-orders/close/close-for-the-day/clean-floss-machine wiping goal achieved [] [plausible; act-now]
+    booth-two-orders/close/close-for-the-day/clean-floss-machine putting-down goal achieved [] [plausible; act-now]
+    booth-two-orders/close/close-for-the-day skip: (at sugar-carton-raspberry home-of-sugar-carton-raspberry) holds
+    booth-two-orders/close/close-for-the-day stick-1: with the customer -- belongs there now (belonging norm), not returned
+    booth-two-orders/close/close-for-the-day stick-2: with the customer -- belongs there now (belonging norm), not returned
+    booth-two-orders/close/close-for-the-day skip: (at sponge home-of-sponge) holds
+    booth-two-orders/close close-for-the-day :succ (mode floss-machine off) holds
+     booth-two-orders :succ (mode floss-machine off) holds
+== booth-two-orders: done
+episode: /home/mbeetz/Documents/CottonCandyTwin/cram/concept/episodes/booth-two-orders.json
+[workbench] plan: booth-two-orders: done
+[workbench] restarting: /home/mbeetz/.virtualenvs/cram-env/bin/python /home/mbeetz/.virtualenvs/cram-env/bin/cramera-live cram/concept/kernel/run_concept.py
+/home/mbeetz/.virtualenvs/cram-env/lib/python3.12/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+INFO:cramera.live.runner:running demo: /home/mbeetz/Documents/CottonCandyTwin/cram/concept/kernel/run_concept.py
+[37;1m2026-10-21 20:16:57.664 [31;1m[[37;1mRTPS_TRANSPORT_SHM[31;1m Error] [37mFailed init_port fastrtps_port7002: open_and_lock_file failed[34;1m -> Function [36mopen_port_internal[m
+[37;1m2026-10-21 20:16:57.664 [31;1m[[37;1mRTPS_TRANSPORT_SHM[31;1m Error] [37mFailed init_port fastrtps_port7003: open_and_lock_file failed[34;1m -> Function [36mopen_port_internal[m
+Unknown attribute "type" in /robot[@name='pr2']/link[@name='base_laser_link']
+Unknown attribute "type" in /robot[@name='pr2']/link[@name='wide_stereo_optical_frame']
+Unknown attribute "type" in /robot[@name='pr2']/link[@name='narrow_stereo_optical_frame']
+Unknown attribute "type" in /robot[@name='pr2']/link[@name='laser_tilt_link']
+Unknown tag "material" in /robot[@name='pr2']/link[@name='l_force_torque_link']/collision[1]
+INFO:cramera.live.bridge:attached to world (robot=PR2, 52 joints)
+INFO:cramera.live.ros_markers:watching markers on /semworld/viz_marker, /coraplex/viz_marker
+INFO:cramera.live.bridge:live queries answered by 'Zuckerwatte-Produktion'
+INFO:cramera.live.bridge:live queries answered by 'Conceptual CRAM episode (Cotton candy booth)'
+[workbench] Cotton candy booth: http://127.0.0.1:8780/
+[workbench] cramera: http://localhost:8711/?live=127.0.0.1:8768

@@ -1,0 +1,12 @@
+[
+ {
+  "path": "",
+  "note": "DISTURBANCE: motor switched on",
+  "t": 0.0
+ },
+ {
+  "path": "",
+  "note": "fill-spinner-head: precondition (mode floss-machine off) does not hold -- not started",
+  "t": 0.0
+ }
+]

@@ -1,0 +1,1364 @@
+[
+ {
+  "path": "booth-shift/fill/fill-spinner-head/take",
+  "designator": "(an action (type transporting) (object ?sugar) (arm ?arm))",
+  "schema": "transporting",
+  "t0": 0.0,
+  "bindings": {
+   "object": {
+    "symbol": "sugar-carton-raspberry",
+    "servant": "eql-annotations",
+    "status": "recorded",
+    "candidates": 1
+   },
+   "arm": {
+    "symbol": "right-arm",
+    "servant": "robot-model",
+    "status": "recorded"
+   }
+  },
+  "goal": [
+   "(achieve (held-by sugar-carton-raspberry right-arm) :at (end ?i))",
+   "(prevent (dropped sugar-carton-raspberry) :during ?i)"
+  ],
+  "gate": "admitted",
+  "warrant": "justified",
+  "warrant_why": "",
+  "preact": "act-now",
+  "t1": 0.0,
+  "wall_s": 1.1,
+  "model_only": [
+   "(prevent (dropped sugar-carton-raspberry) :during ?i)"
+  ],
+  "verdict": "goal achieved",
+  "violations": [],
+  "state_after": [
+   "(mode floss-machine off)",
+   "(switch-state motor-switch off)",
+   "(switch-state heat-switch off)",
+   "(travel-fraction heat-control 0)",
+   "(stage candy-1 none)",
+   "(held-by sugar-carton-raspberry right-arm)",
+   "(gripper-free left-arm)",
+   "(at (the robot) at-machine)",
+   "(open-order candy-1)",
+   "(idle booth)"
+  ]
+ },
+ {
+  "path": "booth-shift/fill/fill-spinner-head/go-close",
+  "designator": "(an action (type navigating) (destination (the station (tag machine-close))))",
+  "schema": "navigating",
+  "t0": 0.0,
+  "bindings": {
+   "destination": {
+    "symbol": "machine-close",
+    "servant": "layout-stations",
+    "status": "recorded"
+   }
+  },
+  "goal": [
+   "(achieve (at (the robot) machine-close) :at (end ?i))",
+   "(prevent (contact (the robot) (a person)) :during ?i)"
+  ],
+  "gate": "admitted",
+  "warrant": "justified",
+  "warrant_why": "",
+  "preact": "act-now",
+  "t1": 0.0,
+  "wall_s": 0.0,
+  "model_only": [
+   "(prevent (contact (the robot) (a person)) :during ?i)"
+  ],
+  "verdict": "goal achieved",
+  "violations": [],
+  "state_after": [
+   "(mode floss-machine off)",
+   "(switch-state motor-switch off)",
+   "(switch-state heat-switch off)",
+   "(travel-fraction heat-control 0)",
+   "(stage candy-1 none)",
+   "(held-by sugar-carton-raspberry right-arm)",
+   "(gripper-free left-arm)",
+   "(at (the robot) machine-close)",
+   "(open-order candy-1)",
+   "(idle booth)"
+  ]
+ },
+ {
+  "path": "booth-shift/fill/fill-spinner-head/pour",
+  "designator": "(an action (type pouring-into) (object ?sugar) (destination (tagged spinner-head ?machine)) (amount (some substance (mass portion-batch))))",
+  "schema": "pouring-into",
+  "t0": 0.0,
+  "bindings": {
+   "object": {
+    "symbol": "sugar-carton-raspberry",
+    "servant": "eql-annotations",
+    "status": "recorded",
+    "candidates": 1
+   },
+   "destination": {
+    "symbol": "spinner-head",
+    "servant": "sdt-part-tree",
+    "status": "recorded",
+    "grounding": "CottonCandyMachine.spinner_head"
+   },
+   "amount": {
+    "symbol": [
+     "mass",
+     0.054
+    ],
+    "servant": "recipe",
+    "status": "commonsense",
+    "value_kg": 0.054
+   }
+  },
+  "goal": [
+   "(achieve (contains spinner-head (mass 0.054)) :at (end ?i))",
+   "(maintain (held-by sugar-carton-raspberry ?arm) :during ?i)",
+   "(prevent (spilled (mass 0.054)) :during ?i)",
+   "(prevent (poured-into (mass 0.054) spinner-head) :while (not (mode floss-machine off)))"
+  ],
+  "gate": "admitted",
+  "warrant": "plausible",
+  "warrant_why": "amount: common sense / assumed",
+  "preact": "act-now",
+  "t1": 0.0,
+  "wall_s": 1.2,
+  "model_only": [
+   "(prevent (spilled (mass 0.054)) :during ?i)"
+  ],
+  "verdict": "goal achieved",
+  "violations": [],
+  "state_after": [
+   "(mode floss-machine off)",
+   "(contains spinner-head (mass 0.054))",
+   "(switch-state motor-switch off)",
+   "(switch-state heat-switch off)",
+   "(travel-fraction heat-control 0)",
+   "(stage candy-1 none)",
+   "(held-by sugar-carton-raspberry right-arm)",
+   "(gripper-free left-arm)",
+   "(at (the robot) machine-close)",
+   "(open-order candy-1)",
+   "(idle booth)"
+  ]
+ },
+ {
+  "path": "booth-shift/fill/fill-spinner-head/go-back",
+  "designator": "(an action (type navigating) (destination (the station (tag at-machine))))",
+  "schema": "navigating",
+  "t0": 0.0,
+  "bindings": {
+   "destination": {
+    "symbol": "at-machine",
+    "servant": "layout-stations",
+    "status": "recorded"
+   }
+  },
+  "goal": [
+   "(achieve (at (the robot) at-machine) :at (end ?i))",
+   "(prevent (contact (the robot) (a person)) :during ?i)"
+  ],
+  "gate": "admitted",
+  "warrant": "justified",
+  "warrant_why": "",
+  "preact": "act-now",
+  "t1": 0.0,
+  "wall_s": 0.0,
+  "model_only": [
+   "(prevent (contact (the robot) (a person)) :during ?i)"
+  ],
+  "verdict": "goal achieved",
+  "violations": [],
+  "state_after": [
+   "(mode floss-machine off)",
+   "(contains spinner-head (mass 0.054))",
+   "(switch-state motor-switch off)",
+   "(switch-state heat-switch off)",
+   "(travel-fraction heat-control 0)",
+   "(stage candy-1 none)",
+   "(held-by sugar-carton-raspberry right-arm)",
+   "(gripper-free left-arm)",
+   "(at (the robot) at-machine)",
+   "(open-order candy-1)",
+   "(idle booth)"
+  ]
+ },
+ {
+  "path": "booth-shift/fill/fill-spinner-head/put-back",
+  "designator": "(an action (type putting-down) (object ?sugar) (destination (its destination)))",
+  "schema": "putting-down",
+  "t0": 0.0,
+  "bindings": {
+   "object": {
+    "symbol": "sugar-carton-raspberry",
+    "servant": "eql-annotations",
+    "status": "recorded",
+    "candidates": 1
+   },
+   "destination": {
+    "symbol": "home-of-sugar-carton-raspberry",
+    "servant": "class-home",
+    "status": "commonsense",
+    "note": "where it was taken from (no belonging norm for this context)"
+   }
+  },
+  "goal": [
+   "(achieve (on sugar-carton-raspberry home-of-sugar-carton-raspberry) :at (end ?i))",
+   "(achieve (gripper-free ?arm) :at (end ?i))",
+   "(prevent (dropped sugar-carton-raspberry) :during ?i)"
+  ],
+  "gate": "admitted",
+  "warrant": "plausible",
+  "warrant_why": "destination: common sense / assumed",
+  "preact": "act-now",
+  "t1": 0.0,
+  "wall_s": 1.1,
+  "model_only": [
+   "(prevent (dropped sugar-carton-raspberry) :during ?i)"
+  ],
+  "verdict": "goal achieved",
+  "violations": [],
+  "state_after": [
+   "(mode floss-machine off)",
+   "(contains spinner-head (mass 0.054))",
+   "(switch-state motor-switch off)",
+   "(switch-state heat-switch off)",
+   "(travel-fraction heat-control 0)",
+   "(stage candy-1 none)",
+   "(gripper-free right-arm)",
+   "(gripper-free left-arm)",
+   "(at (the robot) at-machine)",
+   "(on sugar-carton-raspberry home-of-sugar-carton-raspberry)",
+   "(open-order candy-1)",
+   "(idle booth)"
+  ]
+ },
+ {
+  "path": "booth-shift/fill",
+  "note": "fill-spinner-head :succ (gripper-free right-arm) holds",
+  "t": 0.0
+ },
+ {
+  "path": "booth-shift/start/start-machine",
+  "designator": "(an action (type pressing-button) (object (tagged motor-switch ?machine)) (state on))",
+  "schema": "pressing-button",
+  "t0": 0.0,
+  "bindings": {
+   "object": {
+    "symbol": "motor-switch",
+    "servant": "sdt-part-tree",
+    "status": "recorded",
+    "grounding": "CottonCandyMachine.motor_switch"
+   },
+   "state": {
+    "symbol": "on",
+    "servant": "literal",
+    "status": "recorded"
+   },
+   "arm": {
+    "symbol": "right-arm",
+    "servant": "robot-model",
+    "status": "recorded"
+   }
+  },
+  "goal": [
+   "(achieve (switch-state motor-switch on) :at (end ?i))"
+  ],
+  "gate": "admitted",
+  "warrant": "justified",
+  "warrant_why": "",
+  "preact": "act-now",
+  "t1": 0.0,
+  "wall_s": 1.0,
+  "model_only": [],
+  "verdict": "goal achieved",
+  "violations": [],
+  "state_after": [
+   "(mode floss-machine spinning)",
+   "(contains spinner-head (mass 0.054))",
+   "(switch-state motor-switch on)",
+   "(switch-state heat-switch off)",
+   "(travel-fraction heat-control 0)",
+   "(stage candy-1 none)",
+   "(gripper-free right-arm)",
+   "(gripper-free left-arm)",
+   "(at (the robot) at-machine)",
+   "(on sugar-carton-raspberry home-of-sugar-carton-raspberry)",
+   "(moving spinner-head)",
+   "(open-order candy-1)"
+  ]
+ },
+ {
+  "path": "booth-shift/start/start-machine",
+  "designator": "(an action (type pressing-button) (object (tagged heat-switch ?machine)) (state on))",
+  "schema": "pressing-button",
+  "t0": 10.0,
+  "bindings": {
+   "object": {
+    "symbol": "heat-switch",
+    "servant": "sdt-part-tree",
+    "status": "recorded",
+    "grounding": "CottonCandyMachine.heat_switch"
+   },
+   "state": {
+    "symbol": "on",
+    "servant": "literal",
+    "status": "recorded"
+   },
+   "arm": {
+    "symbol": "right-arm",
+    "servant": "robot-model",
+    "status": "recorded"
+   }
+  },
+  "goal": [
+   "(achieve (switch-state heat-switch on) :at (end ?i))"
+  ],
+  "gate": "admitted",
+  "warrant": "justified",
+  "warrant_why": "",
+  "preact": "act-now",
+  "t1": 10.0,
+  "wall_s": 0.8,
+  "model_only": [],
+  "verdict": "goal achieved",
+  "violations": [],
+  "state_after": [
+   "(mode floss-machine warming-up)",
+   "(contains spinner-head (mass 0.054))",
+   "(switch-state motor-switch on)",
+   "(switch-state heat-switch on)",
+   "(travel-fraction heat-control 0)",
+   "(stage candy-1 none)",
+   "(gripper-free right-arm)",
+   "(gripper-free left-arm)",
+   "(at (the robot) at-machine)",
+   "(on sugar-carton-raspberry home-of-sugar-carton-raspberry)",
+   "(moving spinner-head)",
+   "(open-order candy-1)"
+  ]
+ },
+ {
+  "path": "booth-shift/start/start-machine",
+  "designator": "(an action (type turning) (object (tagged heat-control ?machine)) (setting 1))",
+  "schema": "turning",
+  "t0": 10.0,
+  "bindings": {
+   "object": {
+    "symbol": "heat-control",
+    "servant": "sdt-part-tree",
+    "status": "recorded",
+    "grounding": "CottonCandyMachine.heat_control"
+   },
+   "setting": {
+    "symbol": 1.0,
+    "servant": "literal",
+    "status": "recorded"
+   },
+   "arm": {
+    "symbol": "right-arm",
+    "servant": "robot-model",
+    "status": "recorded"
+   }
+  },
+  "goal": [
+   "(achieve (travel-fraction heat-control 1) :at (end ?i))"
+  ],
+  "gate": "admitted",
+  "warrant": "justified",
+  "warrant_why": "",
+  "preact": "act-now",
+  "t1": 10.0,
+  "wall_s": 0.8,
+  "model_only": [],
+  "verdict": "goal achieved",
+  "violations": [],
+  "state_after": [
+   "(mode floss-machine warming-up)",
+   "(contains spinner-head (mass 0.054))",
+   "(switch-state motor-switch on)",
+   "(switch-state heat-switch on)",
+   "(travel-fraction heat-control 0.99)",
+   "(stage candy-1 none)",
+   "(gripper-free right-arm)",
+   "(gripper-free left-arm)",
+   "(at (the robot) at-machine)",
+   "(on sugar-carton-raspberry home-of-sugar-carton-raspberry)",
+   "(hot spinner-head)",
+   "(hot floss-pan)",
+   "(moving spinner-head)",
+   "(open-order candy-1)"
+  ]
+ },
+ {
+  "path": "booth-shift/start/start-machine",
+  "designator": "(an action (type monitoring-process) (process floss-machine) (until (mode floss-machine producing)))",
+  "schema": "monitoring-process",
+  "t0": 10.0,
+  "bindings": {
+   "process": {
+    "symbol": "floss-machine",
+    "servant": "literal",
+    "status": "recorded"
+   },
+   "until": {
+    "symbol": [
+     "mode",
+     "floss-machine",
+     "producing"
+    ],
+    "servant": "condition",
+    "status": "recorded"
+   }
+  },
+  "goal": [
+   "(monitor (mode floss-machine) :until (mode floss-machine producing))",
+   "(achieve (mode floss-machine producing) :within ?timeout)"
+  ],
+  "gate": "admitted",
+  "warrant": "rational",
+  "warrant_why": "",
+  "preact": "act-now",
+  "prediction": "(mode floss-machine producing) after 25 s",
+  "t1": 35.0,
+  "wall_s": 0.6,
+  "model_only": [],
+  "verdict": "goal achieved",
+  "violations": [],
+  "state_after": [
+   "(mode floss-machine producing)",
+   "(contains spinner-head (mass 0.0536))",
+   "(switch-state motor-switch on)",
+   "(switch-state heat-switch on)",
+   "(travel-fraction heat-control 0.99)",
+   "(stage candy-1 none)",
+   "(gripper-free right-arm)",
+   "(gripper-free left-arm)",
+   "(at (the robot) at-machine)",
+   "(on sugar-carton-raspberry home-of-sugar-carton-raspberry)",
+   "(hot spinner-head)",
+   "(hot floss-pan)",
+   "(moving spinner-head)",
+   "(open-order candy-1)"
+  ]
+ },
+ {
+  "path": "booth-shift/start/start-machine",
+  "designator": "(an action (type turning) (object (tagged heat-control ?machine)) (setting 0.7))",
+  "schema": "turning",
+  "t0": 35.0,
+  "bindings": {
+   "object": {
+    "symbol": "heat-control",
+    "servant": "sdt-part-tree",
+    "status": "recorded",
+    "grounding": "CottonCandyMachine.heat_control"
+   },
+   "setting": {
+    "symbol": 0.7,
+    "servant": "literal",
+    "status": "recorded"
+   },
+   "arm": {
+    "symbol": "right-arm",
+    "servant": "robot-model",
+    "status": "recorded"
+   }
+  },
+  "goal": [
+   "(achieve (travel-fraction heat-control 0.7) :at (end ?i))"
+  ],
+  "gate": "admitted",
+  "warrant": "justified",
+  "warrant_why": "",
+  "preact": "act-now",
+  "t1": 35.0,
+  "wall_s": 0.7,
+  "model_only": [],
+  "verdict": "goal achieved",
+  "violations": [],
+  "state_after": [
+   "(mode floss-machine producing)",
+   "(contains spinner-head (mass 0.0536))",
+   "(switch-state motor-switch on)",
+   "(switch-state heat-switch on)",
+   "(travel-fraction heat-control 0.7)",
+   "(stage candy-1 none)",
+   "(gripper-free right-arm)",
+   "(gripper-free left-arm)",
+   "(at (the robot) at-machine)",
+   "(on sugar-carton-raspberry home-of-sugar-carton-raspberry)",
+   "(hot spinner-head)",
+   "(hot floss-pan)",
+   "(moving spinner-head)",
+   "(open-order candy-1)"
+  ]
+ },
+ {
+  "path": "booth-shift/start",
+  "note": "start-machine :succ (mode floss-machine producing) holds",
+  "t": 35.0
+ },
+ {
+  "path": "booth-shift/make/make-cotton-candy/take-stick",
+  "designator": "(an action (type transporting) (object ?stick) (arm ?arm))",
+  "schema": "transporting",
+  "t0": 35.0,
+  "bindings": {
+   "object": {
+    "symbol": "stick-1",
+    "servant": "eql-annotations",
+    "status": "recorded",
+    "candidates": 3
+   },
+   "arm": {
+    "symbol": "right-arm",
+    "servant": "robot-model",
+    "status": "recorded"
+   }
+  },
+  "goal": [
+   "(achieve (held-by stick-1 right-arm) :at (end ?i))",
+   "(prevent (dropped stick-1) :during ?i)"
+  ],
+  "gate": "admitted",
+  "warrant": "justified",
+  "warrant_why": "",
+  "preact": "act-now",
+  "t1": 35.0,
+  "wall_s": 1.1,
+  "model_only": [
+   "(prevent (dropped stick-1) :during ?i)"
+  ],
+  "verdict": "goal achieved",
+  "violations": [],
+  "state_after": [
+   "(mode floss-machine producing)",
+   "(contains spinner-head (mass 0.0536))",
+   "(switch-state motor-switch on)",
+   "(switch-state heat-switch on)",
+   "(travel-fraction heat-control 0.7)",
+   "(stage candy-1 none)",
+   "(held-by stick-1 right-arm)",
+   "(gripper-free left-arm)",
+   "(at (the robot) at-machine)",
+   "(on sugar-carton-raspberry home-of-sugar-carton-raspberry)",
+   "(hot spinner-head)",
+   "(hot floss-pan)",
+   "(moving spinner-head)",
+   "(open-order candy-1)"
+  ]
+ },
+ {
+  "path": "booth-shift/make/make-cotton-candy",
+  "designator": "(an action (type monitoring-process) (process floss-machine) (until (portion-spun)))",
+  "schema": "monitoring-process",
+  "t0": 35.0,
+  "bindings": {
+   "process": {
+    "symbol": "floss-machine",
+    "servant": "literal",
+    "status": "recorded"
+   },
+   "until": {
+    "symbol": [
+     "portion-spun"
+    ],
+    "servant": "condition",
+    "status": "recorded"
+   }
+  },
+  "goal": [
+   "(monitor (mode floss-machine) :until (portion-spun))",
+   "(achieve (portion-spun) :within ?timeout)"
+  ],
+  "gate": "admitted",
+  "warrant": "rational",
+  "warrant_why": "",
+  "preact": "act-now",
+  "prediction": "(portion-spun) after 24 s",
+  "t1": 58.5,
+  "wall_s": 0.5,
+  "model_only": [],
+  "verdict": "goal achieved",
+  "violations": [],
+  "state_after": [
+   "(mode floss-machine producing)",
+   "(contains spinner-head (mass 0.034))",
+   "(portion-spun)",
+   "(switch-state motor-switch on)",
+   "(switch-state heat-switch on)",
+   "(travel-fraction heat-control 0.7)",
+   "(stage candy-1 none)",
+   "(held-by stick-1 right-arm)",
+   "(gripper-free left-arm)",
+   "(at (the robot) at-machine)",
+   "(on sugar-carton-raspberry home-of-sugar-carton-raspberry)",
+   "(hot spinner-head)",
+   "(hot floss-pan)",
+   "(moving spinner-head)",
+   "(open-order candy-1)"
+  ]
+ },
+ {
+  "path": "booth-shift/make/make-cotton-candy/gather",
+  "designator": "(an action (type gathering) (tool ?stick) (container (tagged floss-pan ?machine)))",
+  "schema": "gathering",
+  "t0": 58.5,
+  "bindings": {
+   "tool": {
+    "symbol": "stick-1",
+    "servant": "eql-annotations",
+    "status": "recorded",
+    "candidates": 3
+   },
+   "container": {
+    "symbol": "floss-pan",
+    "servant": "sdt-part-tree",
+    "status": "recorded",
+    "grounding": "CottonCandyMachine.floss_pan"
+   },
+   "arm": {
+    "symbol": "right-arm",
+    "servant": "robot-model",
+    "status": "recorded"
+   }
+  },
+  "goal": [
+   "(achieve (on-tool ?substance stick-1) :at (end ?i))",
+   "(maintain (held-by stick-1 right-arm) :during ?i)"
+  ],
+  "gate": "admitted",
+  "warrant": "justified",
+  "warrant_why": "",
+  "preact": "act-now",
+  "t1": 58.5,
+  "wall_s": 0.5,
+  "model_only": [],
+  "verdict": "goal achieved",
+  "violations": [],
+  "state_after": [
+   "(mode floss-machine producing)",
+   "(contains spinner-head (mass 0.034))",
+   "(switch-state motor-switch on)",
+   "(switch-state heat-switch on)",
+   "(travel-fraction heat-control 0.7)",
+   "(on-tool floss stick-1)",
+   "(stage candy-1 gathered)",
+   "(held-by stick-1 right-arm)",
+   "(gripper-free left-arm)",
+   "(at (the robot) at-machine)",
+   "(on sugar-carton-raspberry home-of-sugar-carton-raspberry)",
+   "(hot spinner-head)",
+   "(hot floss-pan)",
+   "(moving spinner-head)",
+   "(open-order candy-1)"
+  ]
+ },
+ {
+  "path": "booth-shift/make/make-cotton-candy/wrap",
+  "designator": "(an action (type wrapping) (tool ?stick) (above (tagged floss-pan ?machine)))",
+  "schema": "wrapping",
+  "t0": 58.5,
+  "bindings": {
+   "tool": {
+    "symbol": "stick-1",
+    "servant": "eql-annotations",
+    "status": "recorded",
+    "candidates": 3
+   },
+   "above": {
+    "symbol": "floss-pan",
+    "servant": "sdt-part-tree",
+    "status": "recorded",
+    "grounding": "CottonCandyMachine.floss_pan"
+   },
+   "arm": {
+    "symbol": "right-arm",
+    "servant": "robot-model",
+    "status": "recorded"
+   }
+  },
+  "goal": [
+   "(achieve (stage (the cotton-candy (on stick-1)) wrapped) :at (end ?i))",
+   "(maintain (held-by stick-1 right-arm) :during ?i)"
+  ],
+  "gate": "admitted",
+  "warrant": "justified",
+  "warrant_why": "",
+  "preact": "act-now",
+  "t1": 58.5,
+  "wall_s": 0.3,
+  "model_only": [],
+  "verdict": "goal achieved",
+  "violations": [],
+  "state_after": [
+   "(mode floss-machine producing)",
+   "(contains spinner-head (mass 0.034))",
+   "(switch-state motor-switch on)",
+   "(switch-state heat-switch on)",
+   "(travel-fraction heat-control 0.7)",
+   "(on-tool floss stick-1)",
+   "(stage candy-1 wrapped)",
+   "(held-by stick-1 right-arm)",
+   "(gripper-free left-arm)",
+   "(at (the robot) at-machine)",
+   "(on sugar-carton-raspberry home-of-sugar-carton-raspberry)",
+   "(hot spinner-head)",
+   "(hot floss-pan)",
+   "(moving spinner-head)",
+   "(open-order candy-1)",
+   "(ready-to-hand-over candy-1 right-arm)"
+  ]
+ },
+ {
+  "path": "booth-shift/make",
+  "note": "make-cotton-candy :succ (stage candy-1 wrapped) holds",
+  "t": 58.5
+ },
+ {
+  "path": "booth-shift/serve/serve-cotton-candy",
+  "designator": "(an action (type navigating) (destination (the station (tag serving))))",
+  "schema": "navigating",
+  "t0": 58.5,
+  "bindings": {
+   "destination": {
+    "symbol": "serving",
+    "servant": "layout-stations",
+    "status": "recorded"
+   }
+  },
+  "goal": [
+   "(achieve (at (the robot) serving) :at (end ?i))",
+   "(prevent (contact (the robot) (a person)) :during ?i)"
+  ],
+  "gate": "admitted",
+  "warrant": "justified",
+  "warrant_why": "",
+  "preact": "act-now",
+  "t1": 58.5,
+  "wall_s": 0.0,
+  "model_only": [
+   "(prevent (contact (the robot) (a person)) :during ?i)"
+  ],
+  "verdict": "goal achieved",
+  "violations": [],
+  "state_after": [
+   "(mode floss-machine producing)",
+   "(contains spinner-head (mass 0.034))",
+   "(switch-state motor-switch on)",
+   "(switch-state heat-switch on)",
+   "(travel-fraction heat-control 0.7)",
+   "(on-tool floss stick-1)",
+   "(stage candy-1 wrapped)",
+   "(held-by stick-1 right-arm)",
+   "(gripper-free left-arm)",
+   "(at (the robot) serving)",
+   "(on sugar-carton-raspberry home-of-sugar-carton-raspberry)",
+   "(hot spinner-head)",
+   "(hot floss-pan)",
+   "(moving spinner-head)",
+   "(open-order candy-1)",
+   "(ready-to-hand-over candy-1 right-arm)"
+  ]
+ },
+ {
+  "path": "booth-shift/serve/serve-cotton-candy/hand-over",
+  "designator": "(an action (type handing-over) (object ?stick) (recipient ?customer) (destination (the handover-location (reachable-for ?customer))))",
+  "schema": "handing-over",
+  "t0": 58.5,
+  "bindings": {
+   "object": {
+    "symbol": "stick-1",
+    "servant": "eql-annotations",
+    "status": "recorded",
+    "candidates": 3
+   },
+   "recipient": {
+    "symbol": "customer",
+    "servant": "eql-annotations",
+    "status": "recorded",
+    "candidates": 1
+   },
+   "destination": {
+    "symbol": "handover-zone",
+    "servant": "eql-annotations",
+    "status": "recorded",
+    "candidates": 1
+   },
+   "arm": {
+    "symbol": "right-arm",
+    "servant": "robot-model",
+    "status": "recorded"
+   }
+  },
+  "goal": [
+   "(achieve (holds customer stick-1) :at (end ?i))",
+   "(maintain (held-by stick-1 right-arm) :until (taken-by customer stick-1))",
+   "(prevent (dropped stick-1) :during ?i)"
+  ],
+  "gate": "admitted",
+  "warrant": "justified",
+  "warrant_why": "",
+  "preact": "act-now",
+  "t1": 58.5,
+  "wall_s": 1.2,
+  "model_only": [
+   "(prevent (dropped stick-1) :during ?i)"
+  ],
+  "verdict": "goal achieved",
+  "violations": [],
+  "state_after": [
+   "(mode floss-machine producing)",
+   "(contains spinner-head (mass 0.034))",
+   "(switch-state motor-switch on)",
+   "(switch-state heat-switch on)",
+   "(travel-fraction heat-control 0.7)",
+   "(on-tool floss stick-1)",
+   "(stage candy-1 delivered)",
+   "(delivered candy-1 customer)",
+   "(holds customer stick-1)",
+   "(taken-by customer stick-1)",
+   "(gripper-free right-arm)",
+   "(gripper-free left-arm)",
+   "(at (the robot) serving)",
+   "(on sugar-carton-raspberry home-of-sugar-carton-raspberry)",
+   "(hot spinner-head)",
+   "(hot floss-pan)",
+   "(moving spinner-head)"
+  ]
+ },
+ {
+  "path": "booth-shift/serve",
+  "note": "serve-cotton-candy :succ (delivered candy-1 customer) holds",
+  "t": 58.5
+ },
+ {
+  "path": "booth-shift/close/close-for-the-day",
+  "note": "turning: precondition (at (the robot) (the station (tag at-machine))) -> achieve by (an action (type navigating) (destination (the station (tag at-machine))))",
+  "t": 58.5
+ },
+ {
+  "path": "booth-shift/close/close-for-the-day/pre-turning",
+  "designator": "(an action (type navigating) (destination (the station (tag at-machine))))",
+  "schema": "navigating",
+  "t0": 58.5,
+  "bindings": {
+   "destination": {
+    "symbol": "at-machine",
+    "servant": "layout-stations",
+    "status": "recorded"
+   }
+  },
+  "goal": [
+   "(achieve (at (the robot) at-machine) :at (end ?i))",
+   "(prevent (contact (the robot) (a person)) :during ?i)"
+  ],
+  "gate": "admitted",
+  "warrant": "justified",
+  "warrant_why": "",
+  "preact": "act-now",
+  "t1": 58.5,
+  "wall_s": 0.0,
+  "model_only": [
+   "(prevent (contact (the robot) (a person)) :during ?i)"
+  ],
+  "verdict": "goal achieved",
+  "violations": [],
+  "state_after": [
+   "(mode floss-machine producing)",
+   "(contains spinner-head (mass 0.034))",
+   "(switch-state motor-switch on)",
+   "(switch-state heat-switch on)",
+   "(travel-fraction heat-control 0.7)",
+   "(on-tool floss stick-1)",
+   "(stage candy-1 delivered)",
+   "(delivered candy-1 customer)",
+   "(holds customer stick-1)",
+   "(taken-by customer stick-1)",
+   "(gripper-free right-arm)",
+   "(gripper-free left-arm)",
+   "(at (the robot) at-machine)",
+   "(on sugar-carton-raspberry home-of-sugar-carton-raspberry)",
+   "(hot spinner-head)",
+   "(hot floss-pan)",
+   "(moving spinner-head)"
+  ]
+ },
+ {
+  "path": "booth-shift/close/close-for-the-day",
+  "designator": "(an action (type turning) (object (tagged heat-control ?machine)) (setting 1))",
+  "schema": "turning",
+  "t0": 58.5,
+  "bindings": {
+   "object": {
+    "symbol": "heat-control",
+    "servant": "sdt-part-tree",
+    "status": "recorded",
+    "grounding": "CottonCandyMachine.heat_control"
+   },
+   "setting": {
+    "symbol": 1.0,
+    "servant": "literal",
+    "status": "recorded"
+   },
+   "arm": {
+    "symbol": "right-arm",
+    "servant": "robot-model",
+    "status": "recorded"
+   }
+  },
+  "goal": [
+   "(achieve (travel-fraction heat-control 1) :at (end ?i))"
+  ],
+  "gate": "admitted",
+  "warrant": "justified",
+  "warrant_why": "",
+  "preact": "act-now",
+  "t1": 58.5,
+  "wall_s": 0.8,
+  "model_only": [],
+  "verdict": "goal achieved",
+  "violations": [],
+  "state_after": [
+   "(mode floss-machine producing)",
+   "(contains spinner-head (mass 0.034))",
+   "(switch-state motor-switch on)",
+   "(switch-state heat-switch on)",
+   "(travel-fraction heat-control 0.99)",
+   "(on-tool floss stick-1)",
+   "(stage candy-1 delivered)",
+   "(delivered candy-1 customer)",
+   "(holds customer stick-1)",
+   "(taken-by customer stick-1)",
+   "(gripper-free right-arm)",
+   "(gripper-free left-arm)",
+   "(at (the robot) at-machine)",
+   "(on sugar-carton-raspberry home-of-sugar-carton-raspberry)",
+   "(hot spinner-head)",
+   "(hot floss-pan)",
+   "(moving spinner-head)"
+  ]
+ },
+ {
+  "path": "booth-shift/close/close-for-the-day",
+  "note": "signal head-running-empty: expected here (head-running-empty -> continue)",
+  "t": 99.5
+ },
+ {
+  "path": "booth-shift/close/close-for-the-day",
+  "designator": "(an action (type monitoring-process) (process floss-machine) (until (burnt-out ?machine)))",
+  "schema": "monitoring-process",
+  "t0": 58.5,
+  "bindings": {
+   "process": {
+    "symbol": "floss-machine",
+    "servant": "literal",
+    "status": "recorded"
+   },
+   "until": {
+    "symbol": [
+     "burnt-out",
+     "machine"
+    ],
+    "servant": "condition",
+    "status": "recorded"
+   }
+  },
+  "goal": [
+   "(monitor (mode floss-machine) :until (burnt-out machine))",
+   "(achieve (burnt-out machine) :within ?timeout)"
+  ],
+  "gate": "admitted",
+  "warrant": "justified",
+  "warrant_why": "",
+  "preact": "act-now: predicted head-running-empty is expected here (continue)",
+  "prediction": "head-running-empty after 41 s",
+  "t1": 309.5,
+  "wall_s": 3.1,
+  "model_only": [],
+  "verdict": "goal achieved",
+  "violations": [],
+  "state_after": [
+   "(mode floss-machine running-empty)",
+   "(portion-spun)",
+   "(burnt-out machine)",
+   "(switch-state motor-switch on)",
+   "(switch-state heat-switch on)",
+   "(travel-fraction heat-control 0.99)",
+   "(on-tool floss stick-1)",
+   "(stage candy-1 delivered)",
+   "(delivered candy-1 customer)",
+   "(holds customer stick-1)",
+   "(taken-by customer stick-1)",
+   "(gripper-free right-arm)",
+   "(gripper-free left-arm)",
+   "(at (the robot) at-machine)",
+   "(on sugar-carton-raspberry home-of-sugar-carton-raspberry)",
+   "(hot spinner-head)",
+   "(hot floss-pan)",
+   "(moving spinner-head)"
+  ]
+ },
+ {
+  "path": "booth-shift/close/close-for-the-day/stop-machine",
+  "designator": "(an action (type pressing-button) (object (tagged heat-switch ?machine)) (state off))",
+  "schema": "pressing-button",
+  "t0": 309.5,
+  "bindings": {
+   "object": {
+    "symbol": "heat-switch",
+    "servant": "sdt-part-tree",
+    "status": "recorded",
+    "grounding": "CottonCandyMachine.heat_switch"
+   },
+   "state": {
+    "symbol": "off",
+    "servant": "literal",
+    "status": "recorded"
+   },
+   "arm": {
+    "symbol": "right-arm",
+    "servant": "robot-model",
+    "status": "recorded"
+   }
+  },
+  "goal": [
+   "(achieve (switch-state heat-switch off) :at (end ?i))"
+  ],
+  "gate": "admitted",
+  "warrant": "justified",
+  "warrant_why": "",
+  "preact": "act-now",
+  "t1": 309.5,
+  "wall_s": 1.3,
+  "model_only": [],
+  "verdict": "goal achieved",
+  "violations": [],
+  "state_after": [
+   "(mode floss-machine spinning)",
+   "(portion-spun)",
+   "(burnt-out machine)",
+   "(switch-state motor-switch on)",
+   "(switch-state heat-switch off)",
+   "(travel-fraction heat-control 0.99)",
+   "(on-tool floss stick-1)",
+   "(stage candy-1 delivered)",
+   "(delivered candy-1 customer)",
+   "(holds customer stick-1)",
+   "(taken-by customer stick-1)",
+   "(gripper-free right-arm)",
+   "(gripper-free left-arm)",
+   "(at (the robot) at-machine)",
+   "(on sugar-carton-raspberry home-of-sugar-carton-raspberry)",
+   "(moving spinner-head)"
+  ]
+ },
+ {
+  "path": "booth-shift/close/close-for-the-day/stop-machine",
+  "designator": "(an action (type monitoring-process) (process floss-machine) (until (mode floss-machine spinning)))",
+  "schema": "monitoring-process",
+  "t0": 309.5,
+  "bindings": {
+   "process": {
+    "symbol": "floss-machine",
+    "servant": "literal",
+    "status": "recorded"
+   },
+   "until": {
+    "symbol": [
+     "mode",
+     "floss-machine",
+     "spinning"
+    ],
+    "servant": "condition",
+    "status": "recorded"
+   }
+  },
+  "goal": [
+   "(monitor (mode floss-machine) :until (mode floss-machine spinning))",
+   "(achieve (mode floss-machine spinning) :within ?timeout)"
+  ],
+  "verdict": "skipped: goal holds",
+  "t1": 309.5
+ },
+ {
+  "path": "booth-shift/close/close-for-the-day/stop-machine",
+  "designator": "(an action (type pressing-button) (object (tagged motor-switch ?machine)) (state off))",
+  "schema": "pressing-button",
+  "t0": 309.5,
+  "bindings": {
+   "object": {
+    "symbol": "motor-switch",
+    "servant": "sdt-part-tree",
+    "status": "recorded",
+    "grounding": "CottonCandyMachine.motor_switch"
+   },
+   "state": {
+    "symbol": "off",
+    "servant": "literal",
+    "status": "recorded"
+   },
+   "arm": {
+    "symbol": "right-arm",
+    "servant": "robot-model",
+    "status": "recorded"
+   }
+  },
+  "goal": [
+   "(achieve (switch-state motor-switch off) :at (end ?i))"
+  ],
+  "gate": "admitted",
+  "warrant": "justified",
+  "warrant_why": "",
+  "preact": "act-now",
+  "t1": 309.5,
+  "wall_s": 0.9,
+  "model_only": [],
+  "verdict": "goal achieved",
+  "violations": [],
+  "state_after": [
+   "(mode floss-machine off)",
+   "(portion-spun)",
+   "(burnt-out machine)",
+   "(switch-state motor-switch off)",
+   "(switch-state heat-switch off)",
+   "(travel-fraction heat-control 0.99)",
+   "(on-tool floss stick-1)",
+   "(stage candy-1 delivered)",
+   "(delivered candy-1 customer)",
+   "(holds customer stick-1)",
+   "(taken-by customer stick-1)",
+   "(gripper-free right-arm)",
+   "(gripper-free left-arm)",
+   "(at (the robot) at-machine)",
+   "(on sugar-carton-raspberry home-of-sugar-carton-raspberry)",
+   "(idle booth)"
+  ]
+ },
+ {
+  "path": "booth-shift/close/close-for-the-day/stop-machine",
+  "designator": "(an action (type monitoring-process) (process floss-machine) (until (mode floss-machine off)))",
+  "schema": "monitoring-process",
+  "t0": 309.5,
+  "bindings": {
+   "process": {
+    "symbol": "floss-machine",
+    "servant": "literal",
+    "status": "recorded"
+   },
+   "until": {
+    "symbol": [
+     "mode",
+     "floss-machine",
+     "off"
+    ],
+    "servant": "condition",
+    "status": "recorded"
+   }
+  },
+  "goal": [
+   "(monitor (mode floss-machine) :until (mode floss-machine off))",
+   "(achieve (mode floss-machine off) :within ?timeout)"
+  ],
+  "verdict": "skipped: goal holds",
+  "t1": 309.5
+ },
+ {
+  "path": "booth-shift/close/close-for-the-day",
+  "note": "stop-machine :succ (mode floss-machine off) holds",
+  "t": 309.5
+ },
+ {
+  "path": "booth-shift/close/close-for-the-day/clean-floss-machine",
+  "designator": "(an action (type transporting) (object (the sponge)))",
+  "schema": "transporting",
+  "t0": 309.5,
+  "bindings": {
+   "object": {
+    "symbol": "sponge",
+    "servant": "eql-annotations",
+    "status": "recorded",
+    "candidates": 1
+   },
+   "arm": {
+    "symbol": "right-arm",
+    "servant": "robot-model",
+    "status": "recorded"
+   }
+  },
+  "goal": [
+   "(achieve (held-by sponge right-arm) :at (end ?i))",
+   "(prevent (dropped sponge) :during ?i)"
+  ],
+  "gate": "admitted",
+  "warrant": "justified",
+  "warrant_why": "",
+  "preact": "act-now",
+  "t1": 309.5,
+  "wall_s": 1.2,
+  "model_only": [
+   "(prevent (dropped sponge) :during ?i)"
+  ],
+  "verdict": "goal achieved",
+  "violations": [],
+  "state_after": [
+   "(mode floss-machine off)",
+   "(portion-spun)",
+   "(burnt-out machine)",
+   "(switch-state motor-switch off)",
+   "(switch-state heat-switch off)",
+   "(travel-fraction heat-control 0.99)",
+   "(on-tool floss stick-1)",
+   "(stage candy-1 delivered)",
+   "(delivered candy-1 customer)",
+   "(holds customer stick-1)",
+   "(taken-by customer stick-1)",
+   "(held-by sponge right-arm)",
+   "(gripper-free left-arm)",
+   "(at (the robot) at-machine)",
+   "(on sugar-carton-raspberry home-of-sugar-carton-raspberry)",
+   "(idle booth)"
+  ]
+ },
+ {
+  "path": "booth-shift/close/close-for-the-day/clean-floss-machine",
+  "designator": "(an action (type wiping) (tool (the sponge)) (surface (tagged floss-pan ?machine)))",
+  "schema": "wiping",
+  "t0": 309.5,
+  "bindings": {
+   "tool": {
+    "symbol": "sponge",
+    "servant": "eql-annotations",
+    "status": "recorded",
+    "candidates": 1
+   },
+   "surface": {
+    "symbol": "floss-pan",
+    "servant": "sdt-part-tree",
+    "status": "recorded",
+    "grounding": "CottonCandyMachine.floss_pan"
+   },
+   "arm": {
+    "symbol": "right-arm",
+    "servant": "robot-model",
+    "status": "recorded"
+   }
+  },
+  "goal": [
+   "(achieve (clean floss-pan) :at (end ?i))",
+   "(maintain (held-by sponge right-arm) :during ?i)"
+  ],
+  "gate": "admitted",
+  "warrant": "plausible",
+  "warrant_why": "model-only goal (clean floss-pan)",
+  "preact": "act-now",
+  "t1": 309.5,
+  "wall_s": 0.4,
+  "model_only": [
+   "(achieve (clean floss-pan) :at (end ?i))"
+  ],
+  "verdict": "goal achieved",
+  "violations": [],
+  "state_after": [
+   "(mode floss-machine off)",
+   "(portion-spun)",
+   "(burnt-out machine)",
+   "(switch-state motor-switch off)",
+   "(switch-state heat-switch off)",
+   "(travel-fraction heat-control 0.99)",
+   "(on-tool floss stick-1)",
+   "(stage candy-1 delivered)",
+   "(delivered candy-1 customer)",
+   "(holds customer stick-1)",
+   "(taken-by customer stick-1)",
+   "(held-by sponge right-arm)",
+   "(gripper-free left-arm)",
+   "(at (the robot) at-machine)",
+   "(on sugar-carton-raspberry home-of-sugar-carton-raspberry)",
+   "(idle booth)"
+  ]
+ },
+ {
+  "path": "booth-shift/close/close-for-the-day/clean-floss-machine",
+  "designator": "(an action (type putting-down) (object (the sponge)) (destination (its destination)))",
+  "schema": "putting-down",
+  "t0": 309.5,
+  "bindings": {
+   "object": {
+    "symbol": "sponge",
+    "servant": "eql-annotations",
+    "status": "recorded",
+    "candidates": 1
+   },
+   "destination": {
+    "symbol": "home-of-sponge",
+    "servant": "class-home",
+    "status": "commonsense",
+    "note": "where it was taken from (no belonging norm for this context)"
+   }
+  },
+  "goal": [
+   "(achieve (on sponge home-of-sponge) :at (end ?i))",
+   "(achieve (gripper-free ?arm) :at (end ?i))",
+   "(prevent (dropped sponge) :during ?i)"
+  ],
+  "gate": "admitted",
+  "warrant": "plausible",
+  "warrant_why": "destination: common sense / assumed",
+  "preact": "act-now",
+  "t1": 309.5,
+  "wall_s": 1.3,
+  "model_only": [
+   "(prevent (dropped sponge) :during ?i)"
+  ],
+  "verdict": "goal achieved",
+  "violations": [],
+  "state_after": [
+   "(mode floss-machine off)",
+   "(portion-spun)",
+   "(burnt-out machine)",
+   "(switch-state motor-switch off)",
+   "(switch-state heat-switch off)",
+   "(travel-fraction heat-control 0.99)",
+   "(on-tool floss stick-1)",
+   "(stage candy-1 delivered)",
+   "(delivered candy-1 customer)",
+   "(holds customer stick-1)",
+   "(taken-by customer stick-1)",
+   "(gripper-free right-arm)",
+   "(gripper-free left-arm)",
+   "(at (the robot) at-machine)",
+   "(on sugar-carton-raspberry home-of-sugar-carton-raspberry)",
+   "(on sponge home-of-sponge)",
+   "(idle booth)"
+  ]
+ },
+ {
+  "path": "booth-shift/close/close-for-the-day",
+  "note": "skip: (at sugar-carton-raspberry home-of-sugar-carton-raspberry) holds",
+  "t": 309.5
+ },
+ {
+  "path": "booth-shift/close/close-for-the-day",
+  "note": "stick-1: with the customer -- belongs there now (belonging norm), not returned",
+  "t": 309.5
+ },
+ {
+  "path": "booth-shift/close/close-for-the-day",
+  "note": "skip: (at sponge home-of-sponge) holds",
+  "t": 309.5
+ },
+ {
+  "path": "booth-shift/close",
+  "note": "close-for-the-day :succ (mode floss-machine off) holds",
+  "t": 309.5
+ },
+ {
+  "path": "",
+  "note": "booth-shift :succ (delivered candy-1 customer) holds, (mode floss-machine off) holds",
+  "t": 309.5
+ }
+]

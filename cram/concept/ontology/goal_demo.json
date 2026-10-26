@@ -1,0 +1,42 @@
+{
+ "pour_goal": [
+  "(achieve (contains (tagged spinner-head machine) sugar) :at (end ?i))",
+  "(maintain (held-by sugar-carton ?arm) :during ?i)",
+  "(prevent (spilled sugar) :during ?i)",
+  "(prevent (poured-into sugar (tagged spinner-head machine)) :while (not (mode floss-machine off)))"
+ ],
+ "A_pour_machine_off": {
+  "raised": null,
+  "satisfied": true,
+  "violations": []
+ },
+ "B_pour_motor_running": {
+  "raised": "SugarPouredIntoSpinningHead",
+  "satisfied": false,
+  "violations": [
+   [
+    "(achieve (contains (tagged spinner-head machine) sugar) :at (end ?i))",
+    1.5,
+    "not achieved"
+   ],
+   [
+    "(prevent (poured-into sugar (tagged spinner-head machine)) :while (not (mode floss-machine off)))",
+    1.0,
+    "happened"
+   ]
+  ]
+ },
+ "C_service_prevent_running_empty": {
+  "satisfied": false,
+  "first_running_empty_s": 89.5,
+  "phases": [
+   "producing",
+   "running-empty",
+   "warming-up"
+  ]
+ },
+ "C_closing_achieve_burn_out_mode": {
+  "satisfied": true
+ },
+ "note": "trajectories from cram/cotton_candy/process.py (FlossMachineProcess) with stub switches; timings = FlossMachineTimings defaults"
+}

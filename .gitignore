@@ -26,3 +26,7 @@ ontology/build/
 report/*.tex
 test_reports/*.txt
 report/web/
+
+# PC-only: heavy or regenerable (added 2026-10-26 when the repo got a GitHub remote)
+.venv*/
+.pytest_cache/

@@ -1,0 +1,74 @@
+Prefix(:=<http://www.ease-crc.org/ont/SOMA-Allen.owl#>)
+Prefix(dc:=<http://purl.org/dc/elements/1.1/>)
+Prefix(owl:=<http://www.w3.org/2002/07/owl#>)
+Prefix(rdf:=<http://www.w3.org/1999/02/22-rdf-syntax-ns#>)
+Prefix(xml:=<http://www.w3.org/XML/1998/namespace>)
+Prefix(xsd:=<http://www.w3.org/2001/XMLSchema#>)
+Prefix(SOMA:=<http://www.ease-crc.org/ont/SOMA.owl#>)
+Prefix(rdfs:=<http://www.w3.org/2000/01/rdf-schema#>)
+
+
+Ontology(<http://www.ease-crc.org/ont/SOMA-Allen.owl>
+Import(<http://www.ease-crc.org/ont/SOMA.owl>)
+Annotation(rdfs:comment "SOMA-Allen.owl defines the Allen relations of his interval calculus.
+
+Currently, this module is not included with the rest of SOMA as Allen relations break OWL-DL constraints on the property hierarchy and result in an undecidable formalism.
+
+Work in progress: redefine the Allen relations via SWRL. While this makes it impossible to use them to draw conclusions at the level of a TBox, it will at least allow some temporal reasoning on an ABox.")
+
+Declaration(ObjectProperty(SOMA:after))
+Declaration(ObjectProperty(SOMA:before))
+Declaration(ObjectProperty(SOMA:contains))
+Declaration(ObjectProperty(SOMA:during))
+Declaration(ObjectProperty(SOMA:finishedBy))
+Declaration(ObjectProperty(SOMA:finishes))
+Declaration(ObjectProperty(SOMA:startedBy))
+Declaration(ObjectProperty(SOMA:starts))
+
+############################
+#   Object Properties
+############################
+
+# Object Property: SOMA:after (SOMA:after)
+
+AsymmetricObjectProperty(SOMA:after)
+IrreflexiveObjectProperty(SOMA:after)
+
+# Object Property: SOMA:before (SOMA:before)
+
+AsymmetricObjectProperty(SOMA:before)
+IrreflexiveObjectProperty(SOMA:before)
+
+# Object Property: SOMA:contains (SOMA:contains)
+
+AsymmetricObjectProperty(SOMA:contains)
+IrreflexiveObjectProperty(SOMA:contains)
+
+# Object Property: SOMA:during (SOMA:during)
+
+AsymmetricObjectProperty(SOMA:during)
+IrreflexiveObjectProperty(SOMA:during)
+
+# Object Property: SOMA:finishedBy (finished by)
+
+AsymmetricObjectProperty(SOMA:finishedBy)
+IrreflexiveObjectProperty(SOMA:finishedBy)
+
+# Object Property: SOMA:finishes (SOMA:finishes)
+
+AsymmetricObjectProperty(SOMA:finishes)
+IrreflexiveObjectProperty(SOMA:finishes)
+
+# Object Property: SOMA:startedBy (started by)
+
+AsymmetricObjectProperty(SOMA:startedBy)
+IrreflexiveObjectProperty(SOMA:startedBy)
+
+# Object Property: SOMA:starts (SOMA:starts)
+
+AsymmetricObjectProperty(SOMA:starts)
+IrreflexiveObjectProperty(SOMA:starts)
+
+
+
+)
