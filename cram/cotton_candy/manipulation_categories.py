@@ -49,7 +49,7 @@ from semantic_digital_twin.datastructures.definitions import GripperState
 from semantic_digital_twin.grasping.grasp_candidates import GraspCandidate
 from semantic_digital_twin.robots.robot_parts import Arm
 from semantic_digital_twin.semantic_annotations.mixins import HasRootBody
-from semantic_digital_twin.world_description.world_entity import Body
+from semantic_digital_twin.world_description.world_entity import Body, KinematicStructureEntity
 
 from cotton_candy.predicates import GripperIsFree, GripperIsNotFree
 from cotton_candy.semantic_annotations import OperatingElement
@@ -252,6 +252,28 @@ class ApproachDirection(Enum):
             Pose.from_xyz_quaternion(pos_x=offset[0], pos_y=offset[1], pos_z=offset[2], quat_x=qx, quat_y=qy,
                                      quat_z=qz, quat_w=qw, reference_frame=graspable.root),
         )
+
+
+# %% tool motions at a station
+
+
+class KeepsBaseStill:
+    """
+    Mixin for the booth's tool motions (gathering, wrapping, wiping): the base stands still at its station while the
+    tool moves.
+
+    CRAM main from November 2026 controls the whole body for tool actions (relative to the world root), and the
+    PR2's base drove 0.14 m while wiping the table (measured 2026-11-06), so the sponge's home was out of reach for
+    the put-down after it. Under the former coraplex the base stayed at the station (0.000 m), which the booth's
+    plans assume: they move the base only with NavigateAction between stations.
+    """
+
+    @property
+    def controlled_root(self) -> KinematicStructureEntity:
+        """
+        :return: The robot's own root, so the base holds still.
+        """
+        return self.robot.root
 
 
 # %% configuration change: pressing, turning
@@ -783,7 +805,7 @@ class PouringIntoAction(FullBodyControlledAction, MovesToolCenterPoint, Sequenti
 
 
 @dataclass(kw_only=True, eq=False, repr=False)
-class GatheringAction(ToolMotionAction, ParallelAction, HasManipulationCategory):
+class GatheringAction(KeepsBaseStill, ToolMotionAction, ParallelAction, HasManipulationCategory):
     """
     Gather a fibrous or loose substance from a container onto a held instrument: dip the instrument's tip into it,
     sweep it around the container to accumulate the substance on the tip, and lift it out.
@@ -845,7 +867,7 @@ class GatheringAction(ToolMotionAction, ParallelAction, HasManipulationCategory)
 
 
 @dataclass(kw_only=True, eq=False, repr=False)
-class WrappingAction(ToolMotionAction, ParallelAction, HasManipulationCategory):
+class WrappingAction(KeepsBaseStill, ToolMotionAction, ParallelAction, HasManipulationCategory):
     """
     Wrap a loose substance around a held instrument with figure-eight strokes.
     """
@@ -903,9 +925,9 @@ class WrappingAction(ToolMotionAction, ParallelAction, HasManipulationCategory):
 
 
 @dataclass(kw_only=True, eq=False, repr=False)
-class CategorisedWipingAction(WipingAction, HasManipulationCategory):
+class CategorisedWipingAction(KeepsBaseStill, WipingAction, HasManipulationCategory):
     """
-    coraplex's wiping, labelled with its category.
+    coraplex's wiping, labelled with its category, with the base at its station.
     """
 
     @classproperty

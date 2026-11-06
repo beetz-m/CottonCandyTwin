@@ -3,7 +3,8 @@ CRAM booth world (coraplex, kinematic PR2, FlossMachineProcess).
 
   atoms()      the StateReader: ground atoms for the OBSERVABLE predicates (process model + world)
   resolve()    the booth's servants: order-record, layout-stations, recipe, free candy stick
-  r_<schema>   realisations: schema phases -> the existing coraplex actions (parameters of cotton_candy/actions.py)
+  r_<schema>   realisations: schema phases -> the booth's actions (parameters of cotton_candy/actions.py); ccram runs
+               each realisation as one statechart (ccram.cram_nodes.CramPlans, CRAM main of 2026-11)
   predict()    emulation of monitoring-process on a copy of the floss machine model (D4 pre-act verdict)
 """
 from __future__ import annotations
@@ -59,8 +60,8 @@ class BoothAdapter(Adapter):
         self.process.advance(10.0 if dt is None else float(dt))
 
     def atoms(self):
-        from coraplex.querying.predicates import GripperIsFree
         from cotton_candy.booth_world import RobotStation
+        from cotton_candy.predicates import GripperIsFree
         p, tracked = self.process, self.tracked
         a = [["mode", "floss-machine", p.phase.value.replace("_", "-")]]
         if p.sugar_in_head_kg > 1e-6:                          # a quantity: (contains head (mass kg))
@@ -219,14 +220,14 @@ class BoothAdapter(Adapter):
         obj, arm = R["object"][0], R["arm"][0]
         kind = type(obj).__name__
         if os.environ.get("KERNEL_DEBUG"):
-            from coraplex.querying.predicates import GripperIsFree
+            from cotton_candy.predicates import GripperIsFree
             print("      [debug] take", kind, "base", self.robot.root.global_pose.to_np()[:3, 3].round(3),
                   "free R/L", GripperIsFree(self.robot.right_arm.end_effector)(),
                   GripperIsFree(self.robot.left_arm.end_effector)(), "obj", obj.root.global_pose.to_np()[:3, 3].round(3),
                   "obj parent", obj.root.parent_kinematic_structure_entity.name.name, flush=True)
         if id(obj) not in self.home:                   # class home (D7): the full pose it was taken from (orientation
             from scipy.spatial.transform import Rotation   # matters: a stick goes back upright into the quiver) and
-            from semantic_digital_twin.spatial_types.spatial_types import Pose   # the body it hung from
+            from krrood_spatial_math.spatial_types import Pose                   # the body it hung from
             m = obj.root.global_pose.to_np()
             qx, qy, qz, qw = Rotation.from_matrix(m[:3, :3]).as_quat()
             self.home[id(obj)] = Pose.from_xyz_quaternion(pos_x=float(m[0, 3]), pos_y=float(m[1, 3]),
@@ -236,26 +237,28 @@ class BoothAdapter(Adapter):
         if kind == "SugarCarton":
             half = self._half(obj)
             self.grip[id(obj)] = pose_above(obj.root.global_pose, -half + 0.03, self.world.root)
-            return [MoveTorsoAction(TorsoState.HIGH),
-                    TransportingAction(obj, arm, ApproachDirection.TOWARDS_SALES_FRONT,
+            return [MoveTorsoAction(torso_state=TorsoState.HIGH),
+                    TransportingAction(graspable=obj, arm=arm, approach=ApproachDirection.TOWARDS_SALES_FRONT,
                                        grasp_offset=(0.0, 0.0, -half + 0.03))]
         if kind == "CandyStick":
-            return [MoveTorsoAction(TorsoState.LOW), TransportingAction(obj, arm, ApproachDirection.TOWARDS_LEFT_WALL)]
-        return [TransportingAction(obj, arm, ApproachDirection.TOWARDS_SALES_FRONT)]
+            return [MoveTorsoAction(torso_state=TorsoState.LOW),
+                    TransportingAction(graspable=obj, arm=arm, approach=ApproachDirection.TOWARDS_LEFT_WALL)]
+        return [TransportingAction(graspable=obj, arm=arm, approach=ApproachDirection.TOWARDS_SALES_FRONT)]
 
     def r_pressing_button(self, R):
         from coraplex.robot_plans.actions.core.robot_body import MoveTorsoAction, ParkArmsAction
         from cotton_candy.manipulation_categories import PressingButtonAction
         from semantic_digital_twin.datastructures.definitions import TorsoState
         on = str(R["state"][1]) == "on"
-        return [MoveTorsoAction(TorsoState.LOW), PressingButtonAction(R["object"][0], self._arm(R), 1.0 if on else 0.0),
-                self._step(self.process.notice_switches), ParkArmsAction(self.robot.all_arms)]   # as Start/Stop end
+        return [MoveTorsoAction(torso_state=TorsoState.LOW),
+                PressingButtonAction(element=R["object"][0], arm=self._arm(R), travel_fraction=1.0 if on else 0.0),
+                self._step(self.process.notice_switches), ParkArmsAction(arms=self.robot.all_arms)]   # as Start/Stop end
 
     def r_turning(self, R):
         from coraplex.robot_plans.actions.core.robot_body import ParkArmsAction
         from cotton_candy.manipulation_categories import TurningAction
-        return [TurningAction(R["object"][0], self._arm(R), float(R["setting"][0])),
-                ParkArmsAction(self.robot.all_arms)]
+        return [TurningAction(element=R["object"][0], arm=self._arm(R), travel_fraction=float(R["setting"][0])),
+                ParkArmsAction(arms=self.robot.all_arms)]
 
     def r_monitoring_process(self, R):
         """Waits on the process model until the condition holds (the machine's reported state on a real one)."""
@@ -291,23 +294,24 @@ class BoothAdapter(Adapter):
                 self._step(self.process.candy_wrapped)]
 
     def r_handing_over(self, R):
-        from coraplex.plans.attachment_nodes import ReAttachNode
         from coraplex.robot_plans.actions.core.robot_body import ParkArmsAction
         from cotton_candy.manipulation_categories import HandingOverAction
-        from semantic_digital_twin.spatial_types.spatial_types import Pose
+        from cramph.world_modification_nodes import MoveBranch
+        from krrood_spatial_math.spatial_types import Pose
         stick, customer, zone = R["object"][0], R["recipient"][0], R["destination"][0]
         z = zone.root.global_pose.to_np()
         pose = Pose.from_xyz_rpy(x=float(z[0, 3]), y=float(z[1, 3]), z=float(z[2, 3]), pitch=-math.pi / 2,
                                  reference_frame=self.world.root)
-        return [HandingOverAction(stick, self._arm(R), pose), ReAttachNode(body=stick.root, new_parent=customer.root),
+        return [HandingOverAction(graspable=stick, arm=self._arm(R), handover_pose=pose),
+                MoveBranch(branch_root=stick.root, new_parent=customer.root),
                 self._step(lambda: self.process.candy_delivered(customer.root.name.name)),
-                ParkArmsAction(self.robot.all_arms)]
+                ParkArmsAction(arms=self.robot.all_arms)]
 
     def r_wiping(self, R):
         """The stainless strip beside the pan (the original CleanFlossMachineAction: never water in the head)."""
         from coraplex.datastructures.enums import WipingTechnique
         from cotton_candy.manipulation_categories import CategorisedWipingAction
-        from semantic_digital_twin.spatial_types.spatial_types import Pose
+        from krrood_spatial_math.spatial_types import Pose
         sponge = R["tool"][0]
         table = self.world.get_body_by_name("MachineTable")
         bbox = table.collision.as_bounding_box_collection_in_frame(self.world.root).bounding_box()
@@ -319,7 +323,7 @@ class BoothAdapter(Adapter):
 
     def r_navigating(self, R):
         from coraplex.robot_plans.actions.core.navigation import NavigateAction
-        return [NavigateAction(R["destination"][0])]
+        return [NavigateAction(target_location=R["destination"][0])]
 
     def r_pouring_into(self, R):
         from cotton_candy.manipulation_categories import PouringIntoAction
@@ -332,7 +336,7 @@ class BoothAdapter(Adapter):
             self.events.append((self.process.time_s, ["poured-into", R["amount"][1], R["destination"][1]],
                                 self.atoms()))
             self.process.pour_sugar(kg)
-        return [PouringIntoAction(self.robot.right_arm, head.root, standoff=(2 * half - grip_h) * math.sin(tilt),
+        return [PouringIntoAction(arm=self.robot.right_arm, target=head.root, standoff=(2 * half - grip_h) * math.sin(tilt),
                                   pour_height=0.24, tilt_angle=tilt, lift_from=self.grip[id(obj)],
                                   may_touch=[self.machine.floss_pan.root, self.world.get_body_by_name("FlossBubble")]),
                 self._step(pour)]
@@ -343,8 +347,8 @@ class BoothAdapter(Adapter):
         arm = self.robot.right_arm
         obj = R["object"][0]
         par = self.parent.get(id(obj)) if R["destination"][1].startswith("home-of-") else None
-        return [ParkArmsAction([arm]), PuttingDownAction(obj, R["destination"][0], new_parent=par),
-                ParkArmsAction(self.robot.all_arms)]
+        return [ParkArmsAction(arms=[arm]), PuttingDownAction(graspable=obj, target=R["destination"][0], new_parent=par),
+                ParkArmsAction(arms=self.robot.all_arms)]
 
 
 def make_adapter(demo, world, context):
