@@ -1,15 +1,16 @@
 """The kernel's episode in cramera's query panel: per step the designator, the goal template (D10), the gate, the
 verdict, and per role the binding with the servant that made it and its status (the climb, D3). Filled live while the
-plan runs (the lists grow; queries see the current state)."""
+plan runs (the lists grow; queries see the current state). The query types come from the stand-alone cramera's question
+engine (cramera_bridge.questions; cramera.knowledge left CRAM main in November 2026)."""
 from __future__ import annotations
 
 from dataclasses import dataclass
 
 from typing_extensions import Any, List
 
-from cramera.knowledge.presets import Preset
-from cramera.knowledge.query_domain import QueryDomain
-from cramera.knowledge.queryable_knowledge import QueryableKnowledge, QueryScope
+from cramera_bridge.questions.knowledge import QueryableKnowledge, QueryDomain
+from cramera_bridge.questions.presets import Preset
+from cramera_protocol.questions import QueryScope
 
 
 @dataclass

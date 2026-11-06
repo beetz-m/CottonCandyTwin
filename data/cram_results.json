@@ -1,28 +1,30 @@
 {
  "_provenance": {
-  "git": "ba9ad33",
-  "generated": "2026-10-20T19:57:23",
+  "git": "e9dcd12",
+  "generated": "2026-11-06T23:54:08",
   "inputs": {
    "cram/cotton_candy/__init__.py": "e3b0c44298fc1c14",
-   "cram/cotton_candy/actions.py": "37fe6dd8530098ed",
-   "cram/cotton_candy/booth_world.py": "751fa1e95eb75b93",
-   "cram/cotton_candy/competency_questions.py": "f0803aa407df3e8b",
-   "cram/cotton_candy/control.py": "1e32b8a42abc2027",
+   "cram/cotton_candy/actions.py": "9a0f7936d166145f",
+   "cram/cotton_candy/booth_world.py": "89c88d646cb7359c",
+   "cram/cotton_candy/competency_questions.py": "ceda3259609d914d",
+   "cram/cotton_candy/control.py": "8a24b1d624969ff0",
    "cram/cotton_candy/designators.py": "67fb5c8ef844a169",
-   "cram/cotton_candy/manipulation_categories.py": "56ef474b1f8cf8b3",
+   "cram/cotton_candy/manipulation_categories.py": "ddbe443a112a6a23",
    "cram/cotton_candy/ontology/__init__.py": "e3b0c44298fc1c14",
-   "cram/cotton_candy/ontology/owl.py": "3caca49c83d7be41",
-   "cram/cotton_candy/ontology/production.py": "885d0b4403107149",
+   "cram/cotton_candy/ontology/owl.py": "73bdd91acfcd1a29",
+   "cram/cotton_candy/ontology/production.py": "3c1f9b542580a7ab",
+   "cram/cotton_candy/plan_running.py": "c5652ff91adb40e6",
+   "cram/cotton_candy/predicates.py": "94543475a240c773",
    "cram/cotton_candy/process.py": "c97fd8d801395f35",
-   "cram/cotton_candy/process_nodes.py": "b31637e79df59d19",
+   "cram/cotton_candy/process_nodes.py": "cc29ad65c32d0b3b",
    "cram/cotton_candy/recipes.py": "89470b9b988e47e8",
-   "cram/cotton_candy/robot_envelope.py": "4889f9c5e1a28ac1",
-   "cram/cotton_candy/semantic_annotations.py": "df2605b029c87f2c",
+   "cram/cotton_candy/robot_envelope.py": "1085f02aee2449a3",
+   "cram/cotton_candy/semantic_annotations.py": "490f63a6ebe14021",
    "cram/cotton_candy/teach_postures.py": "444552dfeb302a99",
-   "cram/cotton_candy/universal_plan.py": "a1e3b177aa93c4e8",
+   "cram/cotton_candy/universal_plan.py": "64a46a7a870c2e8b",
    "site/params.py": "850d7237e38a5ee3",
    "site/layout.py": "f22934e424124b2f",
-   "cram/export_results.py": "1b1d4f5b53c52af9"
+   "cram/export_results.py": "5817785e076a2b3b"
   }
  },
  "generated_by": "cram/export_results.py",
@@ -30,7 +32,7 @@
   {
    "step": "Fill the spinner head",
    "designator": "FillSpinnerHeadAction",
-   "wall_s": 3.3,
+   "wall_s": 3.9,
    "time_s": 0.0,
    "phase": "off",
    "sugar_in_head_g": 54.0,
@@ -40,7 +42,7 @@
   {
    "step": "Start the machine",
    "designator": "StartFlossMachineAction",
-   "wall_s": 2.7,
+   "wall_s": 3.5,
    "time_s": 35.0,
    "phase": "producing",
    "sugar_in_head_g": 53.6,
@@ -50,7 +52,7 @@
   {
    "step": "Sell portion 1",
    "designator": "SellCottonCandyAction",
-   "wall_s": 2.4,
+   "wall_s": 3.1,
    "time_s": 58.5,
    "phase": "producing",
    "sugar_in_head_g": 34.0,
@@ -60,7 +62,7 @@
   {
    "step": "Sell portion 2",
    "designator": "SellCottonCandyAction",
-   "wall_s": 2.7,
+   "wall_s": 3.3,
    "time_s": 82.5,
    "phase": "producing",
    "sugar_in_head_g": 14.0,
@@ -70,7 +72,7 @@
   {
    "step": "Shut down (burn-out)",
    "designator": "ShutDownFlossMachineAction",
-   "wall_s": 2.1,
+   "wall_s": 2.8,
    "time_s": 399.5,
    "phase": "off",
    "sugar_in_head_g": 0.0,
@@ -80,7 +82,7 @@
   {
    "step": "Clean the machine",
    "designator": "CleanFlossMachineAction",
-   "wall_s": 1.8,
+   "wall_s": 2.2,
    "time_s": 399.5,
    "phase": "off",
    "sugar_in_head_g": 0.0,
@@ -106,7 +108,7 @@
     "HANDED-OVER"
    ],
    "failures": [],
-   "wall_s": 9.2,
+   "wall_s": 13.3,
    "process_time_s": 58.5
   },
   {
@@ -122,7 +124,7 @@
     "HANDED-OVER"
    ],
    "failures": [],
-   "wall_s": 2.5,
+   "wall_s": 2.0,
    "process_time_s": 58.5
   },
   {
@@ -135,7 +137,7 @@
     "HANDED-OVER"
    ],
    "failures": [],
-   "wall_s": 1.8,
+   "wall_s": 1.1,
    "process_time_s": 58.5
   },
   {
@@ -155,7 +157,7 @@
     "HANDED-OVER"
    ],
    "failures": [],
-   "wall_s": 8.9,
+   "wall_s": 13.5,
    "process_time_s": 58.5
   },
   {
@@ -173,7 +175,7 @@
     "HANDED-OVER"
    ],
    "failures": [],
-   "wall_s": 2.9,
+   "wall_s": 3.0,
    "process_time_s": 82.5
   },
   {
@@ -626,7 +628,7 @@
    "answer": [
     [
      "SugarCarton",
-     "0.5140694621025755"
+     "0.5140767494419644"
     ]
    ]
   },

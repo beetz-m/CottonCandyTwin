@@ -1,7 +1,8 @@
 """Run a plan schema of booth.lisp on the CRAM booth through ccram (the generic kernel + concept/adapter.py).
 
     cram/run.sh python cram/concept/kernel/run_concept.py [plan]                    # headless (no viewer)
-    cram/run.sh cramera-live cram/concept/kernel/run_concept.py [plan]             # watch it in cramera
+Live viewing (cramera-live) is not available since 2026-11-06: CRAM main removed the cramera package, and the
+stand-alone cramera stack runs the CRAM of 2026-10-27, whose plan API the booth no longer uses.
 Env: CONCEPT_PLAN, CONCEPT_SCENARIO, COTTON_CANDY_HOLD=1, CONCEPT_WORKBENCH=1 (serve the workbench page after the plan).
 The same as  ~/Documents/ConceptualCRAM/bin/ccram run cram/concept --plan P --scenario S [--workbench] [--hold].
 (kernel/booth_kernel.py is the pre-ccram kernel, kept for reference only.)

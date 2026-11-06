@@ -1,4 +1,6 @@
 """SUPERSEDED by ccram (~/Documents/ConceptualCRAM/ccram/kernel.py) + concept/adapter.py; kept for reference.
+It is written against coraplex's plan API before November 2026 (sequential, Context, ExecutionBoundaryNode) and does
+not run on CRAM main of 2026-11; it was not ported (2026-11-06).
 
 The conceptual CRAM kernel on the cotton candy booth (M1 step 3): booth.lisp, executed.
 

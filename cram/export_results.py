@@ -3,8 +3,8 @@ Export the CRAM layer's results for the report: data/cram_results.json in the tw
 
 It executes, kinematically, the full shift (step by step, recording the machine's process state after every
 top-level designator) and the generalized plan from the scenario states of tests/test_universal_plan.py; it also
-records the ontology's production steps and categories and answers every competency question with cramera's EQL
-runner.
+records the ontology's production steps and categories and answers every competency question with the stand-alone
+cramera's EQL runner (cramera_bridge.questions).
 
 Run: cram/run.sh python cram/export_results.py
 """
@@ -19,10 +19,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE / "tests"))
 
-from coraplex.datastructures.dataclasses import Context
-from coraplex.execution_environment import kinematically_simulated_robot
-from coraplex.plans.factories import sequential
-from cramera.knowledge.query_runner import EqlQueryRunner
+from cramera_bridge.questions.runner import QueryRunner
 from krrood.entity_query_language.exceptions import MultipleSolutionFound
 from semantic_digital_twin.robots.pr2 import PR2
 
@@ -39,6 +36,7 @@ from cotton_candy.booth_world import BoothWorldBuilder, RobotStation, TwinModule
 from cotton_candy.competency_questions import QUESTIONS, CottonCandyKnowledgeSource
 from cotton_candy.manipulation_categories import ApproachDirection, TransportingAction
 from cotton_candy.ontology.production import OntologyBuilder
+from cotton_candy.plan_running import BoothContext
 from cotton_candy.process import CandyStage, FlossMachineProcess, FlossMachineTimings
 from cotton_candy.recipes import Flavour
 from cotton_candy.semantic_annotations import CandyStick, CottonCandyMachine, HandoverZone, Sponge, SugarCarton
@@ -55,7 +53,7 @@ def booth():
     robot = world.get_semantic_annotations_by_type(PR2)[0]
     machine = world.get_semantic_annotations_by_type(CottonCandyMachine)[0]
     process = FlossMachineProcess(machine, FlossMachineTimings.from_twin_register(TwinModule.PARAMS.load()))
-    context = Context(world, robot, sampling_seed=0)
+    context = BoothContext(world, robot, sampling_seed=0)
     return world, robot, machine, process, context
 
 
@@ -75,21 +73,24 @@ def shift() -> list:
     arm, carton = robot.right_arm, one(SugarCarton)
     sticks = world.get_semantic_annotations_by_type(CandyStick)
     st = {s: s.pose(world.root) for s in RobotStation}
-    steps = [("Fill the spinner head", FillSpinnerHeadAction(machine, process, carton, arm, st[RobotStation.MACHINE],
-                                                             st[RobotStation.MACHINE_CLOSE])),
-             ("Start the machine", StartFlossMachineAction(machine, process, arm))]
+    steps = [("Fill the spinner head", FillSpinnerHeadAction(machine=machine, process=process, carton=carton, arm=arm,
+                                                             machine_station=st[RobotStation.MACHINE],
+                                                             close_station=st[RobotStation.MACHINE_CLOSE])),
+             ("Start the machine", StartFlossMachineAction(machine=machine, process=process, arm=arm))]
     for i, refill in enumerate(project_refills(process, 2)):
         steps.append((f"Sell portion {i + 1}" + (" (refill first)" if refill else ""),
-                      SellCottonCandyAction(machine, process, sticks[i], carton, one(HandoverZone), arm,
-                                            st[RobotStation.SERVING], st[RobotStation.MACHINE],
-                                            st[RobotStation.MACHINE_CLOSE], refill_first=refill)))
-    steps += [("Shut down (burn-out)", ShutDownFlossMachineAction(machine, process, arm)),
-              ("Clean the machine", CleanFlossMachineAction(machine, process, one(Sponge), arm))]
+                      SellCottonCandyAction(machine=machine, process=process, stick=sticks[i], carton=carton,
+                                            handover=one(HandoverZone), arm=arm,
+                                            serving_station=st[RobotStation.SERVING],
+                                            machine_station=st[RobotStation.MACHINE],
+                                            close_station=st[RobotStation.MACHINE_CLOSE], refill_first=refill)))
+    steps += [("Shut down (burn-out)", ShutDownFlossMachineAction(machine=machine, process=process, arm=arm)),
+              ("Clean the machine", CleanFlossMachineAction(machine=machine, process=process, sponge=one(Sponge),
+                                                            arm=arm))]
     rows = []
     for name, designator in steps:
         started = time.time()
-        with kinematically_simulated_robot:
-            sequential([designator], context).perform()
+        context.perform([designator])
         rows.append({"step": name, "designator": type(designator).__name__,
                      "wall_s": round(time.time() - started, 1), **machine_state(process)})
     return rows
@@ -105,18 +106,18 @@ def scenarios() -> list:
         carton = world.get_semantic_annotations_by_type(SugarCarton)[0]
         stick = world.get_semantic_annotations_by_type(CandyStick)[0]
         setup = {
-            "taken": [FillSpinnerHeadAction(machine, process, carton, arm, RobotStation.MACHINE.pose(world.root),
-                                            RobotStation.MACHINE_CLOSE.pose(world.root)),
-                      StartFlossMachineAction(machine, process, arm),
-                      TransportingAction(stick, arm, ApproachDirection.TOWARDS_LEFT_WALL)],
+            "taken": [FillSpinnerHeadAction(machine=machine, process=process, carton=carton, arm=arm,
+                                            machine_station=RobotStation.MACHINE.pose(world.root),
+                                            close_station=RobotStation.MACHINE_CLOSE.pose(world.root)),
+                      StartFlossMachineAction(machine=machine, process=process, arm=arm),
+                      TransportingAction(graspable=stick, arm=arm, approach=ApproachDirection.TOWARDS_LEFT_WALL)],
         }
         if prepare in ("taken", "wrapped"):
-            designators = setup["taken"] + ([FormPortionAction(machine, process, stick, arm)] if prepare == "wrapped" else [])
-            with kinematically_simulated_robot:
-                sequential(designators, context).perform()
+            designators = setup["taken"] + ([FormPortionAction(machine=machine, process=process, stick=stick, arm=arm)]
+                                            if prepare == "wrapped" else [])
+            context.perform(designators)
         if second_order:
-            with kinematically_simulated_robot:
-                plan.perform()
+            plan.perform()
             process.new_order(Flavour.RASPBERRY.value, ordered_by="Customer")
             plan.trace.clear()
         if prepare == "lost":
@@ -128,8 +129,7 @@ def scenarios() -> list:
         try:
             b = belief(plan)
             row["projection"] = plan.projection(b)
-            with kinematically_simulated_robot:
-                final = plan.perform()
+            final = plan.perform()
             row.update(outcome="delivered" if final.delivered else final.stage.value, trace=list(plan.trace),
                        failures=[f"{f.tag}: {f.description}" for f in plan.failures])
         except (GoalUnachievable, MultipleSolutionFound) as error:
@@ -149,13 +149,12 @@ def scenarios() -> list:
 
 def ontology_and_questions() -> dict:
     world, robot, context, machine, process, plan = fresh()
-    with kinematically_simulated_robot:
-        plan.perform()                       # one delivered candy, so the belief questions have answers
+    plan.perform()                           # one delivered candy, so the belief questions have answers
     process.new_order(Flavour.RASPBERRY.value, ordered_by="Customer")
     ontology = OntologyBuilder(world, context, process).build()
     source = CottonCandyKnowledgeSource(ontology, process, world)
     knowledge = source.knowledge()[0]
-    runner = EqlQueryRunner(domains=knowledge.domains, extra_names=knowledge.extra_names)
+    runner = QueryRunner(domains=knowledge.domains, extra_names=knowledge.extra_names)
     answers = []
     for q in QUESTIONS:
         rows = [tuple(_plain(v) for v in r) if isinstance(r, tuple) else _plain(r)
