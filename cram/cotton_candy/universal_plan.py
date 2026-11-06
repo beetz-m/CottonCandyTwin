@@ -31,16 +31,14 @@ from enum import Enum
 from scipy.spatial.transform import Rotation
 from typing_extensions import Any, Callable, Dict, List, Optional
 
-from coraplex.datastructures.dataclasses import Context
-from coraplex.plans.factories import sequential
-from coraplex.robot_plans.actions.base import ActionDescription
+from coraplex.robot_plans.actions.base import Action
 from coraplex.robot_plans.actions.core.robot_body import MoveTorsoAction
 from krrood.entity_query_language.exceptions import MultipleSolutionFound
+from krrood_spatial_math.spatial_types import Pose
 from semantic_digital_twin.datastructures.definitions import TorsoState
 from semantic_digital_twin.robots.robot_parts import Arm
 from semantic_digital_twin.semantic_annotations.mixins import HasRootBody
 from semantic_digital_twin.semantic_annotations.semantic_annotations import Human
-from semantic_digital_twin.spatial_types.spatial_types import Pose
 
 from cotton_candy.actions import (
     FillSpinnerHeadAction,
@@ -53,6 +51,7 @@ from cotton_candy.actions import (
 from cotton_candy.booth_world import RobotStation
 from cotton_candy.designators import ServiceDesignators, resolve, resolve_or_none
 from cotton_candy.manipulation_categories import ApproachDirection, PuttingDownAction, TransportingAction
+from cotton_candy.plan_running import BoothContext
 from cotton_candy.process import CandyStage, CottonCandyBelief, FlossMachinePhase, FlossMachineProcess
 from cotton_candy.semantic_annotations import CandyStick, Sponge, SugarCarton
 
@@ -246,7 +245,7 @@ class AchieveStep:
     The kernel, written out.
     """
 
-    methods: Callable[[ServiceBelief], List[ActionDescription]]
+    methods: Callable[[ServiceBelief], List[Action]]
     """
     The designators that achieve the step in the given belief state.
     """
@@ -289,9 +288,9 @@ class MakeAndHandOverCandyPlan:
     ``(perform (an action (type making-and-handing-over) (object (the candy I am making))))``.
     """
 
-    context: Context
+    context: BoothContext
     """
-    The plan context.
+    The world and the robot the plan is built for and performed by.
     """
 
     process: FlossMachineProcess
@@ -369,23 +368,25 @@ class MakeAndHandOverCandyPlan:
             AchieveStep(2, "STICK-IN-HAND", lambda b: b.stick_in_hand,
                         lambda b: b.gripper_free and b.producing and b.enough_sugar and b.stick is not None,
                         "gripper free AND producing AND sugar >= portion AND a stick for the candy",
-                        lambda b: [MoveTorsoAction(TorsoState.LOW),
-                                   TransportingAction(b.stick, arm, ApproachDirection.TOWARDS_LEFT_WALL)],
+                        lambda b: [MoveTorsoAction(torso_state=TorsoState.LOW),
+                                   TransportingAction(graspable=b.stick, arm=arm,
+                                                      approach=ApproachDirection.TOWARDS_LEFT_WALL)],
                         protects=lambda b: b.stick_in_hand or b.delivered),
             AchieveStep(3, "CANDY-FORMED", lambda b: b.stage in (CandyStage.WRAPPED, CandyStage.DELIVERED),
                         lambda b: b.stick_in_hand and b.stage is CandyStage.NONE and b.producing and b.enough_sugar,
                         "stick in hand AND candy not started AND producing AND sugar >= portion",
-                        lambda b: [FormPortionAction(machine, p, b.stick, arm)]),
+                        lambda b: [FormPortionAction(machine=machine, process=p, stick=b.stick, arm=arm)]),
             AchieveStep(4, "CANDY-WRAPPED", lambda b: b.stage in (CandyStage.WRAPPED, CandyStage.DELIVERED),
                         lambda b: b.stick_in_hand and b.stage is CandyStage.GATHERED,
                         "stick in hand AND floss gathered",
-                        lambda b: [FinishPortionAction(machine, p, b.stick, arm)]),
+                        lambda b: [FinishPortionAction(machine=machine, process=p, stick=b.stick, arm=arm)]),
             AchieveStep(5, "HANDED-OVER", lambda b: b.delivered,
                         lambda b: b.stick_in_hand and b.stage is CandyStage.WRAPPED and b.customer is not None,
                         "stick in hand AND candy wrapped AND the customer it is for is there",
-                        lambda b: [ServeCottonCandyAction(b.stick, resolve(self.designators.the_handover_zone()),
-                                                          arm, self._station(RobotStation.SERVING),
-                                                          self._station(RobotStation.MACHINE),
+                        lambda b: [ServeCottonCandyAction(stick=b.stick,
+                                                          handover=resolve(self.designators.the_handover_zone()),
+                                                          arm=arm, serving_station=self._station(RobotStation.SERVING),
+                                                          machine_station=self._station(RobotStation.MACHINE),
                                                           customer=b.customer, process=p)]),
         ]
 
@@ -398,28 +399,30 @@ class MakeAndHandOverCandyPlan:
 
     # %% RAP methods
 
-    def _free_gripper(self, belief: ServiceBelief) -> List[ActionDescription]:
+    def _free_gripper(self, belief: ServiceBelief) -> List[Action]:
         """
         Put back whatever is held (an empty stick goes back into the quiver while the machine is made ready).
         """
         if belief.held is None:
             return []
         name = belief.held.root.name.name
-        return [PuttingDownAction(belief.held, self.homes[name], new_parent=self.parents.get(name))]
+        return [PuttingDownAction(graspable=belief.held, target=self.homes[name], new_parent=self.parents.get(name))]
 
-    def _make_ready(self, belief: ServiceBelief) -> List[ActionDescription]:
+    def _make_ready(self, belief: ServiceBelief) -> List[Action]:
         """
         Bring the machine to producing with sugar for the candy: fill and start, start, or refill - with the sugar
         designated for the candy.
         """
         machine, p, arm = resolve(self.designators.the_machine()), self.process, self.arm
-        stations = (self._station(RobotStation.MACHINE), self._station(RobotStation.MACHINE_CLOSE))
+        stations = dict(machine_station=self._station(RobotStation.MACHINE),
+                        close_station=self._station(RobotStation.MACHINE_CLOSE))
         if belief.phase is FlossMachinePhase.OFF:
-            fill = [] if belief.enough_sugar else [FillSpinnerHeadAction(machine, p, belief.sugar, arm, *stations)]
-            return fill + [StartFlossMachineAction(machine, p, arm)]
+            fill = [] if belief.enough_sugar else [FillSpinnerHeadAction(machine=machine, process=p,
+                                                                         carton=belief.sugar, arm=arm, **stations)]
+            return fill + [StartFlossMachineAction(machine=machine, process=p, arm=arm)]
         if not belief.enough_sugar:
-            return [RefillSpinnerHeadAction(machine, p, belief.sugar, arm, *stations)]
-        return [] if belief.producing else [StartFlossMachineAction(machine, p, arm)]
+            return [RefillSpinnerHeadAction(machine=machine, process=p, carton=belief.sugar, arm=arm, **stations)]
+        return [] if belief.producing else [StartFlossMachineAction(machine=machine, process=p, arm=arm)]
 
     # %% interpretation
 
@@ -478,10 +481,7 @@ class MakeAndHandOverCandyPlan:
             try:
                 designators = step.methods(belief)
                 if designators:
-                    sub_plan = sequential(designators, self.context)
-                    if self.on_plan is not None:
-                        self.on_plan(sub_plan)
-                    sub_plan.perform()
+                    self.context.perform(designators, attach=self.on_plan)
                 if step.protects is not None and step not in protections:
                     protections.append(step)
             except (GoalUnachievable, MultipleSolutionFound):
@@ -501,7 +501,7 @@ class MakeAndHandOverCandyPlan:
         return self.process.candies[-1]
 
 
-def make_and_hand_over(context: Context, process: FlossMachineProcess, materials: List[Any]) -> MakeAndHandOverCandyPlan:
+def make_and_hand_over(context: BoothContext, process: FlossMachineProcess, materials: List[Any]) -> MakeAndHandOverCandyPlan:
     """
     :return: The generalized plan for the booth world of ``context`` (the candy is whatever order is open in the
         process's belief store when the plan runs).

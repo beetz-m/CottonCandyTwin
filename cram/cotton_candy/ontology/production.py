@@ -21,13 +21,17 @@ from enum import StrEnum
 import numpy as np
 from typing_extensions import Any, Dict, List, Optional, Type
 
-from coraplex.plans.factories import sequential
 from semantic_digital_twin.semantic_annotations.mixins import HasRootBody
 from semantic_digital_twin.semantic_annotations.semantic_annotations import Human
 
 from cotton_candy import actions as A
 from cotton_candy.booth_world import RobotStation, TwinModule
-from cotton_candy.manipulation_categories import ManipulationActionCategory, category_profile
+from cotton_candy.manipulation_categories import (
+    ApproachDirection,
+    ManipulationActionCategory,
+    TransportingAction,
+    category_profile,
+)
 from cotton_candy.process import FlossMachineProcess
 from cotton_candy.recipes import Ingredient
 from cotton_candy.semantic_annotations import (
@@ -566,7 +570,8 @@ class OntologyBuilder:
 
     context: Any
     """
-    A plan context in that world (to read the designators' category profiles from their plans).
+    The booth's plan context in that world (a :class:`~cotton_candy.plan_running.BoothContext`), to read the
+    designators' category profiles from their plans.
     """
 
     process: FlossMachineProcess
@@ -700,6 +705,16 @@ class OntologyBuilder:
         by_id = {id(a.annotation): a for a in self.ontology.artefacts}
         return [by_id[id(a)] for a in annotations if id(a) in by_id]
 
+    @staticmethod
+    def _establishing(action) -> List[Any]:
+        """
+        :return: The steps that establish a designator's pre-condition before its plan is read: serving needs the stick
+            in hand (CRAM main builds a place only for an object that is held or picked up earlier in the plan).
+        """
+        if isinstance(action, A.ServeCottonCandyAction):
+            return [TransportingAction(graspable=action.stick, arm=action.arm, approach=ApproachDirection.TOWARDS_LEFT_WALL)]
+        return []
+
     def _steps(self) -> None:
         w, process = self.world, self.process
         machine = w.get_semantic_annotations_by_type(CottonCandyMachine)[0]
@@ -707,34 +722,36 @@ class OntologyBuilder:
         one = lambda t: w.get_semantic_annotations_by_type(t)[0]
         station = lambda s: s.pose(w.root)
         shift = [
-            ("Prepare the machine (unlock the transport handles)", A.PrepareFlossMachineAction(machine, arm),
+            ("Prepare the machine (unlock the transport handles)", A.PrepareFlossMachineAction(machine=machine, arm=arm),
              "B machine tending: access", "GM_MAN_EXP p. 5 'Setup for Use', step 2", "staff"),
-            ("Fill the spinner head", A.FillSpinnerHeadAction(machine, process, one(SugarCarton), arm,
-                                                             station(RobotStation.MACHINE),
-                                                             station(RobotStation.MACHINE_CLOSE)),
+            ("Fill the spinner head", A.FillSpinnerHeadAction(machine=machine, process=process, carton=one(SugarCarton), arm=arm,
+                                                             machine_station=station(RobotStation.MACHINE),
+                                                             close_station=station(RobotStation.MACHINE_CLOSE)),
              "B machine tending: load", "GM_MAN_EXP p. 9-10 (step 3), carton p. 9", "robot"),
-            ("Start the machine", A.StartFlossMachineAction(machine, process, arm), "B machine tending: operate",
+            ("Start the machine", A.StartFlossMachineAction(machine=machine, process=process, arm=arm), "B machine tending: operate",
              "GM_MAN_EXP p. 10, steps 4-6", "robot"),
-            ("Make a portion", A.MakeCottonCandyAction(machine, process, one(CandyStick), arm), "D portion",
+            ("Make a portion", A.MakeCottonCandyAction(machine=machine, process=process, stick=one(CandyStick), arm=arm), "D portion",
              "GM_MAN_EXP p. 11 'Making Floss'", "robot"),
-            ("Serve the portion", A.ServeCottonCandyAction(one(CandyStick), one(HandoverZone), arm,
-                                                           station(RobotStation.SERVING),
-                                                           station(RobotStation.MACHINE)),
+            ("Serve the portion", A.ServeCottonCandyAction(stick=one(CandyStick), handover=one(HandoverZone), arm=arm,
+                                                           serving_station=station(RobotStation.SERVING),
+                                                           machine_station=station(RobotStation.MACHINE)),
              "J handover / F serve", "-", "robot"),
             ("Make cotton candy and hand it to a customer",
-             A.MakeAndServeCottonCandyAction(machine, process, one(CandyStick), one(SugarCarton), one(HandoverZone),
-                                             one(Human), arm, station(RobotStation.SERVING),
-                                             station(RobotStation.MACHINE), station(RobotStation.MACHINE_CLOSE)),
+             A.MakeAndServeCottonCandyAction(machine=machine, process=process, stick=one(CandyStick),
+                                             carton=one(SugarCarton), handover=one(HandoverZone), customer=one(Human),
+                                             arm=arm, serving_station=station(RobotStation.SERVING),
+                                             machine_station=station(RobotStation.MACHINE),
+                                             close_station=station(RobotStation.MACHINE_CLOSE)),
              "activity: serve (B + D + J)", "GM_MAN_EXP pp. 9-11", "robot"),
-            ("Stop the machine", A.StopFlossMachineAction(machine, process, arm), "B machine tending: operate",
+            ("Stop the machine", A.StopFlossMachineAction(machine=machine, process=process, arm=arm), "B machine tending: operate",
              "GM_MAN_EXP p. 10, step 8", "robot"),
-            ("Shut the machine down", A.ShutDownFlossMachineAction(machine, process, arm),
+            ("Shut the machine down", A.ShutDownFlossMachineAction(machine=machine, process=process, arm=arm),
              "B machine tending / maintenance", "GM_MAN_EXP p. 13 'Shut Down Procedure'", "robot"),
-            ("Clean the machine", A.CleanFlossMachineAction(machine, process, one(Sponge), arm), "G wipe",
+            ("Clean the machine", A.CleanFlossMachineAction(machine=machine, process=process, sponge=one(Sponge), arm=arm), "G wipe",
              "GM_MAN_EXP p. 13 'Care and Cleaning'", "robot"),
         ]
         for order, (name, action, family, manual, by) in enumerate(shift, start=1):
-            sequential([action], self.context)
+            self.context.expand(*self._establishing(action), action)
             categories = [self._category(c) for c in category_profile(action)]
             self.ontology.steps.append(
                 ProductionStep(

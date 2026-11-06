@@ -24,41 +24,34 @@ import numpy as np
 from scipy.spatial.transform import Rotation
 from typing_extensions import Any, Dict, List, Optional, Tuple, Union
 
-from giskardpy.motion_statechart.data_types import DefaultWeights
-from giskardpy.motion_statechart.goals.open_close import Open
-from giskardpy.motion_statechart.goals.templates import Parallel
-from krrood.entity_query_language.core.variable import Variable
-from krrood.entity_query_language.factories import ConditionType, and_, variable_from
-from krrood.ormatic.utils import classproperty
-
-from coraplex.datastructures.dataclasses import Context
 from coraplex.datastructures.enums import ToolPathSegmentKind
-from coraplex.plans.attachment_nodes import ReAttachNode
-from coraplex.plans.factories import code, sequential
-from coraplex.plans.plan_node import PlanNode
-from coraplex.querying.predicates import GripperIsFree, GripperIsNotFree
-from coraplex.robot_plans.actions.base import ActionDescription
+from coraplex.robot_plans.actions.base import Action, ActionOfSteps, GoalAction, ParallelAction, SequentialAction
 from coraplex.robot_plans.actions.composite.tool_based import FullBodyControlledAction, ToolMotionAction, WipingAction
 from coraplex.robot_plans.actions.composite.tool_paths import ToolPath, ToolPathSegment
-from coraplex.robot_plans.actions.core.navigation import NavigateAction
 from coraplex.robot_plans.actions.core.pick_up import GraspingAction, PickUpAction
 from coraplex.robot_plans.actions.core.placing import PlaceAction
-from coraplex.robot_plans.actions.core.robot_body import ParkArmsAction
-from coraplex.robot_plans.motions.base import BaseMotion
-from giskardpy.motion_statechart.goals.collision_avoidance import UpdateTemporaryCollisionRules
+from coraplex.robot_plans.actions.core.robot_body import MoveManipulatorAction, ParkArmsAction, SetGripperAction
+from coraplex.robot_plans.mixins import MovesToolCenterPoint, ReattachesBranches
+from cramph.composites import Parallel
+from cramph.node import StatechartNode
+from giskardpy.motion_statechart.goals.grasped_mechanism import ArticulateGraspedMechanism
+from giskardpy.motion_statechart.tasks.cartesian_tasks import CartesianPose
+from giskardpy.motion_statechart.weights import DefaultWeights
+from krrood.entity_query_language.factories import ConditionType, and_, variable_from
+from krrood.ormatic.utils import classproperty
+from krrood_spatial_math.spatial_types import HomogeneousTransformationMatrix, Pose
+from semantic_digital_twin.collision_checking.collision_matrix import CollisionRule
 from semantic_digital_twin.collision_checking.collision_rules import (
     AllowCollisionForBodies,
     AllowCollisionForEndEffector,
 )
-from coraplex.robot_plans.motions.gripper import MoveGripperMotion, MoveToolCenterPointMotion
 from semantic_digital_twin.datastructures.definitions import GripperState
 from semantic_digital_twin.grasping.grasp_candidates import GraspCandidate
 from semantic_digital_twin.robots.robot_parts import Arm
 from semantic_digital_twin.semantic_annotations.mixins import HasRootBody
-from semantic_digital_twin.spatial_types import HomogeneousTransformationMatrix
-from semantic_digital_twin.spatial_types.spatial_types import Pose
 from semantic_digital_twin.world_description.world_entity import Body
 
+from cotton_candy.predicates import GripperIsFree, GripperIsNotFree
 from cotton_candy.semantic_annotations import OperatingElement
 
 
@@ -192,7 +185,6 @@ class ManipulationActionCategory(Enum):
         return self.value
 
 
-@dataclass
 class HasManipulationCategory:
     """
     Mixin for designators that realise a manipulation action category.
@@ -204,6 +196,22 @@ class HasManipulationCategory:
         The category this designator realises.
         """
         raise NotImplementedError(cls)
+
+
+class HasConditions:
+    """
+    Mixin for designators with a pre-condition (must hold before the plan runs) and a post-condition (holds once it
+    succeeded), as EQL conditions over the designator's parameters.
+
+    coraplex's ``ActionDescription`` carried these until November 2026; CRAM main's actions have none, so the booth
+    keeps them on its own designators. A designator without a condition answers ``None``.
+    """
+
+    def pre_condition(self) -> Optional[ConditionType]:
+        return None
+
+    def post_condition(self) -> Optional[ConditionType]:
+        return None
 
 
 # %% grasps
@@ -249,8 +257,8 @@ class ApproachDirection(Enum):
 # %% configuration change: pressing, turning
 
 
-@dataclass
-class TurnToMotion(BaseMotion):
+@dataclass(kw_only=True, eq=False, repr=False)
+class TurnToAction(GoalAction):
     """
     Turn a held operating element to a position of its joint.
     """
@@ -270,51 +278,58 @@ class TurnToMotion(BaseMotion):
     The joint position to turn to.
     """
 
-    def perform(self):
-        return
-
-    @property
-    def _motion_chart(self):
-        turn = Open(
+    def create_goal(self) -> StatechartNode:
+        turn = ArticulateGraspedMechanism(
             tip_link=self.arm.end_effector.tool_frame,
             environment_link=self.object_part,
             goal_joint_state=self.goal_position,
             mechanism_weight=DefaultWeights.WEIGHT_BELOW_COLLISION_AVOIDANCE,
         )
-        # coraplex's OpeningMotion/ClosingMotion leave the base free, so it drifts while the element is moved;
-        # hold it like the other arm motions do
+        # the base would drift while the element is moved; hold it like the other arm motions do
         hold_base = self.keep_base_still()
         if not hold_base:
             return turn
-        return Parallel([turn, *hold_base], name="TurnTo")
+        return Parallel(nodes=[turn, *hold_base], name="TurnTo")
 
 
-@dataclass
-class MoveTCPMayTouchMotion(MoveToolCenterPointMotion):
+@dataclass(kw_only=True, eq=False, repr=False)
+class MoveToolCenterPointMayTouchAction(MoveManipulatorAction):
     """
     Move the tool centre point while the arm may touch some bodies, e.g. rest on a pan rim while reaching over it.
 
     Everything else stays under collision avoidance; the end effector and what it holds may touch the environment.
     """
 
-    may_touch: List[Body] = field(default_factory=list, kw_only=True)
+    may_touch: List[Body] = field(default_factory=list)
     """
     The bodies the arm's links may touch during this motion.
     """
 
-    def _only_allow_gripper_collision_rules(self, end_effector):
-        return [
-            UpdateTemporaryCollisionRules(
-                temporary_rules=[
-                    AllowCollisionForEndEffector(end_effector=end_effector),
-                    AllowCollisionForBodies(allowed_collision_bodies=set(self.may_touch)),
-                ]
-            )
-        ]
+    def create_temporary_collision_rules(self) -> List[CollisionRule]:
+        rules = super().create_temporary_collision_rules()
+        if self.may_touch:
+            rules.append(AllowCollisionForBodies(allowed_collision_bodies=set(self.may_touch)))
+        return rules
 
 
-@dataclass
-class ElementActuationAction(ActionDescription):
+def move_tool_center_point(target: Pose, arm: Arm, **options) -> MoveManipulatorAction:
+    """
+    :return: The tool centre point of ``arm`` moved to ``target``; the gripper and what it holds may touch the
+        surroundings.
+    """
+    return MoveManipulatorAction(target_pose=target, end_effector=arm.end_effector, allow_gripper_collision=True,
+                                 **options)
+
+
+def set_gripper(arm: Arm, state: GripperState) -> SetGripperAction:
+    """
+    :return: The gripper of ``arm`` opened or closed.
+    """
+    return SetGripperAction(configuration=arm.end_effector.default_configuration(state))
+
+
+@dataclass(kw_only=True, eq=False, repr=False)
+class ElementActuationAction(HasConditions, SequentialAction):
     """
     Bring an operating element to a fraction of its travel and leave it there (common plan of pressing and turning).
     """
@@ -349,51 +364,48 @@ class ElementActuationAction(ActionDescription):
         limits = self.element.movable_joint.dof.limits
         return limits.lower.position + self.travel_fraction * (limits.upper.position - limits.lower.position)
 
-    def _mechanism_motion(self) -> BaseMotion:
+    def _mechanism_motion(self) -> TurnToAction:
         limits = self.element.movable_joint.dof.limits
         margin = 0.01 * (limits.upper.position - limits.lower.position)
         goal = min(max(self._goal_position(), limits.lower.position + margin), limits.upper.position - margin)
-        return TurnToMotion(self.element.root, self.arm, goal)
+        return TurnToAction(object_part=self.element.root, arm=self.arm, goal_position=goal)
 
-    def _contact_plan(self) -> List[Any]:
+    def _contact_plan(self) -> List[StatechartNode]:
         """
         :return: How the gripper takes the element before it is moved.
         """
-        return [GraspingAction(self.approach.grasp(self.element), self.arm)]
+        return [GraspingAction(grasp=self.approach.grasp(self.element), arm=self.arm)]
 
-    @property
-    def _action_plan(self) -> PlanNode:
+    def create_steps(self) -> List[StatechartNode]:
         back_off = Pose.from_xyz_rpy(x=-self.release_clearance, reference_frame=self.arm.end_effector.tool_frame)
-        return sequential(
-            [ParkArmsAction([self.arm])]
+        return (
+            [ParkArmsAction(arms=[self.arm])]
             + self._contact_plan()
             + [
                 self._mechanism_motion(),
-                MoveGripperMotion(GripperState.OPEN, self.arm.end_effector, allow_gripper_collision=True),
-                MoveToolCenterPointMotion(back_off, self.arm, allow_gripper_collision=True),
+                set_gripper(self.arm, GripperState.OPEN),
+                move_tool_center_point(back_off, self.arm),
             ]
         )
 
-    @staticmethod
-    def pre_condition(variables: Dict[str, Variable], context: Context, kwargs: Dict[str, Any]) -> ConditionType:
+    def pre_condition(self) -> ConditionType:
         """
         The actuating gripper has to be free.
         """
-        return GripperIsFree(variables["arm"].end_effector)
+        return GripperIsFree(variable_from(self.arm).end_effector)
 
-    @staticmethod
-    def post_condition(variables: Dict[str, Variable], context: Context, kwargs: Dict[str, Any]) -> ConditionType:
+    def post_condition(self) -> ConditionType:
         """
         The element stands within 5 % of its travel at the requested position.
         """
-        element = variable_from(kwargs["element"])
+        element = variable_from(self.element)
         return and_(
-            element.travel_fraction > kwargs["travel_fraction"] - 0.05,
-            element.travel_fraction < kwargs["travel_fraction"] + 0.05,
+            element.travel_fraction > self.travel_fraction - 0.05,
+            element.travel_fraction < self.travel_fraction + 0.05,
         )
 
 
-@dataclass
+@dataclass(kw_only=True, eq=False, repr=False)
 class PressingButtonAction(ElementActuationAction, HasManipulationCategory):
     """
     Press a button or rocker into a position: push it with the closed gripper's fingertips.
@@ -405,14 +417,14 @@ class PressingButtonAction(ElementActuationAction, HasManipulationCategory):
     def manipulation_category(cls) -> ManipulationActionCategory:
         return ManipulationActionCategory.PRESSING_BUTTON
 
-    def _contact_plan(self) -> List[Any]:
+    def _contact_plan(self) -> List[StatechartNode]:
         return [
-            MoveGripperMotion(GripperState.CLOSE, self.arm.end_effector, allow_gripper_collision=True),
-            GraspingAction(self.approach.grasp(self.element), self.arm),
+            set_gripper(self.arm, GripperState.CLOSE),
+            GraspingAction(grasp=self.approach.grasp(self.element), arm=self.arm),
         ]
 
 
-@dataclass
+@dataclass(kw_only=True, eq=False, repr=False)
 class TurningAction(ElementActuationAction, HasManipulationCategory):
     """
     Grasp a knob or lever and turn it to a position.
@@ -426,8 +438,8 @@ class TurningAction(ElementActuationAction, HasManipulationCategory):
 # %% displacement and interaction: transporting, handing over
 
 
-@dataclass
-class TransportingAction(ActionDescription, HasManipulationCategory):
+@dataclass(kw_only=True, eq=False, repr=False)
+class TransportingAction(SequentialAction, HasManipulationCategory):
     """
     Pick an object up and, if a target is given, put it down there; without a target the object stays held.
     """
@@ -461,16 +473,16 @@ class TransportingAction(ActionDescription, HasManipulationCategory):
     def manipulation_category(cls) -> ManipulationActionCategory:
         return ManipulationActionCategory.TRANSPORTING
 
-    @property
-    def _action_plan(self) -> PlanNode:
-        steps = [ParkArmsAction([self.arm]), PickUpAction(self.approach.grasp(self.graspable, self.grasp_offset), self.arm)]
+    def create_steps(self) -> List[StatechartNode]:
+        steps = [ParkArmsAction(arms=[self.arm]),
+                 PickUpAction(grasp=self.approach.grasp(self.graspable, self.grasp_offset), arm=self.arm)]
         if self.target is not None:
-            steps.append(PlaceAction(self.graspable, self.target))
-        return sequential(steps)
+            steps.append(PlaceAction(object_designator=self.graspable, target_location=self.target))
+        return steps
 
 
-@dataclass
-class PuttingDownAction(ActionDescription, HasManipulationCategory):
+@dataclass(kw_only=True, eq=False, repr=False)
+class PuttingDownAction(ReattachesBranches, SequentialAction, HasManipulationCategory):
     """
     Put a held object down at a pose (the second half of a transport).
     """
@@ -513,20 +525,18 @@ class PuttingDownAction(ActionDescription, HasManipulationCategory):
     def manipulation_category(cls) -> ManipulationActionCategory:
         return ManipulationActionCategory.TRANSPORTING
 
-    @property
-    def _action_plan(self) -> PlanNode:
+    def create_steps(self) -> List[StatechartNode]:
         steps = []
         if self.arm is not None and self.retreat > 0.0:
             tool = self.arm.end_effector.tool_frame.global_pose.to_np()
             qx, qy, qz, qw = Rotation.from_matrix(tool[:3, :3]).as_quat()
             steps.append(
-                MoveToolCenterPointMotion(
+                move_tool_center_point(
                     Pose.from_xyz_quaternion(
                         pos_x=float(tool[0, 3]), pos_y=float(tool[1, 3]) + self.retreat, pos_z=float(tool[2, 3]),
                         quat_x=qx, quat_y=qy, quat_z=qz, quat_w=qw, reference_frame=self.world.root,
                     ),
                     self.arm,
-                    allow_gripper_collision=True,
                 )
             )
         if self.arm is not None and self.via_height > 0.0:
@@ -535,24 +545,23 @@ class PuttingDownAction(ActionDescription, HasManipulationCategory):
             qx, qy, qz, qw = Rotation.from_matrix(tool[:3, :3]).as_quat()
             grasp_offset = tool[:3, 3] - self.graspable.root.global_pose.to_np()[:3, 3]
             steps.append(
-                MoveToolCenterPointMotion(
+                move_tool_center_point(
                     Pose.from_xyz_quaternion(
                         pos_x=float(target[0, 3] + grasp_offset[0]), pos_y=float(target[1, 3] + grasp_offset[1]),
                         pos_z=max(float(tool[2, 3]), float(target[2, 3] + grasp_offset[2]) + self.via_height),
                         quat_x=qx, quat_y=qy, quat_z=qz, quat_w=qw, reference_frame=self.world.root,
                     ),
                     self.arm,
-                    allow_gripper_collision=True,
                 )
             )
-        steps.append(PlaceAction(self.graspable, self.target))
+        steps.append(PlaceAction(object_designator=self.graspable, target_location=self.target))
         if self.new_parent is not None:
-            steps.append(ReAttachNode(body=self.graspable.root, new_parent=self.new_parent))
-        return sequential(steps)
+            steps += self.reattach(self.graspable.root, self.new_parent)
+        return steps
 
 
-@dataclass
-class HandingOverAction(ActionDescription, HasManipulationCategory):
+@dataclass(kw_only=True, eq=False, repr=False)
+class HandingOverAction(HasConditions, SequentialAction, HasManipulationCategory):
     """
     Hand a held object to a person: present it in the handover zone and release it once the person holds it.
     """
@@ -576,30 +585,27 @@ class HandingOverAction(ActionDescription, HasManipulationCategory):
     def manipulation_category(cls) -> ManipulationActionCategory:
         return ManipulationActionCategory.HANDING_OVER
 
-    @property
-    def _action_plan(self) -> PlanNode:
-        return sequential([PlaceAction(self.graspable, self.handover_pose)])
+    def create_steps(self) -> List[StatechartNode]:
+        return [PlaceAction(object_designator=self.graspable, target_location=self.handover_pose)]
 
-    @staticmethod
-    def pre_condition(variables: Dict[str, Variable], context: Context, kwargs: Dict[str, Any]) -> ConditionType:
+    def pre_condition(self) -> ConditionType:
         """
         The arm holds what is handed over.
         """
-        return GripperIsNotFree(variables["arm"].end_effector)
+        return GripperIsNotFree(variable_from(self.arm).end_effector)
 
-    @staticmethod
-    def post_condition(variables: Dict[str, Variable], context: Context, kwargs: Dict[str, Any]) -> ConditionType:
+    def post_condition(self) -> ConditionType:
         """
         The arm has let go: the recipient holds it.
         """
-        return GripperIsFree(variables["arm"].end_effector)
+        return GripperIsFree(variable_from(self.arm).end_effector)
 
 
 # %% substance manipulation: scooping, pouring, gathering, wrapping
 
 
-@dataclass
-class ScoopingAction(ActionDescription, HasManipulationCategory):
+@dataclass(kw_only=True, eq=False, repr=False)
+class ScoopingAction(SequentialAction, HasManipulationCategory):
     """
     Dip a held scoop into a container of granular substance and lift it out filled.
     """
@@ -628,8 +634,7 @@ class ScoopingAction(ActionDescription, HasManipulationCategory):
     def manipulation_category(cls) -> ManipulationActionCategory:
         return ManipulationActionCategory.SCOOPING
 
-    @property
-    def _action_plan(self) -> PlanNode:
+    def create_steps(self) -> List[StatechartNode]:
         source = self.source.global_pose.to_np()
         tool = self.arm.end_effector.tool_frame.global_pose.to_np()
         quat = Rotation.from_matrix(tool[:3, :3]).as_quat()
@@ -640,24 +645,23 @@ class ScoopingAction(ActionDescription, HasManipulationCategory):
                 quat_x=quat[0], quat_y=quat[1], quat_z=quat[2], quat_w=quat[3], reference_frame=self.world.root,
             )
 
-        return sequential(
-            [
-                MoveToolCenterPointMotion(at(self.approach_height), self.arm, allow_gripper_collision=True),
-                MoveToolCenterPointMotion(at(self.dip_height), self.arm, allow_gripper_collision=True),
-                MoveToolCenterPointMotion(at(self.approach_height), self.arm, allow_gripper_collision=True),
-            ]
-        )
+        return [
+            move_tool_center_point(at(self.approach_height), self.arm),
+            move_tool_center_point(at(self.dip_height), self.arm),
+            move_tool_center_point(at(self.approach_height), self.arm),
+        ]
 
 
-@dataclass
-class PouringIntoAction(FullBodyControlledAction, HasManipulationCategory):
+@dataclass(kw_only=True, eq=False, repr=False)
+class PouringIntoAction(FullBodyControlledAction, MovesToolCenterPoint, SequentialAction, HasManipulationCategory):
     """
     Pour the contents of a held container into a target: hold it above the target, offset towards the agent, and
     tilt it forward about the world x axis so the contents run out over the target.
 
     (coraplex's PouringAction chooses its pouring side relative to the arm; here the pouring direction is fixed by
     the operator's position in front of the machine.) Full-body controlled: the base may lean in, within collision
-    avoidance, because the head lies beyond the arm's reach from a parked station.
+    avoidance, because the head lies beyond the arm's reach from a parked station. The tool goals are this action's
+    own (as in coraplex's PouringAction), so they are expressed relative to the world root it controls the body in.
     """
 
     arm: Arm
@@ -702,11 +706,10 @@ class PouringIntoAction(FullBodyControlledAction, HasManipulationCategory):
     may_touch: List[Body] = field(default_factory=list)
     """
     Bodies the arm may touch while reaching over to the target (the pan rim, the bubble), as a person rests a forearm
-    on a rim; passed to every motion as a temporary collision allowance.
+    on a rim; a temporary collision allowance for the whole pour.
 
-    Limitation (coraplex, 2026-10-20): the execution environment adds its collision-avoidance tasks before a motion's
-    temporary rules apply, so this allowance does not lift the arm's buffer to the pan. Reaching over the 0.66 m pan
-    with a PR2 therefore only succeeds when the pour runs with collision avoidance off (see demo.py).
+    Limitation: reaching over the 0.66 m pan with a PR2 has only been shown with collision avoidance off (see
+    demo.py), so the allowance is not exercised by the booth's runs.
     """
 
     position_tolerance: float = 0.03
@@ -725,8 +728,27 @@ class PouringIntoAction(FullBodyControlledAction, HasManipulationCategory):
     def manipulation_category(cls) -> ManipulationActionCategory:
         return ManipulationActionCategory.POURING
 
-    @property
-    def _action_plan(self) -> PlanNode:
+    def create_temporary_collision_rules(self) -> List[CollisionRule]:
+        rules: List[CollisionRule] = [AllowCollisionForEndEffector(end_effector=self.arm.end_effector)]
+        if self.may_touch:
+            rules.append(AllowCollisionForBodies(allowed_collision_bodies=set(self.may_touch)))
+        return rules
+
+    def _goal(self, target: Pose, threshold: Optional[float] = None) -> StatechartNode:
+        """
+        :return: The tool centre point brought to ``target`` within ``threshold`` (the default threshold if None).
+        """
+        goal = CartesianPose(
+            root_link=self.controlled_root,
+            tip_link=self.arm.end_effector.tool_frame,
+            goal_pose=target,
+            translation_threshold=self.position_threshold if threshold is None else threshold,
+            orientation_threshold=self.orientation_threshold,
+        )
+        hold_base = self.keep_base_still()
+        return Parallel(nodes=[goal, *hold_base], name="CartesianPose") if hold_base else goal
+
+    def create_steps(self) -> List[StatechartNode]:
         target = self.target.global_pose.to_np()
         upright = Rotation.from_euler("xyz", list(self.grip.value)).as_matrix()
         x, y, z = float(target[0, 3]), float(target[1, 3]) + self.standoff, float(target[2, 3]) + self.pour_height
@@ -737,38 +759,31 @@ class PouringIntoAction(FullBodyControlledAction, HasManipulationCategory):
                                             quat_w=qw, reference_frame=self.world.root)
 
         tilt = Rotation.from_euler("x", self.tilt_angle).as_matrix()   # top of the held container towards -y
-        lift = []
-        if self.lift_from is not None:
+
+        def lift() -> List[StatechartNode]:
+            if self.lift_from is None:
+                return []
             grip = self.lift_from.to_np()
             qx, qy, qz, qw = Rotation.from_matrix(upright).as_quat()
-            lift = [
-                MoveTCPMayTouchMotion(
-                    Pose.from_xyz_quaternion(pos_x=float(grip[0, 3]), pos_y=float(grip[1, 3]),
-                                             pos_z=z + self.approach_lift, quat_x=qx, quat_y=qy, quat_z=qz,
-                                             quat_w=qw, reference_frame=self.world.root),
-                    self.arm, allow_gripper_collision=True, may_touch=self.may_touch,
-                )
-            ]
-        return sequential(
-            lift
+            return [self._goal(Pose.from_xyz_quaternion(pos_x=float(grip[0, 3]), pos_y=float(grip[1, 3]),
+                                                        pos_z=z + self.approach_lift, quat_x=qx, quat_y=qy,
+                                                        quat_z=qz, quat_w=qw, reference_frame=self.world.root))]
+
+        return (
+            lift()
             + [
-                MoveTCPMayTouchMotion(oriented(upright, 0.25, self.approach_lift), self.arm,
-                                          allow_gripper_collision=True),
-                MoveTCPMayTouchMotion(oriented(upright), self.arm, allow_gripper_collision=True, may_touch=self.may_touch,
-                                          position_threshold=self.position_tolerance),
-                MoveTCPMayTouchMotion(oriented(tilt @ upright), self.arm, allow_gripper_collision=True, may_touch=self.may_touch,
-                                          position_threshold=self.position_tolerance),
-                MoveTCPMayTouchMotion(oriented(upright), self.arm, allow_gripper_collision=True, may_touch=self.may_touch,
-                                          position_threshold=self.position_tolerance),
-                MoveTCPMayTouchMotion(oriented(upright, 0.25, self.approach_lift), self.arm,
-                                          allow_gripper_collision=True),
+                self._goal(oriented(upright, 0.25, self.approach_lift)),
+                self._goal(oriented(upright), self.position_tolerance),
+                self._goal(oriented(tilt @ upright), self.position_tolerance),
+                self._goal(oriented(upright), self.position_tolerance),
+                self._goal(oriented(upright, 0.25, self.approach_lift)),
             ]
-            + lift
+            + lift()
         )
 
 
-@dataclass(kw_only=True)
-class GatheringAction(ToolMotionAction, HasManipulationCategory):
+@dataclass(kw_only=True, eq=False, repr=False)
+class GatheringAction(ToolMotionAction, ParallelAction, HasManipulationCategory):
     """
     Gather a fibrous or loose substance from a container onto a held instrument: dip the instrument's tip into it,
     sweep it around the container to accumulate the substance on the tip, and lift it out.
@@ -829,8 +844,8 @@ class GatheringAction(ToolMotionAction, HasManipulationCategory):
         return self.container
 
 
-@dataclass(kw_only=True)
-class WrappingAction(ToolMotionAction, HasManipulationCategory):
+@dataclass(kw_only=True, eq=False, repr=False)
+class WrappingAction(ToolMotionAction, ParallelAction, HasManipulationCategory):
     """
     Wrap a loose substance around a held instrument with figure-eight strokes.
     """
@@ -887,7 +902,7 @@ class WrappingAction(ToolMotionAction, HasManipulationCategory):
 # %% surface treatment
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, eq=False, repr=False)
 class CategorisedWipingAction(WipingAction, HasManipulationCategory):
     """
     coraplex's wiping, labelled with its category.
@@ -901,21 +916,31 @@ class CategorisedWipingAction(WipingAction, HasManipulationCategory):
 # %% reading a plan as categories
 
 
-def category_profile(action: ActionDescription) -> List[ManipulationActionCategory]:
+def plan_steps(action: StatechartNode) -> List[StatechartNode]:
+    """
+    :param action: An action whose steps have been created (it joined a statechart, e.g. by ``BoothContext.expand``).
+    :return: Its steps in plan order: the steps of an action of steps, the goal of a goal action, none otherwise.
+    """
+    if isinstance(action, ActionOfSteps):
+        return list(action.nodes)
+    if isinstance(action, GoalAction) and action.goal is not None:
+        return [action.goal]
+    return []
+
+
+def category_profile(action: Action) -> List[ManipulationActionCategory]:
     """
     The manipulation categories an action is composed of, in plan order: the action's own category if it has one,
-    otherwise the categories of its children, recursively.
+    otherwise the categories of its steps, recursively through the booth's own designators.
 
-    :param action: An action whose plan has been built (attached to a plan with a context).
+    :param action: An action whose steps have been created (it joined a statechart, e.g. by ``BoothContext.expand``).
     """
     if isinstance(action, HasManipulationCategory):
         return [type(action).manipulation_category]
     profile = []
-    for node in action._action_plan.children:
-        designator = getattr(node, "designator", None)
-        if isinstance(designator, HasManipulationCategory):
-            profile.append(type(designator).manipulation_category)
-        elif isinstance(designator, ActionDescription) and type(designator).__module__.startswith("cotton_candy"):
-            sequential([designator], action.context)
-            profile += category_profile(designator)
+    for step in plan_steps(action):
+        if isinstance(step, HasManipulationCategory):
+            profile.append(type(step).manipulation_category)
+        elif isinstance(step, Action) and type(step).__module__.startswith("cotton_candy"):
+            profile += category_profile(step)
     return profile

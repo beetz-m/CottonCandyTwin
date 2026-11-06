@@ -7,9 +7,6 @@ from __future__ import annotations
 
 import pytest
 
-from coraplex.datastructures.dataclasses import Context
-from coraplex.execution_environment import kinematically_simulated_robot
-from coraplex.plans.factories import sequential
 from krrood.entity_query_language.exceptions import MultipleSolutionFound
 from semantic_digital_twin.robots.pr2 import PR2
 from semantic_digital_twin.semantic_annotations.semantic_annotations import Human
@@ -18,6 +15,7 @@ from cotton_candy.actions import FillSpinnerHeadAction, FormPortionAction, Start
 from cotton_candy.booth_world import BoothWorldBuilder, RobotStation, TwinModule
 from cotton_candy.manipulation_categories import ApproachDirection, TransportingAction
 from cotton_candy.ontology.production import OntologyBuilder
+from cotton_candy.plan_running import BoothContext
 from cotton_candy.process import CandyStage, FlossMachineProcess, FlossMachineTimings
 from cotton_candy.recipes import Flavour
 from cotton_candy.semantic_annotations import CandyStick, CottonCandyMachine, SugarCarton
@@ -29,7 +27,7 @@ def fresh(flavour: Flavour = Flavour.RASPBERRY, customer: str | None = "Customer
     robot = world.get_semantic_annotations_by_type(PR2)[0]
     machine = world.get_semantic_annotations_by_type(CottonCandyMachine)[0]
     process = FlossMachineProcess(machine, FlossMachineTimings.from_twin_register(TwinModule.PARAMS.load()))
-    context = Context(world, robot, sampling_seed=0)
+    context = BoothContext(world, robot, sampling_seed=0)
     materials = OntologyBuilder(world, context, process).build().materials
     process.candies.clear()
     process.new_order(flavour.value, ordered_by=customer)
@@ -37,8 +35,7 @@ def fresh(flavour: Flavour = Flavour.RASPBERRY, customer: str | None = "Customer
 
 
 def execute(context, designators):
-    with kinematically_simulated_robot:
-        sequential(designators, context).perform()
+    context.perform(designators)
 
 
 def belief(plan):
@@ -57,8 +54,7 @@ def test_cold_machine_achieves_every_sub_goal():
     world, robot, context, machine, process, plan = fresh()
     assert plan.projection(belief(plan)) == ["MACHINE-READY", "STICK-IN-HAND", "CANDY-FORMED", "CANDY-WRAPPED",
                                              "HANDED-OVER"]
-    with kinematically_simulated_robot:
-        final = plan.perform()
+    final = plan.perform()
     assert final.delivered and plan.failures == []
     assert plan.trace == ["MACHINE-READY", "STICK-IN-HAND", "CANDY-FORMED", "HANDED-OVER"]
 
@@ -67,13 +63,13 @@ def test_interrupted_after_taking_the_stick_resumes_with_forming():
     world, robot, context, machine, process, plan = fresh()
     arm, carton = robot.right_arm, world.get_semantic_annotations_by_type(SugarCarton)[0]
     stick = world.get_semantic_annotations_by_type(CandyStick)[0]
-    execute(context, [FillSpinnerHeadAction(machine, process, carton, arm, RobotStation.MACHINE.pose(world.root),
-                                            RobotStation.MACHINE_CLOSE.pose(world.root)),
-                      StartFlossMachineAction(machine, process, arm),
-                      TransportingAction(stick, arm, ApproachDirection.TOWARDS_LEFT_WALL)])
+    execute(context, [FillSpinnerHeadAction(machine=machine, process=process, carton=carton, arm=arm,
+                                            machine_station=RobotStation.MACHINE.pose(world.root),
+                                            close_station=RobotStation.MACHINE_CLOSE.pose(world.root)),
+                      StartFlossMachineAction(machine=machine, process=process, arm=arm),
+                      TransportingAction(graspable=stick, arm=arm, approach=ApproachDirection.TOWARDS_LEFT_WALL)])
     assert plan.select(belief(plan)).tag == "CANDY-FORMED"
-    with kinematically_simulated_robot:
-        assert plan.perform().delivered
+    assert plan.perform().delivered
     assert plan.trace[0] == "CANDY-FORMED"
 
 
@@ -81,15 +77,15 @@ def test_a_wrapped_candy_in_hand_is_only_handed_over():
     world, robot, context, machine, process, plan = fresh()
     arm, carton = robot.right_arm, world.get_semantic_annotations_by_type(SugarCarton)[0]
     stick = world.get_semantic_annotations_by_type(CandyStick)[0]
-    execute(context, [FillSpinnerHeadAction(machine, process, carton, arm, RobotStation.MACHINE.pose(world.root),
-                                            RobotStation.MACHINE_CLOSE.pose(world.root)),
-                      StartFlossMachineAction(machine, process, arm),
-                      TransportingAction(stick, arm, ApproachDirection.TOWARDS_LEFT_WALL),
-                      FormPortionAction(machine, process, stick, arm)])
+    execute(context, [FillSpinnerHeadAction(machine=machine, process=process, carton=carton, arm=arm,
+                                            machine_station=RobotStation.MACHINE.pose(world.root),
+                                            close_station=RobotStation.MACHINE_CLOSE.pose(world.root)),
+                      StartFlossMachineAction(machine=machine, process=process, arm=arm),
+                      TransportingAction(graspable=stick, arm=arm, approach=ApproachDirection.TOWARDS_LEFT_WALL),
+                      FormPortionAction(machine=machine, process=process, stick=stick, arm=arm)])
     assert process.candy.stage is CandyStage.WRAPPED
     assert plan.projection(belief(plan)) == ["HANDED-OVER"]
-    with kinematically_simulated_robot:
-        plan.perform()
+    plan.perform()
     assert plan.trace == ["HANDED-OVER"]
     assert stick.root.parent_kinematic_structure_entity is world.get_semantic_annotations_by_type(Human)[0].root
 
@@ -117,22 +113,18 @@ def test_two_open_orders_leave_the_candy_ambiguous():
 
 def test_a_second_order_gets_a_new_stick_and_skips_the_ready_machine():
     world, robot, context, machine, process, plan = fresh()
-    with kinematically_simulated_robot:
-        plan.perform()
+    plan.perform()
     process.new_order(Flavour.RASPBERRY.value, ordered_by="Customer")
     b = belief(plan)
     assert b.stick.root.name.name == "CandyStick1" and plan.select(b).tag == "STICK-IN-HAND"
     plan.trace.clear()
-    with kinematically_simulated_robot:
-        assert plan.perform().delivered
+    assert plan.perform().delivered
     assert plan.trace == ["STICK-IN-HAND", "CANDY-FORMED", "HANDED-OVER"]
 
 
 def test_goal_already_holding_means_nothing_to_do():
     world, robot, context, machine, process, plan = fresh()
-    with kinematically_simulated_robot:
-        plan.perform()
+    plan.perform()
     plan.trace.clear()
-    with kinematically_simulated_robot:
-        plan.perform()
+    plan.perform()
     assert plan.trace == []

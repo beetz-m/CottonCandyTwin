@@ -36,29 +36,26 @@ import numpy as np
 
 from typing_extensions import Any, Dict, List, Optional
 
-from krrood.entity_query_language.core.variable import Variable
 from krrood.entity_query_language.factories import ConditionType, and_, variable_from
 from krrood.ormatic.utils import classproperty
+from krrood_spatial_math.spatial_types import Pose
 
-from coraplex.datastructures.dataclasses import Context
 from coraplex.datastructures.enums import WipingTechnique
-from coraplex.plans.factories import sequential
-from coraplex.plans.attachment_nodes import ReAttachNode
-from coraplex.plans.plan_node import PlanNode
-from coraplex.querying.predicates import GripperIsFree, GripperIsNotFree
-from coraplex.robot_plans.actions.base import ActionDescription
+from coraplex.robot_plans.actions.base import SequentialAction
 from coraplex.robot_plans.actions.core.navigation import NavigateAction
 from coraplex.robot_plans.actions.core.robot_body import MoveTorsoAction, ParkArmsAction
+from coraplex.robot_plans.mixins import ReattachesBranches
+from cramph.node import StatechartNode
 from semantic_digital_twin.datastructures.definitions import TorsoState
 from semantic_digital_twin.robots.robot_parts import Arm
 from semantic_digital_twin.semantic_annotations.semantic_annotations import Human
-from semantic_digital_twin.spatial_types.spatial_types import Pose
 
 from cotton_candy.manipulation_categories import (
     ApproachDirection,
     CategorisedWipingAction,
     GatheringAction,
     HandingOverAction,
+    HasConditions,
     HasManipulationCategory,
     ManipulationActionCategory,
     PouringIntoAction,
@@ -69,6 +66,7 @@ from cotton_candy.manipulation_categories import (
     WrappingAction,
 )
 from cotton_candy.process import FlossMachinePhase, FlossMachineProcess
+from cotton_candy.predicates import GripperIsFree, GripperIsNotFree
 from cotton_candy.process_nodes import process_step
 from cotton_candy.semantic_annotations import (
     CandyStick,
@@ -90,8 +88,8 @@ def pose_above(body_pose, dz: float, world_root) -> Pose:
 # %% monitoring the machine's process
 
 
-@dataclass
-class MonitoringProcessAction(ActionDescription, HasManipulationCategory):
+@dataclass(kw_only=True, eq=False, repr=False)
+class MonitoringProcessAction(SequentialAction, HasManipulationCategory):
     """
     Watch the machine's process: for a time, until a phase is reached, or until a portion of floss has collected.
 
@@ -137,16 +135,15 @@ class MonitoringProcessAction(ActionDescription, HasManipulationCategory):
         self.process.advance(self.seconds)
         return self.seconds
 
-    @property
-    def _action_plan(self) -> PlanNode:
-        return process_step(self._run)
+    def create_steps(self) -> List[StatechartNode]:
+        return [process_step(self._run)]
 
 
 # %% top level: preparing and filling
 
 
-@dataclass
-class PrepareFlossMachineAction(ActionDescription):
+@dataclass(kw_only=True, eq=False, repr=False)
+class PrepareFlossMachineAction(HasConditions, SequentialAction):
     """
     Make the machine ready to run: turn both Lock-N-Go handles to UNLOCKED so the bell housing floats on its
     springs ("DO NOT operate with handles in the transport position", GM_MAN_EXP p. 5).
@@ -168,31 +165,28 @@ class PrepareFlossMachineAction(ActionDescription):
     The arm that turns the handles.
     """
 
-    @property
-    def _action_plan(self) -> PlanNode:
-        return sequential(
-            [MoveTorsoAction(TorsoState.LOW)]
-            + [TurningAction(handle, self.arm, 1.0) for handle in self.machine.lock_handles]
-            + [ParkArmsAction(self.robot.all_arms)]
+    def create_steps(self) -> List[StatechartNode]:
+        return (
+            [MoveTorsoAction(torso_state=TorsoState.LOW)]
+            + [TurningAction(element=handle, arm=self.arm, travel_fraction=1.0) for handle in self.machine.lock_handles]
+            + [ParkArmsAction(arms=self.robot.all_arms)]
         )
 
-    @staticmethod
-    def pre_condition(variables: Dict[str, Variable], context: Context, kwargs: Dict[str, Any]) -> ConditionType:
+    def pre_condition(self) -> ConditionType:
         """
         The motor is off: the handles are only moved on a stopped machine.
         """
-        return variable_from(kwargs["machine"].motor_switch).is_on == False  # noqa: E712
+        return variable_from(self.machine.motor_switch).is_on == False  # noqa: E712
 
-    @staticmethod
-    def post_condition(variables: Dict[str, Variable], context: Context, kwargs: Dict[str, Any]) -> ConditionType:
+    def post_condition(self) -> ConditionType:
         """
         Every handle stands UNLOCKED.
         """
-        return and_(*[variable_from(handle).is_unlocked for handle in kwargs["machine"].lock_handles])
+        return and_(*[variable_from(handle).is_unlocked for handle in self.machine.lock_handles])
 
 
-@dataclass
-class FillSpinnerHeadAction(ActionDescription):
+@dataclass(kw_only=True, eq=False, repr=False)
+class FillSpinnerHeadAction(HasConditions, SequentialAction):
     """
     Fill the stopped spinner head to 90 % with floss sugar from the Flossugar carton ("With the spinner head stopped,
     pour flossugar into the spinner head. Always fill it 90% full", GM_MAN_EXP p. 10; cartons "with an E-Z pour
@@ -259,53 +253,50 @@ class FillSpinnerHeadAction(ActionDescription):
         root = self.carton.root.global_pose.to_np()
         return float(np.linalg.norm(spout[:3, 3] - root[:3, 3]))
 
-    @property
-    def _action_plan(self) -> PlanNode:
+    def create_steps(self) -> List[StatechartNode]:
         rest = pose_above(self.carton.root.global_pose, 0.0, self.world.root)
         half = self._carton_half_height()
         spout_reach = (2 * half - self.grip_height) * math.sin(self.tilt_angle)
         grip_point = pose_above(self.carton.root.global_pose, -half + self.grip_height, self.world.root)
-        return sequential(
+        return (
             [
-                MoveTorsoAction(TorsoState.HIGH),
-                TransportingAction(self.carton, self.arm, ApproachDirection.TOWARDS_SALES_FRONT,
+                MoveTorsoAction(torso_state=TorsoState.HIGH),
+                TransportingAction(graspable=self.carton, arm=self.arm, approach=ApproachDirection.TOWARDS_SALES_FRONT,
                                    grasp_offset=(0.0, 0.0, -half + self.grip_height)),
-                NavigateAction(self.close_station),
-                PouringIntoAction(self.arm, self.machine.spinner_head.root, standoff=spout_reach,
+                NavigateAction(target_location=self.close_station),
+                PouringIntoAction(arm=self.arm, target=self.machine.spinner_head.root, standoff=spout_reach,
                                   pour_height=self.pour_height, tilt_angle=self.tilt_angle, lift_from=grip_point,
                                   may_touch=[self.machine.floss_pan.root,
                                              self.world.get_body_by_name("FlossBubble")]),
                 process_step(self._pour),
-                NavigateAction(self.machine_station),
-                ParkArmsAction([self.arm]),
-                PuttingDownAction(self.carton, rest),
-                ParkArmsAction(self.robot.all_arms),
+                NavigateAction(target_location=self.machine_station),
+                ParkArmsAction(arms=[self.arm]),
+                PuttingDownAction(graspable=self.carton, target=rest),
+                ParkArmsAction(arms=self.robot.all_arms),
             ]
         )
 
-    @staticmethod
-    def pre_condition(variables: Dict[str, Variable], context: Context, kwargs: Dict[str, Any]) -> ConditionType:
+    def pre_condition(self) -> ConditionType:
         """
         The head stands still ("NEVER add sugar when motor is running") and the arm is free.
         """
         return and_(
-            variable_from(kwargs["process"]).phase == FlossMachinePhase.OFF,
-            GripperIsFree(variables["arm"].end_effector),
+            variable_from(self.process).phase == FlossMachinePhase.OFF,
+            GripperIsFree(variable_from(self.arm).end_effector),
         )
 
-    @staticmethod
-    def post_condition(variables: Dict[str, Variable], context: Context, kwargs: Dict[str, Any]) -> ConditionType:
+    def post_condition(self) -> ConditionType:
         """
         The head is filled to at least 85 % of its capacity.
         """
-        return variable_from(kwargs["process"]).head_fill_level >= 0.85
+        return variable_from(self.process).head_fill_level >= 0.85
 
 
 # %% top level: starting and stopping
 
 
-@dataclass
-class StartFlossMachineAction(ActionDescription):
+@dataclass(kw_only=True, eq=False, repr=False)
+class StartFlossMachineAction(HasConditions, SequentialAction):
     """
     Start the machine and bring it to producing floss (GM_MAN_EXP p. 10, steps 4-6): "Motor & Master" ON, wait
     10 s, "Heat" ON, heat control to maximum for the fastest warm-up, wait until floss appears (20-30 s), then turn
@@ -334,46 +325,43 @@ class StartFlossMachineAction(ActionDescription):
     Heat control setting (fraction of its travel) once floss is produced (ILLUSTRATIVE; found by the operator).
     """
 
-    @property
-    def _action_plan(self) -> PlanNode:
+    def create_steps(self) -> List[StatechartNode]:
         timings = self.process.timings
-        return sequential(
+        return (
             [
-                MoveTorsoAction(TorsoState.LOW),
-                PressingButtonAction(self.machine.motor_switch, self.arm, 1.0),
-                MonitoringProcessAction(self.process, seconds=timings.master_to_heat_delay_s),
-                PressingButtonAction(self.machine.heat_switch, self.arm, 1.0),
-                TurningAction(self.machine.heat_control, self.arm, 1.0),
+                MoveTorsoAction(torso_state=TorsoState.LOW),
+                PressingButtonAction(element=self.machine.motor_switch, arm=self.arm, travel_fraction=1.0),
+                MonitoringProcessAction(process=self.process, seconds=timings.master_to_heat_delay_s),
+                PressingButtonAction(element=self.machine.heat_switch, arm=self.arm, travel_fraction=1.0),
+                TurningAction(element=self.machine.heat_control, arm=self.arm, travel_fraction=1.0),
                 MonitoringProcessAction(
-                    self.process, until_phase=FlossMachinePhase.PRODUCING, timeout_s=3 * timings.warm_up_s
+                    process=self.process, until_phase=FlossMachinePhase.PRODUCING, timeout_s=3 * timings.warm_up_s
                 ),
-                TurningAction(self.machine.heat_control, self.arm, self.operating_heat),
-                ParkArmsAction(self.robot.all_arms),
+                TurningAction(element=self.machine.heat_control, arm=self.arm, travel_fraction=self.operating_heat),
+                ParkArmsAction(arms=self.robot.all_arms),
             ]
         )
 
-    @staticmethod
-    def pre_condition(variables: Dict[str, Variable], context: Context, kwargs: Dict[str, Any]) -> ConditionType:
+    def pre_condition(self) -> ConditionType:
         """
         The machine is off, unlocked, and its head holds sugar.
         """
-        process = variable_from(kwargs["process"])
+        process = variable_from(self.process)
         return and_(
             process.phase == FlossMachinePhase.OFF,
             process.sugar_in_head_kg > 0.0,
-            *[variable_from(handle).is_unlocked for handle in kwargs["machine"].lock_handles],
+            *[variable_from(handle).is_unlocked for handle in self.machine.lock_handles],
         )
 
-    @staticmethod
-    def post_condition(variables: Dict[str, Variable], context: Context, kwargs: Dict[str, Any]) -> ConditionType:
+    def post_condition(self) -> ConditionType:
         """
         The machine produces floss.
         """
-        return variable_from(kwargs["process"]).phase == FlossMachinePhase.PRODUCING
+        return variable_from(self.process).phase == FlossMachinePhase.PRODUCING
 
 
-@dataclass
-class StopFlossMachineAction(ActionDescription):
+@dataclass(kw_only=True, eq=False, repr=False)
+class StopFlossMachineAction(HasConditions, SequentialAction):
     """
     Stop the machine, e.g. to refill (GM_MAN_EXP p. 10, step 8): "Heat" OFF, let the motor run a few seconds to
     start cooling the head, then "Motor & Master" OFF and wait until the head stands still.
@@ -401,29 +389,27 @@ class StopFlossMachineAction(ActionDescription):
     How long the motor runs on after "Heat" OFF ("a few seconds").
     """
 
-    @property
-    def _action_plan(self) -> PlanNode:
-        return sequential(
+    def create_steps(self) -> List[StatechartNode]:
+        return (
             [
-                MoveTorsoAction(TorsoState.LOW),
-                PressingButtonAction(self.machine.heat_switch, self.arm, 0.0),
-                MonitoringProcessAction(self.process, seconds=self.run_after_heat_off_s),
-                PressingButtonAction(self.machine.motor_switch, self.arm, 0.0),
-                MonitoringProcessAction(self.process, until_phase=FlossMachinePhase.OFF, timeout_s=30.0),
-                ParkArmsAction(self.robot.all_arms),
+                MoveTorsoAction(torso_state=TorsoState.LOW),
+                PressingButtonAction(element=self.machine.heat_switch, arm=self.arm, travel_fraction=0.0),
+                MonitoringProcessAction(process=self.process, seconds=self.run_after_heat_off_s),
+                PressingButtonAction(element=self.machine.motor_switch, arm=self.arm, travel_fraction=0.0),
+                MonitoringProcessAction(process=self.process, until_phase=FlossMachinePhase.OFF, timeout_s=30.0),
+                ParkArmsAction(arms=self.robot.all_arms),
             ]
         )
 
-    @staticmethod
-    def post_condition(variables: Dict[str, Variable], context: Context, kwargs: Dict[str, Any]) -> ConditionType:
+    def post_condition(self) -> ConditionType:
         """
         The machine is off.
         """
-        return variable_from(kwargs["process"]).phase == FlossMachinePhase.OFF
+        return variable_from(self.process).phase == FlossMachinePhase.OFF
 
 
-@dataclass
-class RefillSpinnerHeadAction(ActionDescription):
+@dataclass(kw_only=True, eq=False, repr=False)
+class RefillSpinnerHeadAction(HasConditions, SequentialAction):
     """
     Refill a running machine: stop it, fill the stopped head, start it again ("When the floss head needs to be
     refilled with sugar ... turn the Heat Switch OFF", GM_MAN_EXP p. 10).
@@ -459,13 +445,12 @@ class RefillSpinnerHeadAction(ActionDescription):
     Where the base stands for pouring.
     """
 
-    @property
-    def _action_plan(self) -> PlanNode:
-        return sequential(
+    def create_steps(self) -> List[StatechartNode]:
+        return (
             [
-                StopFlossMachineAction(self.machine, self.process, self.arm),
-                FillSpinnerHeadAction(self.machine, self.process, self.carton, self.arm, self.machine_station, self.close_station),
-                StartFlossMachineAction(self.machine, self.process, self.arm),
+                StopFlossMachineAction(machine=self.machine, process=self.process, arm=self.arm),
+                FillSpinnerHeadAction(machine=self.machine, process=self.process, carton=self.carton, arm=self.arm, machine_station=self.machine_station, close_station=self.close_station),
+                StartFlossMachineAction(machine=self.machine, process=self.process, arm=self.arm),
             ]
         )
 
@@ -473,8 +458,8 @@ class RefillSpinnerHeadAction(ActionDescription):
 # %% top level: making and serving
 
 
-@dataclass
-class FinishPortionAction(ActionDescription):
+@dataclass(kw_only=True, eq=False, repr=False)
+class FinishPortionAction(HasConditions, SequentialAction):
     """
     Wrap the gathered floss on the held stick into a portion with figure eights above the pan ("This leaves giant
     pockets and makes the final product appear larger", GM_MAN_EXP p. 11); the candy belief becomes WRAPPED.
@@ -502,25 +487,23 @@ class FinishPortionAction(ActionDescription):
     The arm holding the stick.
     """
 
-    @property
-    def _action_plan(self) -> PlanNode:
-        return sequential(
+    def create_steps(self) -> List[StatechartNode]:
+        return (
             [
                 WrappingAction(arm=self.arm, tool=self.stick, above=self.machine.floss_pan.root),
                 process_step(self.process.candy_wrapped),
             ]
         )
 
-    @staticmethod
-    def pre_condition(variables: Dict[str, Variable], context: Context, kwargs: Dict[str, Any]) -> ConditionType:
+    def pre_condition(self) -> ConditionType:
         """
         The arm holds the stick.
         """
-        return GripperIsNotFree(variables["arm"].end_effector)
+        return GripperIsNotFree(variable_from(self.arm).end_effector)
 
 
-@dataclass
-class FormPortionAction(ActionDescription):
+@dataclass(kw_only=True, eq=False, repr=False)
+class FormPortionAction(HasConditions, SequentialAction):
     """
     Form a portion on the held stick: wait until a portion of floss has collected, gather the web of floss from the
     pan onto the stick and lift it out ("DO NOT roll floss while the cone is inside the pan", GM_MAN_EXP p. 11), then
@@ -549,31 +532,29 @@ class FormPortionAction(ActionDescription):
     The arm holding the stick.
     """
 
-    @property
-    def _action_plan(self) -> PlanNode:
+    def create_steps(self) -> List[StatechartNode]:
         pan, stick_name = self.machine.floss_pan.root, self.stick.root.name.name
-        return sequential(
+        return (
             [
-                MonitoringProcessAction(self.process, until_portion=True, timeout_s=120.0),
+                MonitoringProcessAction(process=self.process, until_portion=True, timeout_s=120.0),
                 GatheringAction(arm=self.arm, tool=self.stick, container=pan),
                 process_step(lambda: self.process.take_portion(stick_name)),
-                FinishPortionAction(self.machine, self.process, self.stick, self.arm),
+                FinishPortionAction(machine=self.machine, process=self.process, stick=self.stick, arm=self.arm),
             ]
         )
 
-    @staticmethod
-    def pre_condition(variables: Dict[str, Variable], context: Context, kwargs: Dict[str, Any]) -> ConditionType:
+    def pre_condition(self) -> ConditionType:
         """
         The machine produces floss and the arm holds the stick.
         """
         return and_(
-            variable_from(kwargs["process"]).phase == FlossMachinePhase.PRODUCING,
-            GripperIsNotFree(variables["arm"].end_effector),
+            variable_from(self.process).phase == FlossMachinePhase.PRODUCING,
+            GripperIsNotFree(variable_from(self.arm).end_effector),
         )
 
 
-@dataclass
-class MakeCottonCandyAction(ActionDescription):
+@dataclass(kw_only=True, eq=False, repr=False)
+class MakeCottonCandyAction(HasConditions, SequentialAction):
     """
     Make one portion (GM_MAN_EXP p. 11): take a stick from the quiver and form the portion on it.
 
@@ -600,36 +581,33 @@ class MakeCottonCandyAction(ActionDescription):
     The arm holding the stick.
     """
 
-    @property
-    def _action_plan(self) -> PlanNode:
-        return sequential(
+    def create_steps(self) -> List[StatechartNode]:
+        return (
             [
-                MoveTorsoAction(TorsoState.LOW),
-                TransportingAction(self.stick, self.arm, ApproachDirection.TOWARDS_LEFT_WALL),
-                FormPortionAction(self.machine, self.process, self.stick, self.arm),
+                MoveTorsoAction(torso_state=TorsoState.LOW),
+                TransportingAction(graspable=self.stick, arm=self.arm, approach=ApproachDirection.TOWARDS_LEFT_WALL),
+                FormPortionAction(machine=self.machine, process=self.process, stick=self.stick, arm=self.arm),
             ]
         )
 
-    @staticmethod
-    def pre_condition(variables: Dict[str, Variable], context: Context, kwargs: Dict[str, Any]) -> ConditionType:
+    def pre_condition(self) -> ConditionType:
         """
         The machine produces floss and the arm is free to take a stick.
         """
         return and_(
-            variable_from(kwargs["process"]).phase == FlossMachinePhase.PRODUCING,
-            GripperIsFree(variables["arm"].end_effector),
+            variable_from(self.process).phase == FlossMachinePhase.PRODUCING,
+            GripperIsFree(variable_from(self.arm).end_effector),
         )
 
-    @staticmethod
-    def post_condition(variables: Dict[str, Variable], context: Context, kwargs: Dict[str, Any]) -> ConditionType:
+    def post_condition(self) -> ConditionType:
         """
         The arm holds the stick with the portion.
         """
-        return GripperIsNotFree(variables["arm"].end_effector)
+        return GripperIsNotFree(variable_from(self.arm).end_effector)
 
 
-@dataclass
-class ServeCottonCandyAction(ActionDescription):
+@dataclass(kw_only=True, eq=False, repr=False)
+class ServeCottonCandyAction(HasConditions, ReattachesBranches, SequentialAction):
     """
     Hand a finished portion to the customer: drive to the serving station, present the stick in the handover zone
     over the counter, let go once the customer holds it, and return to the machine.
@@ -681,44 +659,41 @@ class ServeCottonCandyAction(ActionDescription):
         return Pose.from_xyz_rpy(x=float(zone[0, 3]), y=float(zone[1, 3]), z=float(zone[2, 3]), pitch=-math.pi / 2,
                                  reference_frame=self.world.root)
 
-    @property
-    def _action_plan(self) -> PlanNode:
-        return sequential(
+    def create_steps(self) -> List[StatechartNode]:
+        return (
             [
-                NavigateAction(self.serving_station),
-                HandingOverAction(self.stick, self.arm, self._handover_pose()),
+                NavigateAction(target_location=self.serving_station),
+                HandingOverAction(graspable=self.stick, arm=self.arm, handover_pose=self._handover_pose()),
             ]
-            + ([ReAttachNode(body=self.stick.root, new_parent=self.customer.root)] if self.customer else [])
+            + (self.reattach(self.stick.root, self.customer.root) if self.customer else [])
             + ([process_step(lambda: self.process.candy_delivered(self.customer.root.name.name))]
                if self.customer and self.process else [])
             + [
-                ParkArmsAction(self.robot.all_arms),
-                NavigateAction(self.machine_station),
+                ParkArmsAction(arms=self.robot.all_arms),
+                NavigateAction(target_location=self.machine_station),
             ]
         )
 
-    @staticmethod
-    def pre_condition(variables: Dict[str, Variable], context: Context, kwargs: Dict[str, Any]) -> ConditionType:
+    def pre_condition(self) -> ConditionType:
         """
         The arm holds the stick.
         """
-        return GripperIsNotFree(variables["arm"].end_effector)
+        return GripperIsNotFree(variable_from(self.arm).end_effector)
 
-    @staticmethod
-    def post_condition(variables: Dict[str, Variable], context: Context, kwargs: Dict[str, Any]) -> ConditionType:
+    def post_condition(self) -> ConditionType:
         """
         The arm is free again, and the customer (if given) holds the stick.
         """
-        if kwargs.get("customer") is None:
-            return GripperIsFree(variables["arm"].end_effector)
+        if self.customer is None:
+            return GripperIsFree(variable_from(self.arm).end_effector)
         return and_(
-            GripperIsFree(variables["arm"].end_effector),
-            variable_from(kwargs["stick"].root).parent_kinematic_structure_entity == kwargs["customer"].root,
+            GripperIsFree(variable_from(self.arm).end_effector),
+            variable_from(self.stick.root).parent_kinematic_structure_entity == self.customer.root,
         )
 
 
-@dataclass
-class SellCottonCandyAction(ActionDescription):
+@dataclass(kw_only=True, eq=False, repr=False)
+class SellCottonCandyAction(HasConditions, SequentialAction):
     """
     Sell one portion: refill the head first if the projection says so, make the portion and serve it.
     """
@@ -774,20 +749,19 @@ class SellCottonCandyAction(ActionDescription):
     the caller's projection of the sugar budget (:func:`project_refills`), not by reading the process now.
     """
 
-    @property
-    def _action_plan(self) -> PlanNode:
+    def create_steps(self) -> List[StatechartNode]:
         steps = []
         if self.refill_first:
-            steps.append(RefillSpinnerHeadAction(self.machine, self.process, self.carton, self.arm, self.machine_station, self.close_station))
+            steps.append(RefillSpinnerHeadAction(machine=self.machine, process=self.process, carton=self.carton, arm=self.arm, machine_station=self.machine_station, close_station=self.close_station))
         steps += [
-            MakeCottonCandyAction(self.machine, self.process, self.stick, self.arm),
-            ServeCottonCandyAction(self.stick, self.handover, self.arm, self.serving_station, self.machine_station),
+            MakeCottonCandyAction(machine=self.machine, process=self.process, stick=self.stick, arm=self.arm),
+            ServeCottonCandyAction(stick=self.stick, handover=self.handover, arm=self.arm, serving_station=self.serving_station, machine_station=self.machine_station),
         ]
-        return sequential(steps)
+        return steps
 
 
-@dataclass
-class MakeAndServeCottonCandyAction(ActionDescription):
+@dataclass(kw_only=True, eq=False, repr=False)
+class MakeAndServeCottonCandyAction(HasConditions, SequentialAction):
     """
     Make a portion of cotton candy and hand it to a customer, from whatever state the machine is in.
 
@@ -857,53 +831,52 @@ class MakeAndServeCottonCandyAction(ActionDescription):
         """
         timings = self.process.timings
         enough = self.process.sugar_in_head_kg + self.process.floss_in_pan_kg + 1e-9 >= timings.portion_sugar_kg
-        fill = FillSpinnerHeadAction(self.machine, self.process, self.carton, self.arm, self.machine_station,
-                                     self.close_station)
-        start = StartFlossMachineAction(self.machine, self.process, self.arm)
+        fill = FillSpinnerHeadAction(machine=self.machine, process=self.process, carton=self.carton, arm=self.arm,
+                                     machine_station=self.machine_station, close_station=self.close_station)
+        start = StartFlossMachineAction(machine=self.machine, process=self.process, arm=self.arm)
         if self.process.phase is FlossMachinePhase.OFF:
             return ([] if enough else [fill]) + [start]
         if not enough:
-            return [RefillSpinnerHeadAction(self.machine, self.process, self.carton, self.arm, self.machine_station,
-                                            self.close_station)]
+            return [RefillSpinnerHeadAction(machine=self.machine, process=self.process, carton=self.carton,
+                                            arm=self.arm, machine_station=self.machine_station,
+                                            close_station=self.close_station)]
         return []
 
-    @property
-    def _action_plan(self) -> PlanNode:
-        return sequential(
+    def create_steps(self) -> List[StatechartNode]:
+        return (
             self._preparation()
             + [
-                MakeCottonCandyAction(self.machine, self.process, self.stick, self.arm),
-                ServeCottonCandyAction(self.stick, self.handover, self.arm, self.serving_station,
-                                       self.machine_station, customer=self.customer, process=self.process),
+                MakeCottonCandyAction(machine=self.machine, process=self.process, stick=self.stick, arm=self.arm),
+                ServeCottonCandyAction(stick=self.stick, handover=self.handover, arm=self.arm,
+                                       serving_station=self.serving_station, machine_station=self.machine_station,
+                                       customer=self.customer, process=self.process),
             ]
         )
 
-    @staticmethod
-    def pre_condition(variables: Dict[str, Variable], context: Context, kwargs: Dict[str, Any]) -> ConditionType:
+    def pre_condition(self) -> ConditionType:
         """
         The arm is free, and the stick is still unused (not with a customer).
         """
         return and_(
-            GripperIsFree(variables["arm"].end_effector),
-            variable_from(kwargs["stick"].root).parent_kinematic_structure_entity != kwargs["customer"].root,
+            GripperIsFree(variable_from(self.arm).end_effector),
+            variable_from(self.stick.root).parent_kinematic_structure_entity != self.customer.root,
         )
 
-    @staticmethod
-    def post_condition(variables: Dict[str, Variable], context: Context, kwargs: Dict[str, Any]) -> ConditionType:
+    def post_condition(self) -> ConditionType:
         """
         The customer holds the stick with the portion, and the robot's arm is free again.
         """
         return and_(
-            GripperIsFree(variables["arm"].end_effector),
-            variable_from(kwargs["stick"].root).parent_kinematic_structure_entity == kwargs["customer"].root,
+            GripperIsFree(variable_from(self.arm).end_effector),
+            variable_from(self.stick.root).parent_kinematic_structure_entity == self.customer.root,
         )
 
 
 # %% top level: end of the day
 
 
-@dataclass
-class ShutDownFlossMachineAction(ActionDescription):
+@dataclass(kw_only=True, eq=False, repr=False)
+class ShutDownFlossMachineAction(HasConditions, SequentialAction):
     """
     Shut the machine down for the day (GM_MAN_EXP p. 13): run the head empty, burn out the remaining sugar at
     maximum heat for 3-4 minutes, "Heat" OFF and let the motor cool the head for 1-2 minutes, then "Motor & Master"
@@ -927,46 +900,43 @@ class ShutDownFlossMachineAction(ActionDescription):
     The arm that operates the controls.
     """
 
-    @property
-    def _action_plan(self) -> PlanNode:
+    def create_steps(self) -> List[StatechartNode]:
         timings = self.process.timings
-        return sequential(
+        return (
             [
-                MoveTorsoAction(TorsoState.LOW),
+                MoveTorsoAction(torso_state=TorsoState.LOW),
                 MonitoringProcessAction(
-                    self.process, until_phase=FlossMachinePhase.RUNNING_EMPTY, timeout_s=600.0
+                    process=self.process, until_phase=FlossMachinePhase.RUNNING_EMPTY, timeout_s=600.0
                 ),
-                TurningAction(self.machine.heat_control, self.arm, 1.0),
-                MonitoringProcessAction(self.process, seconds=timings.burn_out_s),
-                PressingButtonAction(self.machine.heat_switch, self.arm, 0.0),
-                MonitoringProcessAction(self.process, seconds=timings.cool_down_s),
-                PressingButtonAction(self.machine.motor_switch, self.arm, 0.0),
-                MonitoringProcessAction(self.process, until_phase=FlossMachinePhase.OFF, timeout_s=30.0),
-                ParkArmsAction(self.robot.all_arms),
+                TurningAction(element=self.machine.heat_control, arm=self.arm, travel_fraction=1.0),
+                MonitoringProcessAction(process=self.process, seconds=timings.burn_out_s),
+                PressingButtonAction(element=self.machine.heat_switch, arm=self.arm, travel_fraction=0.0),
+                MonitoringProcessAction(process=self.process, seconds=timings.cool_down_s),
+                PressingButtonAction(element=self.machine.motor_switch, arm=self.arm, travel_fraction=0.0),
+                MonitoringProcessAction(process=self.process, until_phase=FlossMachinePhase.OFF, timeout_s=30.0),
+                ParkArmsAction(arms=self.robot.all_arms),
             ]
         )
 
-    @staticmethod
-    def pre_condition(variables: Dict[str, Variable], context: Context, kwargs: Dict[str, Any]) -> ConditionType:
+    def pre_condition(self) -> ConditionType:
         """
         The arm is free (no stick or carton held while working the controls).
         """
-        return GripperIsFree(variables["arm"].end_effector)
+        return GripperIsFree(variable_from(self.arm).end_effector)
 
-    @staticmethod
-    def post_condition(variables: Dict[str, Variable], context: Context, kwargs: Dict[str, Any]) -> ConditionType:
+    def post_condition(self) -> ConditionType:
         """
         The machine is off and the head has been burnt out for the full time.
         """
-        process = variable_from(kwargs["process"])
+        process = variable_from(self.process)
         return and_(
             process.phase == FlossMachinePhase.OFF,
-            process.burnt_out_s >= kwargs["process"].timings.burn_out_s - 1.0,
+            process.burnt_out_s >= self.process.timings.burn_out_s - 1.0,
         )
 
 
-@dataclass
-class CleanFlossMachineAction(ActionDescription):
+@dataclass(kw_only=True, eq=False, repr=False)
+class CleanFlossMachineAction(HasConditions, SequentialAction):
     """
     Clean the cooled machine (GM_MAN_EXP p. 13): wipe the stainless parts around it with a damp cloth ("Wipe the
     stainless steel parts with a clean cloth"); "NEVER put water in the floss head."
@@ -1006,27 +976,25 @@ class CleanFlossMachineAction(ActionDescription):
         return Pose.from_xyz_rpy(x=float(sponge[0, 3]), y=float(bbox.max_y) - 0.08, z=float(bbox.max_z),
                                  reference_frame=self.world.root)
 
-    @property
-    def _action_plan(self) -> PlanNode:
+    def create_steps(self) -> List[StatechartNode]:
         rest = pose_above(self.sponge.root.global_pose, 0.0, self.world.root)
-        return sequential(
+        return (
             [
-                TransportingAction(self.sponge, self.arm, ApproachDirection.TOWARDS_SALES_FRONT),
+                TransportingAction(graspable=self.sponge, arm=self.arm, approach=ApproachDirection.TOWARDS_SALES_FRONT),
                 CategorisedWipingAction(
                     arm=self.arm, tool=self.sponge, target_pose=self._wipe_pose(),
                     technique=WipingTechnique.WIPE, length=0.15, cycles=2.0,
                 ),
-                PuttingDownAction(self.sponge, rest),
-                ParkArmsAction(self.robot.all_arms),
+                PuttingDownAction(graspable=self.sponge, target=rest),
+                ParkArmsAction(arms=self.robot.all_arms),
             ]
         )
 
-    @staticmethod
-    def pre_condition(variables: Dict[str, Variable], context: Context, kwargs: Dict[str, Any]) -> ConditionType:
+    def pre_condition(self) -> ConditionType:
         """
         The machine is off ("Allow to cool before cleaning").
         """
-        return variable_from(kwargs["process"]).phase == FlossMachinePhase.OFF
+        return variable_from(self.process).phase == FlossMachinePhase.OFF
 
 
 def project_refills(process: FlossMachineProcess, portions: int, head_filled: bool = True) -> List[bool]:

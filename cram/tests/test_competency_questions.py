@@ -7,13 +7,13 @@ from __future__ import annotations
 
 import pytest
 
-from coraplex.datastructures.dataclasses import Context
-from cramera.knowledge.query_runner import EqlQueryRunner
+from cramera_bridge.questions.runner import QueryRunner
 from semantic_digital_twin.robots.pr2 import PR2
 
 from cotton_candy.booth_world import BoothWorldBuilder, TwinModule
 from cotton_candy.competency_questions import QUESTIONS, CottonCandyKnowledgeSource
 from cotton_candy.ontology.production import OntologyBuilder
+from cotton_candy.plan_running import BoothContext
 from cotton_candy.process import FlossMachineProcess, FlossMachineTimings
 from cotton_candy.semantic_annotations import CottonCandyMachine
 
@@ -24,14 +24,14 @@ def source():
     robot = world.get_semantic_annotations_by_type(PR2)[0]
     machine = world.get_semantic_annotations_by_type(CottonCandyMachine)[0]
     process = FlossMachineProcess(machine, FlossMachineTimings.from_twin_register(TwinModule.PARAMS.load()))
-    ontology = OntologyBuilder(world, Context(world, robot, sampling_seed=0), process).build()
+    ontology = OntologyBuilder(world, BoothContext(world, robot, sampling_seed=0), process).build()
     return CottonCandyKnowledgeSource(ontology, process, world)
 
 
 @pytest.fixture(scope="module")
 def runner(source):
     knowledge = source.knowledge()[0]
-    return EqlQueryRunner(domains=knowledge.domains, extra_names=knowledge.extra_names)
+    return QueryRunner(domains=knowledge.domains, extra_names=knowledge.extra_names)
 
 
 def answer(runner, competence: str, text_start: str) -> list:

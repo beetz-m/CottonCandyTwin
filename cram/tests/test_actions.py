@@ -6,8 +6,6 @@ from __future__ import annotations
 
 import pytest
 
-from coraplex.datastructures.dataclasses import Context
-from coraplex.plans.factories import sequential
 from krrood.entity_query_language.factories import evaluate_condition
 from semantic_digital_twin.robots.pr2 import PR2
 from semantic_digital_twin.world_description.world_entity import Body
@@ -23,8 +21,14 @@ from cotton_candy.actions import (
     StartFlossMachineAction,
     StopFlossMachineAction,
 )
-from cotton_candy.manipulation_categories import ManipulationActionCategory as C, PressingButtonAction, category_profile
+from cotton_candy.manipulation_categories import (
+    ManipulationActionCategory as C,
+    PressingButtonAction,
+    category_profile,
+    plan_steps,
+)
 from cotton_candy.booth_world import BoothWorldBuilder, RobotStation, TwinModule
+from cotton_candy.plan_running import BoothContext
 from cotton_candy.process import (
     FlossMachinePhase,
     FlossMachineProcess,
@@ -49,7 +53,7 @@ def booth():
     robot = world.get_semantic_annotations_by_type(PR2)[0]
     machine = world.get_semantic_annotations_by_type(CottonCandyMachine)[0]
     process = FlossMachineProcess(machine, FlossMachineTimings.from_twin_register(TwinModule.PARAMS.load()))
-    return world, robot, Context(world, robot, sampling_seed=0), machine, process
+    return world, robot, BoothContext(world, robot, sampling_seed=0), machine, process
 
 
 @pytest.fixture(autouse=True)
@@ -64,7 +68,7 @@ def machine_off(booth):
 
 
 def condition_holds(action, condition) -> bool:
-    return bool(evaluate_condition(condition(action.bound_variables, action.context, action.designator_parameter)))
+    return bool(evaluate_condition(condition()))
 
 
 def set_fraction(element, fraction: float) -> None:
@@ -122,11 +126,11 @@ def test_process_follows_the_manual(booth):
 
 def test_pressing_a_button_closes_the_gripper_pushes_and_lets_go(booth):
     world, robot, context, machine, process = booth
-    action = PressingButtonAction(machine.motor_switch, robot.right_arm, 1.0)
-    sequential([action], context)
-    names = [type(node.designator).__name__ for node in action._action_plan.children]
-    assert names == ["ParkArmsAction", "MoveGripperMotion", "GraspingAction", "TurnToMotion", "MoveGripperMotion",
-                     "MoveToolCenterPointMotion"]
+    action = PressingButtonAction(element=machine.motor_switch, arm=robot.right_arm, travel_fraction=1.0)
+    context.expand(action)
+    names = [type(node).__name__ for node in plan_steps(action)]
+    assert names == ["ParkArmsAction", "SetGripperAction", "GraspingAction", "TurnToAction", "SetGripperAction",
+                     "MoveManipulatorAction"]
 
 
 def test_top_level_designators_map_onto_manipulation_categories(booth):
@@ -137,20 +141,22 @@ def test_top_level_designators_map_onto_manipulation_categories(booth):
     arm = robot.right_arm
     one = lambda t: world.get_semantic_annotations_by_type(t)[0]
     expected = [
-        (PrepareFlossMachineAction(machine, arm), [C.TURNING, C.TURNING]),
-        (FillSpinnerHeadAction(machine, process, one(SugarCarton), arm, RobotStation.MACHINE.pose(world.root),
-                               RobotStation.MACHINE_CLOSE.pose(world.root)),
+        (PrepareFlossMachineAction(machine=machine, arm=arm), [C.TURNING, C.TURNING]),
+        (FillSpinnerHeadAction(machine=machine, process=process, carton=one(SugarCarton), arm=arm,
+                               machine_station=RobotStation.MACHINE.pose(world.root),
+                               close_station=RobotStation.MACHINE_CLOSE.pose(world.root)),
          [C.TRANSPORTING, C.POURING, C.TRANSPORTING]),
-        (StartFlossMachineAction(machine, process, arm),
+        (StartFlossMachineAction(machine=machine, process=process, arm=arm),
          [C.PRESSING_BUTTON, C.MONITORING, C.PRESSING_BUTTON, C.TURNING, C.MONITORING, C.TURNING]),
-        (MakeCottonCandyAction(machine, process, one(CandyStick), arm),
+        (MakeCottonCandyAction(machine=machine, process=process, stick=one(CandyStick), arm=arm),
          [C.TRANSPORTING, C.MONITORING, C.GATHERING, C.WRAPPING]),
-        (StopFlossMachineAction(machine, process, arm),
+        (StopFlossMachineAction(machine=machine, process=process, arm=arm),
          [C.PRESSING_BUTTON, C.MONITORING, C.PRESSING_BUTTON, C.MONITORING]),
-        (CleanFlossMachineAction(machine, process, one(Sponge), arm), [C.TRANSPORTING, C.WIPING, C.TRANSPORTING]),
+        (CleanFlossMachineAction(machine=machine, process=process, sponge=one(Sponge), arm=arm),
+         [C.TRANSPORTING, C.WIPING, C.TRANSPORTING]),
     ]
     for action, categories in expected:
-        sequential([action], context)
+        context.expand(action)
         assert category_profile(action) == categories, type(action).__name__
 
 
@@ -158,9 +164,10 @@ def test_fill_needs_a_stopped_head(booth):
     world, robot, context, machine, _ = booth
     process = FlossMachineProcess(machine)
     carton = world.get_semantic_annotations_by_type(SugarCarton)[0]
-    action = FillSpinnerHeadAction(machine, process, carton, robot.right_arm, RobotStation.MACHINE.pose(world.root),
-                                   RobotStation.MACHINE_CLOSE.pose(world.root))
-    sequential([action], context)
+    action = FillSpinnerHeadAction(machine=machine, process=process, carton=carton, arm=robot.right_arm,
+                                   machine_station=RobotStation.MACHINE.pose(world.root),
+                                   close_station=RobotStation.MACHINE_CLOSE.pose(world.root))
+    context.expand(action)
     assert condition_holds(action, action.pre_condition)
     set_fraction(machine.motor_switch, 1.0)
     assert not condition_holds(action, action.pre_condition)
@@ -170,8 +177,8 @@ def test_fill_needs_a_stopped_head(booth):
 def test_start_needs_unlocked_handles_and_sugar(booth):
     world, robot, context, machine, _ = booth
     process = FlossMachineProcess(machine)
-    action = StartFlossMachineAction(machine, process, robot.right_arm)
-    sequential([action], context)
+    action = StartFlossMachineAction(machine=machine, process=process, arm=robot.right_arm)
+    context.expand(action)
     assert not condition_holds(action, action.pre_condition)
     process.pour_sugar(0.05)
     for handle in machine.lock_handles:
@@ -183,8 +190,8 @@ def test_start_needs_unlocked_handles_and_sugar(booth):
 
 def test_prepare_post_condition_reads_the_handles(booth):
     world, robot, context, machine, process = booth
-    action = PrepareFlossMachineAction(machine, robot.right_arm)
-    sequential([action], context)
+    action = PrepareFlossMachineAction(machine=machine, arm=robot.right_arm)
+    context.expand(action)
     assert not condition_holds(action, action.post_condition)
     for handle in machine.lock_handles:
         set_fraction(handle, 1.0)
@@ -199,17 +206,17 @@ def test_selling_refills_only_when_the_head_runs_short(booth, refill_needed):
     process = FlossMachineProcess(machine)
     stick = world.get_semantic_annotations_by_type(CandyStick)[0]
     action = SellCottonCandyAction(
-        machine, process, stick,
-        world.get_semantic_annotations_by_type(SugarCarton)[0],
-        world.get_semantic_annotations_by_type(HandoverZone)[0],
-        robot.right_arm,
-        RobotStation.SERVING.pose(world.root),
-        RobotStation.MACHINE.pose(world.root),
-        RobotStation.MACHINE_CLOSE.pose(world.root),
+        machine=machine, process=process, stick=stick,
+        carton=world.get_semantic_annotations_by_type(SugarCarton)[0],
+        handover=world.get_semantic_annotations_by_type(HandoverZone)[0],
+        arm=robot.right_arm,
+        serving_station=RobotStation.SERVING.pose(world.root),
+        machine_station=RobotStation.MACHINE.pose(world.root),
+        close_station=RobotStation.MACHINE_CLOSE.pose(world.root),
         refill_first=refill_needed,
     )
-    sequential([action], context)
-    names = [type(node.designator).__name__ for node in action._action_plan.children]
+    context.expand(action)
+    names = [type(node).__name__ for node in plan_steps(action)]
     assert ("RefillSpinnerHeadAction" in names) is refill_needed
     assert names[-2:] == ["MakeCottonCandyAction", "ServeCottonCandyAction"]
 
@@ -219,16 +226,17 @@ def test_every_top_level_designator_builds_a_plan(booth):
     arm = robot.right_arm
     stick = world.get_semantic_annotations_by_type(CandyStick)[1]
     actions = [
-        PrepareFlossMachineAction(machine, arm),
-        StartFlossMachineAction(machine, process, arm),
-        MakeCottonCandyAction(machine, process, stick, arm),
-        StopFlossMachineAction(machine, process, arm),
-        ShutDownFlossMachineAction(machine, process, arm),
-        CleanFlossMachineAction(machine, process, world.get_semantic_annotations_by_type(Sponge)[0], arm),
+        PrepareFlossMachineAction(machine=machine, arm=arm),
+        StartFlossMachineAction(machine=machine, process=process, arm=arm),
+        MakeCottonCandyAction(machine=machine, process=process, stick=stick, arm=arm),
+        StopFlossMachineAction(machine=machine, process=process, arm=arm),
+        ShutDownFlossMachineAction(machine=machine, process=process, arm=arm),
+        CleanFlossMachineAction(machine=machine, process=process,
+                                sponge=world.get_semantic_annotations_by_type(Sponge)[0], arm=arm),
     ]
     for action in actions:
-        sequential([action], context)
-        assert action._action_plan.children
+        context.expand(action)
+        assert plan_steps(action)
 
 
 def test_refill_projection_follows_the_sugar_budget(booth):

@@ -192,11 +192,11 @@ def write(ontology: CottonCandyProductionOntology, path: str) -> str:
 
 
 def main() -> None:
-    from coraplex.datastructures.dataclasses import Context
     from semantic_digital_twin.robots.pr2 import PR2
 
     from cotton_candy.booth_world import BoothWorldBuilder, TwinModule, twin_root
     from cotton_candy.ontology.production import OntologyBuilder
+    from cotton_candy.plan_running import BoothContext
     from cotton_candy.process import FlossMachineProcess, FlossMachineTimings
     from cotton_candy.semantic_annotations import CottonCandyMachine
 
@@ -204,7 +204,7 @@ def main() -> None:
     robot = world.get_semantic_annotations_by_type(PR2)[0]
     machine = world.get_semantic_annotations_by_type(CottonCandyMachine)[0]
     process = FlossMachineProcess(machine, FlossMachineTimings.from_twin_register(TwinModule.PARAMS.load()))
-    ontology = OntologyBuilder(world, Context(world, robot, sampling_seed=0), process).build()
+    ontology = OntologyBuilder(world, BoothContext(world, robot, sampling_seed=0), process).build()
     out = write(ontology, os.path.join(twin_root(), "ontology", "build", "cotton_candy_production.ofn"))
     counts = {k: len(v) for k, v in vars(ontology).items()}
     print("wrote", out, counts)

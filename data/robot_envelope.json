@@ -1,9 +1,9 @@
 {
  "_provenance": {
-  "git": "d93b946",
-  "generated": "2026-10-20T12:33:24",
+  "git": "2b1d2d5",
+  "generated": "2026-11-06T21:38:30",
   "inputs": {
-   "cram/cotton_candy/robot_envelope.py": "4889f9c5e1a28ac1"
+   "cram/cotton_candy/robot_envelope.py": "1085f02aee2449a3"
   }
  },
  "robot": "PR2",

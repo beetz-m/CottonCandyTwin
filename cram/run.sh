@@ -5,7 +5,10 @@ set -eo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
 source /opt/ros/jazzy/setup.bash
 source ~/ros_ws/install/setup.bash
-export PYTHONPATH="$HERE:${PYTHONPATH:-}"
+# the stand-alone cramera's question engine (cramera_bridge.questions) for the competency questions: cramera left the
+# CRAM monorepo in November 2026; its question engine imports only krrood, so it runs in cram-env (read-only use)
+CRAMERA_PACKAGES="$HOME/cramera/packages"
+export PYTHONPATH="$HERE:$CRAMERA_PACKAGES/bridge/src:$CRAMERA_PACKAGES/protocol/src:$CRAMERA_PACKAGES/viewer/src:${PYTHONPATH:-}"
 CMD="$1"; shift
 case "$CMD" in
   python) exec ~/.virtualenvs/cram-env/bin/python "$@" ;;

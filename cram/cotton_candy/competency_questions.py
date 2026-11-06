@@ -1,6 +1,10 @@
 """
 Competency questions of the cotton candy production ontology, as EQL presets for cramera's query panel.
 
+The query engine is the stand-alone cramera's (``cramera_bridge.questions``, ``~/cramera/packages``): cramera left the
+CRAM monorepo in November 2026, together with ``cramera.knowledge``; its question engine imports only krrood, so it
+answers in cram-env (``cram/run.sh`` puts the stand-alone packages on the path).
+
 The questions range over the ontology's individuals (which link to the scene graph's semantic annotations) and over
 the live state of the world and the machine's process. Each question names the competence it tests; the expected
 answers are checked in ``tests/test_competency_questions.py`` against hand-curated gold answers.
@@ -12,9 +16,9 @@ from dataclasses import dataclass
 
 from typing_extensions import Any, Dict, List
 
-from cramera.knowledge.presets import Preset
-from cramera.knowledge.query_domain import QueryDomain
-from cramera.knowledge.queryable_knowledge import QueryableKnowledge, QueryScope
+from cramera_bridge.questions.knowledge import QueryableKnowledge, QueryDomain
+from cramera_bridge.questions.presets import Preset
+from cramera_protocol.questions import QueryScope
 
 from cotton_candy.ontology.production import (
     Artefact,
@@ -61,7 +65,7 @@ class CompetencyQuestion:
         """
         :return: The question as a cramera preset.
         """
-        return Preset(f"[{self.competence}] {self.text}", self.code, requires_live=True)
+        return Preset(text=f"[{self.competence}] {self.text}", code=self.code, requires_live=True)
 
 
 QUESTIONS: List[CompetencyQuestion] = [

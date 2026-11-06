@@ -26,7 +26,6 @@ from pathlib import Path
 
 from typing_extensions import Any, Callable, Dict, List, Optional
 
-from coraplex.plans.factories import sequential
 from krrood.entity_query_language.exceptions import MultipleSolutionFound, NoSolutionFound
 from semantic_digital_twin.semantic_annotations.semantic_annotations import Human
 
@@ -98,10 +97,7 @@ class PlanControl:
         return self.plan.context.robot.right_arm
 
     def _run(self, designators) -> None:
-        sub_plan = sequential(designators, self.plan.context)
-        if self.attach_plan is not None:
-            self.attach_plan(sub_plan)
-        sub_plan.perform()
+        self.plan.context.perform(designators, attach=self.attach_plan)
 
     def order(self, flavour: str = Flavour.RASPBERRY.name, customer: Optional[str] = "Customer") -> str:
         candy = self.plan.process.new_order(Flavour[flavour].value, ordered_by=customer or None)
@@ -137,14 +133,14 @@ class PlanControl:
         if not quiver_sticks:
             return "no free stick left in the quiver"
         stick = quiver_sticks[0]
-        self._run([TransportingAction(stick, self.arm, ApproachDirection.TOWARDS_LEFT_WALL)])
+        self._run([TransportingAction(graspable=stick, arm=self.arm, approach=ApproachDirection.TOWARDS_LEFT_WALL)])
         return f"robot took {stick.root.name.name}"
 
     def stop_machine(self) -> str:
         machine = self.world.get_semantic_annotations_by_type(CottonCandyMachine)[0]
         if self.plan.process.phase.name == "OFF":
             return "the machine is already off"
-        self._run([StopFlossMachineAction(machine, self.plan.process, self.arm)])
+        self._run([StopFlossMachineAction(machine=machine, process=self.plan.process, arm=self.arm)])
         return f"robot stopped the machine (phase {self.plan.process.phase.value})"
 
     def lose_candy(self) -> str:

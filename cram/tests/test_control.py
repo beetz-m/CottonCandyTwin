@@ -10,7 +10,6 @@ import urllib.error
 import urllib.request
 from http.server import ThreadingHTTPServer
 
-from coraplex.execution_environment import kinematically_simulated_robot
 
 from cotton_candy.control import Command, PlanControl, _handler_for
 from test_universal_plan import fresh
@@ -22,8 +21,7 @@ def control():
 
 
 def run(c: PlanControl, name: str, **arguments) -> dict:
-    with kinematically_simulated_robot:
-        c.execute(Command(name, arguments))
+    c.execute(Command(name, arguments))
     c.publish_status()
     json.dumps(c.page_status())     # the page must be able to read it
     return c.log[-1]

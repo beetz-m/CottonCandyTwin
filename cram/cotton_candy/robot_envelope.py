@@ -63,7 +63,7 @@ def parked_robot_world(robot_type=PR2):
     world = URDFParser.from_file(
         file_path=robot_type.get_ros_file_path(),
         use_visual_as_collision_backup=robot_type.uses_visual_as_collision_backup,
-    ).parse()
+    ).create_world()
     robot = robot_type.from_world(world)
     for arm in robot.all_arms:
         park = arm.get_joint_state_by_type(StaticJointState.PARK)
